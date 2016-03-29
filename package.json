@@ -1,0 +1,33 @@
+{
+  "name": "task-manager",
+  "version": "0.0.0",
+  "description": "simple app to manage tasks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mcrowder65/task-manager.git"
+  },
+  "author": "Matt Crowder",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/mcrowder65/task-manager/issues"
+  },
+  "dependencies": {
+    "react": "~0.14.7",
+    "express": "~4.13.4",
+    "router": "~1.1.4",
+    "route": "~0.2.5",
+    "link": "~0.1.5",
+    "react-router": "~2.0.1",
+    "react-dom": "~0.14.7",
+    "strict-uri-encode": "~1.1.0"
+  },
+  "devDependencies": {
+    "webpack": "~1.12.14",
+    "webpack-dev-server": "~1.14.1",
+    "jsx-loader": "~0.13.2"
+  }
+}
