@@ -16,6 +16,7 @@ module.exports = {
 		loaders: [
 			{
 				test:/\.js.?/,
+				exclude: /node_modules/,
 				loaders: [
 					'jsx-loader?insertPragma=React.DOM&harmony'
 				]
