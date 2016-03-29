@@ -51,7 +51,7 @@
 /* 1 */
 /***/ function(module, exports) {
 
-	
+	/** @jsx React.DOM */
 	var CommentBox = React.createClass({displayName: "CommentBox",
 	  render: function() {
 	    return (
