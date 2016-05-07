@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html data-ng-app="app">
+	<head>
+		<title>AngularJS Homework</title>
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/javascript" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+	</head>
+	<body>
+		 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
+		<script   src="https://code.jquery.com/jquery-2.2.3.js"   integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4="   crossorigin="anonymous"></script>
+		<nav class="navbar navbar-default">
+		</nav>
+		<div>
+
+			
+		</div>
+		<div data-ng-controller="SimpleController">
+			
+			<div class="container">
+				First name: <input type="text" data-ng-model="newPerson.myFirstName"/> {{ newPerson.myFirstName }} <br><br> 
+				Last name: <input type="text" data-ng-model="newPerson.myLastName"/> {{ newPerson.myLastName }}<br><br>
+				<button data-ng-click="addPerson()"> Add Person </button>
+			
+				<ul>
+					<li data-ng-repeat="person in persons"> {{ person.myFirstName + ' ' + person.myLastName }}</li>
+				</ul>
+			</div>
+		</div>
+		<script>
+			var app = angular.module('app', ['ngRoute']);
+			
+			app.factory('simpleFactory', function(){
+				var persons = [
+					{ myFirstName: 'Matt', myLastName: 'Crowder' }
+				];
+				var factory = {};
+				factory.getPersons = function() {
+					return persons;
+				};
+
+				factory.postPerson = function($scope) {
+					var myFirstName = $scope.newPerson.myFirstName;
+					var myLastName = $scope.newPerson.myLastName;
+					$scope.persons.push({ 
+							myFirstName: myFirstName, 
+							myLastName: myLastName
+					});
+				};
+				return factory;
+			});
+			
+			app.controller('SimpleController', function ($scope, simpleFactory) {
+				$scope.persons = [];
+				$scope.persons = simpleFactory.getPersons();
+				$scope.addPerson = function() {
+					simpleFactory.postPerson($scope);
+				}
+			});
+		</script>
+		
+		
+		
+	</body>
+</html>
