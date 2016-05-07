@@ -1,0 +1,45 @@
+<link rel="stylesheet" type="text/css" href="public/css/addEmail.css">
+<!-- <div>
+	<div class="well" id="emailAccount"><br>
+	  
+	</div>
+	<div class="well" id="emailBody"><br>
+	  
+	</div>
+</div> -->
+<div>
+        
+    <div class="row">
+
+      <!-- first -->
+      <div class="col-md-6">
+        <div class="panel panel-primary">
+        <div class="panel panel-heading" id="heading">Email settings</div>
+          <div class="panel-body">
+            <b>Sending email account:</b> <input type="text" data-ng-model="sendingEmail"/><br><br> 
+    		    <b>Sending email password:</b> <input type="text" data-ng-model="sendingPassword"/><br><br>	
+    		    <b>Receiving email account:</b> <input type="text" data-ng-model="receivingEmail"/><br><br>
+          </div>
+        </div>
+      </div>
+
+      <!-- second -->
+      <div class="col-md-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading" id="heading">Email content</div>
+          <div class="panel-body">
+            <b>Time to send email: </b><input type="text" data-ng-model="timeToSend"/><br><br>
+            <b>Email body: </b><input type="text" data-ng-model="emailBody"/><br><br>
+          </div>
+        </div>
+      </div>
+
+      <!-- third -->
+      <div class="col-md-6">
+        <button data-ng-click="sendEmail()"> Submit email </button>
+      </div>
+
+    </div>
+       
+      
+      </div>
