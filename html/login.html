@@ -1,0 +1,10 @@
+<div data-ng-controller="SimpleController">	
+	<div class="container">
+		First name: <input type="text" data-ng-model="newPerson.myFirstName"/> {{ newPerson.myFirstName }} <br><br> 
+		Last name: <input type="text" data-ng-model="newPerson.myLastName"/> {{ newPerson.myLastName }}<br><br>
+		<button data-ng-click="addPerson()"> Add Person </button>
+		<ul>
+			<li data-ng-repeat="person in persons"> {{ person.myFirstName + ' ' + person.myLastName }}</li>
+		</ul>
+	</div>
+</div>
