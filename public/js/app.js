@@ -1,4 +1,5 @@
-    
+   
+
 var app = angular.module('app', ['ngRoute']);
 
 app.factory('simpleFactory', function(){
@@ -18,7 +19,14 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
     $scope.sendEmail = function() {
         simpleFactory.sendEmail($scope);
     }
+    $scope.signUp = function() {
+        
+    }
+    $scope.verifyPasswords = function() {
+        verifyPasswords($scope.initialPassword, $scope.confirmPassword);
+    }
 });
+
 app.config(function ($routeProvider) {
 
 	$routeProvider
@@ -70,7 +78,21 @@ app.config(function ($routeProvider) {
     .otherwise({ redirectTo: '/allEmails' });
 
 });
-
+function changePasswordBoxColor(color){
+    document.getElementById("initialPassword").style.borderColor=color;
+    document.getElementById("confirmPassword").style.borderColor=color;
+}
+function verifyPasswords(initialPassword, confirmPassword){
+    if(initialPassword !== confirmPassword){
+        changePasswordBoxColor("red");
+    }
+    else if(initialPassword === confirmPassword){
+        changePasswordBoxColor("lime");
+        if(confirmPassword.length < 7){
+            changePasswordBoxColor("red");
+        }
+    }
+}
 function sendEmailToServer(data){
     console.log('sending data: ' + JSON.stringify(data));
     $.ajax
@@ -88,3 +110,4 @@ function sendEmailToServer(data){
         }.bind(this)
     });
 }
+
