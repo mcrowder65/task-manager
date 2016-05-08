@@ -75,7 +75,7 @@ function sendEmailToServer(data){
     console.log('sending data: ' + JSON.stringify(data));
     $.ajax
     ({
-        url: "/api/emails/newEmail",
+        url: "/newEmail",
         dataType: 'json',
         type: 'POST',
         data: data,
