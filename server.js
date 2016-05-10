@@ -22,7 +22,6 @@ var port = server.address().port;
 });
 
 
-
 /**************************************************
 					SERVER RECEIVERS
 ***************************************************/
@@ -63,7 +62,21 @@ app.post('/newEmail', function(req, res){
 	res.json(req.body);
 });
 
-
+var user = require('./models/user.js');
+app.post('/signup', function(req, res) {
+	user.findOrCreate({
+		username: req.body.username,
+		password: user.hashPassword(req.body.password)
+	}, function(err, tempUser, created) {
+		if(created) {
+			var token = user.generateToken(tempUser.username);
+	        res.json({token: tempUser._id});
+		}
+		else if(!created){
+			res.sendStatus("403");
+		}
+	});
+});
 
 
 

@@ -5,14 +5,16 @@
 		<title>AngularJS Homework</title>
 		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/javascript" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+		<link rel="stylesheet" type="text/css" href="index.css">
 	</head>
-	<body>
+	<body onload="auth()">
 		<script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4="crossorigin="anonymous"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
 		
 		<script src="public/js/app.js"></script>
-		<nav class="navbar navbar-default">
+
+		<nav class="navbar navbar-default" id="navbar">
 			 <a class="navbar-brand" href="/#/allEmails">Home</a>
 			 <ul class="nav navbar-nav">
 				 <li><a href="/#/day">Day</a></li>
@@ -20,15 +22,36 @@
 				 <li><a href="/#/month">Month</a></li>
 			 	<li><a href="/#/addEmail">Add Email</a></li>
 			 </ul>
-			 <ul class="nav navbar-nav navbar-right">
-			 	<li><a href="/#/profile">Profile</a></li>
-			 	<li><a href="/#/signup">Sign up</a></li>
+			 <!-- <ul class="nav navbar-nav navbar-right" id="signedOut">
+			 	
 			 	<li><a href="/#/login">Log in</a></li>
 			 </ul>
+			 <ul class="nav navbar-nav navbar-right" id="signedIn">
+			 	<li><a href="/#/profile">Profile</a></li>
+			 	<li><a href="/#/logout">Log out</a></li>
+			 </ul> -->
 
 		</nav>
 		<div data-ng-view></div>
 		<div></div>
 
 	</body>
+
+	<script>
+		function auth(){
+			//check if token is valid
+			$("#navbar").append("<ul class=\"nav navbar-nav navbar-right\"><li><a href='/#/signup'>Sign up</a></li><li><a href='/#/login'>Log in</a></li></ul>");
+			// or
+			$("#navbar").append("<ul class='nav navbar-nav navbar-right'><li><a href='/#/profile'>Profile</a></li><li><a href='/#/logout'>Log out</a></li></ul>");
+		}
+	</script>
 </html>
+
+
+
+
+
+
+
+
+

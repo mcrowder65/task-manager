@@ -13,6 +13,7 @@ app.factory('simpleFactory', function(){
             emailBody: $scope.emailBody
         });
     }
+
 	return factory;
 });
 app.controller('SimpleController', function ($scope, simpleFactory) {
@@ -20,7 +21,7 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
         simpleFactory.sendEmail($scope);
     }
     $scope.signUp = function() {
-        
+        signUpUser($scope.username, $scope.confirmPassword);
     }
     $scope.verifyPasswords = function() {
         verifyPasswords($scope.initialPassword, $scope.confirmPassword);
@@ -94,7 +95,6 @@ function verifyPasswords(initialPassword, confirmPassword){
     }
 }
 function sendEmailToServer(data){
-    console.log('sending data: ' + JSON.stringify(data));
     $.ajax
     ({
         url: "/newEmail",
@@ -110,4 +110,19 @@ function sendEmailToServer(data){
         }.bind(this)
     });
 }
-
+function signUpUser(username, password){
+    $.ajax
+    ({
+        url: "/signup",
+        dataType: 'json',
+        type: 'POST',
+        data: {username: username, password: password},
+        success: function(data, status, headers, config){
+            console.log('success');
+            localStorage.token = data.token;
+        }.bind(this),
+        error: function(data, status, headers, config){
+            console.log('error');
+        }.bind(this)
+    });
+}
