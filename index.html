@@ -22,15 +22,6 @@
 				 <li><a href="/#/month">Month</a></li>
 			 	<li><a href="/#/addEmail">Add Email</a></li>
 			 </ul>
-			 <!-- <ul class="nav navbar-nav navbar-right" id="signedOut">
-			 	
-			 	<li><a href="/#/login">Log in</a></li>
-			 </ul>
-			 <ul class="nav navbar-nav navbar-right" id="signedIn">
-			 	<li><a href="/#/profile">Profile</a></li>
-			 	<li><a href="/#/logout">Log out</a></li>
-			 </ul> -->
-
 		</nav>
 		<div data-ng-view></div>
 		<div></div>
@@ -39,7 +30,6 @@
 
 	<script>
 		function auth(){
-			//check if token is valid
 			if(localStorage.token){
 				$("#navbar").append("<ul class='nav navbar-nav navbar-right'><li><a href='/#/profile'>Profile</a></li><li><a onclick=\"logout()\" href='/#/'>Log out</a></li></ul>");
 			}
@@ -49,6 +39,7 @@
 		}
 		function logout(){
 			localStorage.token="";
+			window.location="/index.html";
 		}
 	</script>
 </html>

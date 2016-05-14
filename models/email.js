@@ -6,9 +6,10 @@ var emailSchema = new Schema({
     sendingEmail: String,
     sendingPassword: String,
     receivingEmail: String,
-    timeToSend: String,
+    timeToSend: Date,
     emailBody: String,
-    emailSubject: String
+    subject: String,
+    userID: String
 });
 
 // add findOrCreate

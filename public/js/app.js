@@ -3,22 +3,22 @@
 var app = angular.module('app', ['ngRoute']);
 
 app.factory('simpleFactory', function(){
-	var factory = {};
-    factory.sendEmail = function($scope) {
+    var factory = {};
+
+    return factory;
+});
+app.controller('SimpleController', function ($scope, simpleFactory) {
+    $scope.sendEmail = function() {
+        var timeToSend = new Date("May 14, 2016 " + $scope.timeToSend).getTime();
         sendEmailToServer({
             sendingEmail: $scope.sendingEmail,
             sendingPassword: $scope.sendingPassword,
             receivingEmail: $scope.receivingEmail,
-            timeToSend: $scope.timeToSend,
-            emailBody: $scope.emailBody
+            timeToSend: timeToSend,
+            emailBody: $scope.emailBody,
+            subject: $scope.subject,
+            userID: localStorage.token
         });
-    }
-
-	return factory;
-});
-app.controller('SimpleController', function ($scope, simpleFactory) {
-    $scope.sendEmail = function() {
-        simpleFactory.sendEmail($scope);
     }
     $scope.signUp = function() {
         signUpUser($scope.username, $scope.confirmPassword);
@@ -126,6 +126,7 @@ function signUpUser(username, password){
         data: {username: username, password: password},
         success: function(data, status, headers, config){
             localStorage.token = data.token;
+            window.location="/index.html";
         }.bind(this),
         error: function(data, status, headers, config){
             localStorage.token="";
@@ -141,6 +142,7 @@ function login(username, password){
         data: {username: username, password: password},
         success: function(data, status, headers, config){
             localStorage.token = data.token;
+            window.location="/index.html";
         }.bind(this),
         error: function(data, status, headers, config){
             localStorage.token="";

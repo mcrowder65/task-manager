@@ -11,7 +11,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
         extended: true
 }));
-var nodemailer = require('nodemailer');
 
 
 var portNumber = 8000
@@ -28,38 +27,26 @@ var port = server.address().port;
 
 var email = require('./models/email.js');
 app.post('/newEmail', function(req, res){
-	var transporter = nodemailer.createTransport({
-		service: 'Gmail',
-		auth: {
-			user: req.body.sendingEmail,
-			pass: req.body.sendingPassword
-		}
-	});
-
-	var mailOptions = {
-		from: req.body.sendingEmail,
-		to: req.body.receivingEmail,
-		subject: 'do this',
-		html: req.body.emailBody
-	};
-	email.findOrCreate({
+		email.findOrCreate({
 		sendingEmail: req.body.sendingEmail,
 		sendingPassword: req.body.sendingPassword,
 		receivingEmail: req.body.receivingEmail,
 		emailBody: req.body.emailBody,
-		timeToSend: req.body.timeToSend
+		timeToSend: req.body.timeToSend,
+		subject: req.body.subject,
+		userID: req.body.userID
 	}, function(err, email, created) {
 		if (created) {
 
 		}
-		else if(driveway)
+		else if(email)
 			res.json({});
 		else
 			res.sendStatus("403");
 	});
 	//transporter.sendMail(mailOptions); 
 
-	res.json(req.body);
+	//res.json(req.body);
 });
 
 var user = require('./models/user.js');
