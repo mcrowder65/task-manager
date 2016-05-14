@@ -78,6 +78,23 @@ app.post('/signup', function(req, res) {
 	});
 });
 
+app.post('/login', function(req, res) {
+	user.findOne({username: req.body.username}, 
+	function(err, tempUser) {
+		if (err) {
+		    res.sendStatus(403);
+		    return;
+		}
+        if (tempUser && tempUser.checkPassword(req.body.password)) {
+            var token = tempUser._id;
+            res.json({token:token});
+       	} 
+        else {
+            res.sendStatus(403);
+        }
+	});
+});
+
 
 
 

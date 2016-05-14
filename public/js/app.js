@@ -23,6 +23,9 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
     $scope.signUp = function() {
         signUpUser($scope.username, $scope.confirmPassword);
     }
+    $scope.login = function() {
+        login($scope.username, $scope.password);
+    }
     $scope.verifyPasswords = function() {
         verifyPasswords($scope.initialPassword, $scope.confirmPassword);
     }
@@ -76,6 +79,11 @@ app.config(function ($routeProvider) {
     	controller: 'SimpleController',
         templateUrl: 'public/html/login.html'
     })
+    .when('/logout',
+    {
+        controller: 'SimpleController',
+        templateUrl: 'public/html/logout.html'
+    })
     .otherwise({ redirectTo: '/allEmails' });
 
 });
@@ -103,7 +111,6 @@ function sendEmailToServer(data){
         data: data,
         success: function(data, status, headers, config){
           console.log("success");
-          
         }.bind(this),
         error: function(data, status, headers, config){
             console.log("error");
@@ -118,11 +125,46 @@ function signUpUser(username, password){
         type: 'POST',
         data: {username: username, password: password},
         success: function(data, status, headers, config){
-            console.log('success');
             localStorage.token = data.token;
         }.bind(this),
         error: function(data, status, headers, config){
-            console.log('error');
+            localStorage.token="";
         }.bind(this)
     });
 }
+function login(username, password){
+    $.ajax
+    ({
+        url: "/login",
+        dataType: 'json',
+        type: 'POST',
+        data: {username: username, password: password},
+        success: function(data, status, headers, config){
+            localStorage.token = data.token;
+        }.bind(this),
+        error: function(data, status, headers, config){
+            localStorage.token="";
+        }.bind(this)
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -26,7 +26,8 @@ userSchema.statics.hashPassword = function(password) {
 
 // check the password
 userSchema.methods.checkPassword = function(password) {
-    return bcrypt.compareSync(password,this.password_hash);
+    console.log(password + " " + this.password);
+    return bcrypt.compareSync(password, this.password);
 };
 
 // Generate a token for a client

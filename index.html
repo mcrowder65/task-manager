@@ -40,9 +40,15 @@
 	<script>
 		function auth(){
 			//check if token is valid
-			$("#navbar").append("<ul class=\"nav navbar-nav navbar-right\"><li><a href='/#/signup'>Sign up</a></li><li><a href='/#/login'>Log in</a></li></ul>");
-			// or
-			$("#navbar").append("<ul class='nav navbar-nav navbar-right'><li><a href='/#/profile'>Profile</a></li><li><a href='/#/logout'>Log out</a></li></ul>");
+			if(localStorage.token){
+				$("#navbar").append("<ul class='nav navbar-nav navbar-right'><li><a href='/#/profile'>Profile</a></li><li><a onclick=\"logout()\" href='/#/'>Log out</a></li></ul>");
+			}
+			else {
+				$("#navbar").append("<ul class=\"nav navbar-nav navbar-right\"><li><a href='/#/signup'>Sign up</a></li><li><a href='/#/login'>Log in</a></li></ul>");
+			}
+		}
+		function logout(){
+			localStorage.token="";
 		}
 	</script>
 </html>
