@@ -1,4 +1,3 @@
-   
 
 var app = angular.module('app', ['ngRoute']);
 
@@ -9,7 +8,11 @@ app.factory('simpleFactory', function(){
 });
 app.controller('SimpleController', function ($scope, simpleFactory) {
     $scope.sendEmail = function() {
-        var timeToSend = new Date("May 14, 2016 " + $scope.timeToSend).getTime();
+        var time = String($scope.dateToSend);
+        time = time.match("([Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec]* [0-9]* [0-9]{0,4})");
+        time = time[0];
+        var timeToSend = new Date(time + " " + $scope.timeToSend).getTime();
+        console.log(timeToSend);
         sendEmailToServer({
             sendingEmail: $scope.sendingEmail,
             sendingPassword: $scope.sendingPassword,
@@ -19,6 +22,13 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
             subject: $scope.subject,
             userID: localStorage.token
         });
+    }
+    $scope.setReceiverEmail = function(){
+        setReceiverEmail({_id: localStorage.token, receiverEmail: $scope.receiverEmail});
+    }
+    $scope.getReceiverEmail = function() {
+        $scope.receiverEmail = getReceiverEmail();
+        console.log($scope.receiverEmail);
     }
     $scope.signUp = function() {
         signUpUser($scope.username, $scope.confirmPassword);
@@ -91,6 +101,7 @@ function changePasswordBoxColor(color){
     document.getElementById("initialPassword").style.borderColor=color;
     document.getElementById("confirmPassword").style.borderColor=color;
 }
+
 function verifyPasswords(initialPassword, confirmPassword){
     if(initialPassword !== confirmPassword){
         changePasswordBoxColor("red");
@@ -101,6 +112,38 @@ function verifyPasswords(initialPassword, confirmPassword){
             changePasswordBoxColor("red");
         }
     }
+}
+function setReceiverEmail(data){
+    $.ajax
+    ({
+        url: "/setReceiverEmail",
+        dataType: 'json',
+        type: 'POST',
+        data: data,
+        success: function(data, status, headers, config){
+            console.log('set receiverEmail to ' + data);
+        }.bind(this),
+        error: function(data, status, headers, config){
+        }.bind(this)
+    });
+}
+var receiverEmail = '';
+function getReceiverEmail(){
+    
+    $.ajax
+    ({
+        url: "/getReceivingEmail",
+        dataType: 'json',
+        type: 'POST',
+        data: {id: localStorage.token},
+        success: function(data, status, headers, config){
+            receiverEmail = data.email;
+        }.bind(this),
+        error: function(data, status, headers, config){
+        }.bind(this)
+    });
+    console.log(receiverEmail);
+    return receiverEmail;
 }
 function sendEmailToServer(data){
     $.ajax

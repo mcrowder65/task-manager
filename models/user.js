@@ -14,9 +14,10 @@ var SECRET = '\x1f\x1e1\x8a\x8djO\x9e\xe4\xcb\x9d`\x13\x02\xfb+\xbb\x89q"F\x8a\x
 // User info, with items owned by that user
 var userSchema = new Schema({
     username: {type: String, index: true, unique: true},
-    email: {type: Array},
-    senderEmails: {type: Array},
-    password: {type: String}
+    receiverEmail: String,
+    senderEmail: String,
+    senderPassword: String,
+    password: String
 });
 
 // hash the password

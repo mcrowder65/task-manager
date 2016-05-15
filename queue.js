@@ -24,12 +24,7 @@ app.post('/getEmails',
 	function (req, res){
 		email.find({},
 		function(err, tempEmail)
-		{
-			// if (driveway)
-			// 	res.json({driveway: driveway});
-			// else
-			// 	res.sendStatus("403");
-		});
+		{});
 	}
 );
 function checkEmails() {
@@ -57,4 +52,4 @@ function checkEmails() {
 	});
 	
 }
-setInterval(checkEmails, 1000);
+setInterval(checkEmails, 300000);

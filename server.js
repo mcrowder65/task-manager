@@ -37,23 +37,47 @@ app.post('/newEmail', function(req, res){
 		userID: req.body.userID
 	}, function(err, email, created) {
 		if (created) {
-
+			res.json({});
 		}
 		else if(email)
 			res.json({});
 		else
 			res.sendStatus("403");
 	});
-	//transporter.sendMail(mailOptions); 
-
-	//res.json(req.body);
+});
+app.post('/setReceiverEmail', function(req, res) {
+	user.update({_id: req.body._id}, {receiverEmail: req.body.receiverEmail},
+	function(err, user) {
+		if(user)
+			res.json(req.body.receiverEmail);
+		else
+			res.sendStatus('403');
+	});
+});
+app.post('/getReceivingEmail', function(req, res) {
+	user.findOne({_id: req.body.id}, 
+	function(err, tempUser) {
+		if (err) {
+		    res.sendStatus(403);
+		    return;
+		}
+        if (tempUser) {
+            res.json({email:tempUser.receiverEmail});
+       	} 
+        else {
+            res.sendStatus(403);
+        }
+	});
 });
 
 var user = require('./models/user.js');
 app.post('/signup', function(req, res) {
 	user.findOrCreate({
 		username: req.body.username,
-		password: user.hashPassword(req.body.password)
+		password: user.hashPassword(req.body.password),
+		receiverEmail: '',
+		senderEmail: '',
+		senderPassword: ''
 	}, function(err, tempUser, created) {
 		if(created) {
 			var token = user.generateToken(tempUser.username);
