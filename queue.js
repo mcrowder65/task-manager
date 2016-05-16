@@ -34,14 +34,14 @@ function checkEmails() {
 				var transporter = nodemailer.createTransport({
 					service: 'Gmail',
 					auth: {
-						user: emails[i].sendingEmail,
-						pass: emails[i].sendingPassword
+						user: emails[i].senderEmail,
+						pass: emails[i].senderPassword
 					}
 				});
 
 				var mailOptions = {
-					from: emails[i].sendingEmail,
-					to: emails[i].receivingEmail,
+					from: emails[i].senderEmail,
+					to: emails[i].receiverEmail,
 					subject: emails[i].subject,
 					html: emails[i].emailBody
 				};
@@ -52,4 +52,4 @@ function checkEmails() {
 	});
 	
 }
-setInterval(checkEmails, 300000);
+setInterval(checkEmails, 1000);

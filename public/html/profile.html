@@ -1,9 +1,15 @@
-<div style="text-align:center">
-<!-- 	<b>Receiving email account:</b> <input type="text" id="email" data-ng-model="receiverEmail"/><br><br> 
- -->	<b>Receiving email account:</b> <input type="text" data-ng-value="receiverEmail" data-ng-model="receiverEmail"/><br><br> 
-	<button data-ng-click="setReceiverEmail()">set receiver</button>
+<link rel="stylesheet" type="text/css" href="public/css/profile.css">
 
+<div style="text-align:center">
+    <b>Receiving email account:</b> <input type="text" data-ng-value="receiverEmail" data-ng-model="receiverEmail"/><br><br> 
 	<button data-ng-click="getReceiverEmail()">get receiver</button>
+	<button data-ng-click="setReceiverEmail()">set receiver</button><br><br>
+	<b>Sender email account:</b> <input type="text" data-ng-value="senderEmail" data-ng-model="senderEmail"/><br><br> 
+	<button data-ng-click="getSenderEmail()">get sender email</button>
+	<button data-ng-click="setSenderEmail()">set sender email</button><br><br>
+	<b>Sender email password:</b> <input type="text" data-ng-value="senderPassword" data-ng-model="senderPassword"/><br><br> 
+	<button data-ng-click="getSenderPassword()">get sender password</button>
+	<button data-ng-click="setSenderPassword()">set sender password</button><br><br>
 </div>
 
 

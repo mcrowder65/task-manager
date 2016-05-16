@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 var findOrCreate = require('mongoose-findorcreate');
 
 var emailSchema = new Schema({
-    sendingEmail: String,
-    sendingPassword: String,
+    senderEmail: String,
+    senderPassword: String,
     receiverEmail: String,
     timeToSend: Date,
     emailBody: String,

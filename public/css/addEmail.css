@@ -13,3 +13,6 @@ left:50%;
 #heading{
 	text-align: center;
 }
+input{
+	width: 200px;
+}

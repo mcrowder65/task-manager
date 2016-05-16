@@ -2,7 +2,6 @@ var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/list');
-var api = require('./models/api.js');
 
 app.use(express.static(__dirname + ''));
 var bodyParser = require('body-parser');
@@ -28,9 +27,9 @@ var port = server.address().port;
 var email = require('./models/email.js');
 app.post('/newEmail', function(req, res){
 		email.findOrCreate({
-		sendingEmail: req.body.sendingEmail,
-		sendingPassword: req.body.sendingPassword,
-		receivingEmail: req.body.receivingEmail,
+		senderEmail: req.body.senderEmail,
+		senderPassword: req.body.senderPassword,
+		receiverEmail: req.body.receiverEmail,
 		emailBody: req.body.emailBody,
 		timeToSend: req.body.timeToSend,
 		subject: req.body.subject,
@@ -43,16 +42,6 @@ app.post('/newEmail', function(req, res){
 			res.json({});
 		else
 			res.sendStatus("403");
-	});
-});
-app.post('/setReceiverEmail', function(req, res) {
-	console.log(req.body.receiverEmail);
-	user.update({_id: req.body._id}, {receiverEmail: req.body.receiverEmail},
-	function(err, user) {
-		if(user)
-			res.json(req.body.receiverEmail);
-		else
-			res.sendStatus('403');
 	});
 });
 app.post('/getReceiverEmail', function(req, res) {
@@ -70,7 +59,63 @@ app.post('/getReceiverEmail', function(req, res) {
         }
 	});
 });
-
+app.post('/setReceiverEmail', function(req, res) {
+	user.update({_id: req.body._id}, {receiverEmail: req.body.receiverEmail},
+	function(err, user) {
+		if(user)
+			res.json(req.body.receiverEmail);
+		else
+			res.sendStatus('403');
+	});
+});
+app.post('/getSenderPassword', function(req, res) {
+	user.findOne({_id: req.body.id}, 
+	function(err, tempUser) {
+		if (err) {
+		    res.sendStatus(403);
+		    return;
+		}
+        if (tempUser) {
+            res.json({senderPassword:tempUser.senderPassword});
+       	} 
+        else {
+            res.sendStatus(403);
+        }
+	});
+});
+app.post('/setSenderPassword', function(req, res) {
+	user.update({_id: req.body._id}, {senderPassword: req.body.senderPassword},
+	function(err, user) {
+		if(user)
+			res.json(req.body.senderPassword);
+		else
+			res.sendStatus('403');
+	});
+});
+app.post('/getSenderEmail', function(req, res) {
+	user.findOne({_id: req.body.id}, 
+	function(err, tempUser) {
+		if (err) {
+		    res.sendStatus(403);
+		    return;
+		}
+        if (tempUser) {
+            res.json({senderEmail: tempUser.senderEmail});
+       	} 
+        else {
+            res.sendStatus(403);
+        }
+	});
+});
+app.post('/setSenderEmail', function(req, res) {
+	user.update({_id: req.body._id}, {senderEmail: req.body.senderEmail},
+	function(err, user) {
+		if(user)
+			res.json(req.body.senderEmail);
+		else
+			res.sendStatus('403');
+	});
+});
 var user = require('./models/user.js');
 app.post('/signup', function(req, res) {
 	user.findOrCreate({

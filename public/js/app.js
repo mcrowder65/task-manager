@@ -12,10 +12,9 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
         time = time.match("([Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec]* [0-9]* [0-9]{0,4})");
         time = time[0];
         var timeToSend = new Date(time + " " + $scope.timeToSend).getTime();
-        console.log(timeToSend);
         sendEmailToServer({
-            sendingEmail: $scope.sendingEmail,
-            sendingPassword: $scope.sendingPassword,
+            senderEmail: $scope.senderEmail,
+            senderPassword: $scope.senderPassword,
             receiverEmail: $scope.receiverEmail,
             timeToSend: timeToSend,
             emailBody: $scope.emailBody,
@@ -23,12 +22,23 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
             userID: localStorage.token
         });
     }
+    $scope.getSenderPassword = function() {
+        $scope.senderPassword = getSenderPassword();
+    }
+    $scope.setSenderPassword = function() {
+        setSenderPassword({_id: localStorage.token, senderPassword: $scope.senderPassword});
+    }
+    $scope.getSenderEmail = function() {
+        $scope.senderEmail = getSenderEmail();
+    }
+    $scope.setSenderEmail = function() {
+        setSenderEmail({_id: localStorage.token, senderEmail: $scope.senderEmail});
+    }
     $scope.setReceiverEmail = function(){
         setReceiverEmail({_id: localStorage.token, receiverEmail: $scope.receiverEmail});
     }
     $scope.getReceiverEmail = function() {
         $scope.receiverEmail = getReceiverEmail();
-        console.log($scope.receiverEmail);
     }
     $scope.signUp = function() {
         signUpUser($scope.username, $scope.confirmPassword);
@@ -113,20 +123,6 @@ function verifyPasswords(initialPassword, confirmPassword){
         }
     }
 }
-function setReceiverEmail(data){
-    $.ajax
-    ({
-        url: "/setReceiverEmail",
-        dataType: 'json',
-        type: 'POST',
-        data: data,
-        success: function(data, status, headers, config){
-            console.log('set receiverEmail to ' + data);
-        }.bind(this),
-        error: function(data, status, headers, config){
-        }.bind(this)
-    });
-}
 var receiverEmail = '';
 function getReceiverEmail(){
     
@@ -143,8 +139,89 @@ function getReceiverEmail(){
         error: function(data, status, headers, config){
         }.bind(this)
     });
-    console.log(receiverEmail);
     return receiverEmail;
+}
+function setReceiverEmail(data){
+    if(data.receiverEmail) {
+        $.ajax
+        ({
+            url: "/setReceiverEmail",
+            dataType: 'json',
+            type: 'POST',
+            data: data,
+            success: function(data, status, headers, config){
+                console.log('set receiverEmail to ' + data);
+            }.bind(this),
+            error: function(data, status, headers, config){
+            }.bind(this)
+        });
+    }
+}
+var senderEmail = '';
+function getSenderEmail(){
+    $.ajax
+    ({
+        url: "/getSenderEmail",
+        dataType: 'json',
+        type: 'POST',
+        async: false,
+        data: {id: localStorage.token},
+        success: function(data, status, headers, config){
+            senderEmail = data.senderEmail;
+        }.bind(this),
+        error: function(data, status, headers, config){
+        }.bind(this)
+    });
+    return senderEmail;
+}
+function setSenderEmail(data){
+    if(data.senderEmail) {
+        $.ajax
+        ({
+            url: "/setSenderEmail",
+            dataType: 'json',
+            type: 'POST',
+            data: data,
+            success: function(data, status, headers, config){
+                senderEmail = data.senderEmail;
+            }.bind(this),
+            error: function(data, status, headers, config){
+            }.bind(this)
+        });
+    }
+}
+var senderPassword = '';
+function getSenderPassword(){
+    $.ajax
+    ({
+        url: "/getSenderPassword",
+        dataType: 'json',
+        type: 'POST',
+        async: false,
+        data: {id: localStorage.token},
+        success: function(data, status, headers, config){
+            senderPassword = data.senderPassword;
+        }.bind(this),
+        error: function(data, status, headers, config){
+        }.bind(this)
+    });
+    return senderPassword;
+}
+function setSenderPassword(data){
+    if(data.senderPassword) {
+        $.ajax
+        ({
+            url: "/setSenderPassword",
+            dataType: 'json',
+            type: 'POST',
+            data: data,
+            success: function(data, status, headers, config){
+                senderPassword = data.senderPassword;
+            }.bind(this),
+            error: function(data, status, headers, config){
+            }.bind(this)
+        });
+    }
 }
 function sendEmailToServer(data){
     $.ajax

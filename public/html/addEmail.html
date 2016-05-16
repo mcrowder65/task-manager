@@ -9,9 +9,9 @@
         <div class="panel panel-primary">
         <div class="panel panel-heading" id="heading">Email settings</div>
           <div class="panel-body">
-            <b>Sending email account:</b> <input type="text" data-ng-model="sendingEmail"/><br><br> 
-    		    <b>Sending email password:</b> <input type="text" data-ng-model="sendingPassword"/><br><br>	
-    		    <b>Receiving email account:</b> <input type="text" data-ng-model="receiverEmail"/><br><br>
+            <b>Sending email account:</b> <input type="text" data-ng-value="getSenderEmail()" data-ng-model="senderEmail"/><br><br> 
+    		    <b>Sending email password:</b> <input type="text" data-ng-value="getSenderPassword()" data-ng-model="senderPassword"/><br><br>	
+    		    <b>Receiving email account:</b> <input type="text" data-ng-value="getReceiverEmail()" data-ng-model="receiverEmail"/><br><br>
           </div>
         </div>
       </div>
