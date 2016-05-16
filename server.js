@@ -151,7 +151,21 @@ app.post('/login', function(req, res) {
         }
 	});
 });
-
+app.post('/getEmails', function(req, res) {
+	email.find({userID: req.body.id}, 
+	function(err, emails) {
+		if (err) {
+		    res.sendStatus(403);
+		    return;
+		}
+        if (emails) {
+            res.json(emails);
+       	} 
+        else {
+            res.sendStatus(403);
+        }
+	});
+});
 
 
 

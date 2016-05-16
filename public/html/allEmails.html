@@ -1,3 +1,6 @@
 <div style="text-align:center">
-	all emails will show here
+	<button data-ng-click="getEmails()">Get all emails</button>
+	<div data-ng-repeat="email in emails">
+		<b> email: </b> {{ email }} 
+	</div>
 </div>

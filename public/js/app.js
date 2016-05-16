@@ -22,6 +22,9 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
             userID: localStorage.token
         });
     }
+    $scope.getEmails = function(){
+        $scope.emails = getEmails();
+    }
     $scope.getSenderPassword = function() {
         $scope.senderPassword = getSenderPassword();
     }
@@ -270,7 +273,24 @@ function login(username, password){
         }.bind(this)
     });
 }
-
+var emails = [];
+function getEmails(){
+    $.ajax
+    ({
+        url: "/getEmails",
+        dataType: 'json',
+        type: 'POST',
+        async: false,
+        data: {id: localStorage.token},
+        success: function(data, status, headers, config){
+            emails = data;
+            console.log(emails);
+        }.bind(this),
+        error: function(data, status, headers, config){
+        }.bind(this)
+    });
+    return emails;
+}
 
 
 
