@@ -5,7 +5,7 @@ var findOrCreate = require('mongoose-findorcreate');
 var emailSchema = new Schema({
     sendingEmail: String,
     sendingPassword: String,
-    receivingEmail: String,
+    receiverEmail: String,
     timeToSend: Date,
     emailBody: String,
     subject: String,

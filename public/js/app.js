@@ -16,7 +16,7 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
         sendEmailToServer({
             sendingEmail: $scope.sendingEmail,
             sendingPassword: $scope.sendingPassword,
-            receivingEmail: $scope.receivingEmail,
+            receiverEmail: $scope.receiverEmail,
             timeToSend: timeToSend,
             emailBody: $scope.emailBody,
             subject: $scope.subject,
@@ -132,9 +132,10 @@ function getReceiverEmail(){
     
     $.ajax
     ({
-        url: "/getReceivingEmail",
+        url: "/getReceiverEmail",
         dataType: 'json',
         type: 'POST',
+        async: false,
         data: {id: localStorage.token},
         success: function(data, status, headers, config){
             receiverEmail = data.email;

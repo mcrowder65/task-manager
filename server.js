@@ -46,6 +46,7 @@ app.post('/newEmail', function(req, res){
 	});
 });
 app.post('/setReceiverEmail', function(req, res) {
+	console.log(req.body.receiverEmail);
 	user.update({_id: req.body._id}, {receiverEmail: req.body.receiverEmail},
 	function(err, user) {
 		if(user)
@@ -54,7 +55,7 @@ app.post('/setReceiverEmail', function(req, res) {
 			res.sendStatus('403');
 	});
 });
-app.post('/getReceivingEmail', function(req, res) {
+app.post('/getReceiverEmail', function(req, res) {
 	user.findOne({_id: req.body.id}, 
 	function(err, tempUser) {
 		if (err) {
