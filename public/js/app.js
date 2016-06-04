@@ -24,6 +24,7 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
     }
     $scope.getEmails = function(){
         $scope.emails = getEmails();
+        console.log(emails)
     }
     $scope.getSenderPassword = function() {
         $scope.senderPassword = getSenderPassword();
@@ -284,6 +285,14 @@ function getEmails(){
         data: {id: localStorage.token},
         success: function(data, status, headers, config){
             emails = data;
+            
+
+            
+            for(var i = 0; i < emails.length; i++) {
+                var date = new Date(emails[i].timeToSend)
+                console.log(date);
+                emails[i].date = date.getMonth() + "/" + date.getDate() + " " + date.toLocaleTimeString()
+            }
             console.log(emails);
         }.bind(this),
         error: function(data, status, headers, config){
