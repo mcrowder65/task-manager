@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var findOrCreate = require('mongoose-findorcreate')
 
 // setup bcrypt
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var SALT = bcrypt.genSaltSync();
 
 // setup json web token
