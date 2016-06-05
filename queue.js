@@ -16,7 +16,7 @@ var email = require('./models/email.js');
 var portNumber = 7999
 var server = app.listen(portNumber, function() {
 console.log("Started on port " + portNumber);
-var host = server.address().address;
+var host = server.address().address;3
 var port = server.address().port;
 });
 
@@ -52,4 +52,4 @@ function checkEmails() {
 	});
 	
 }
-setInterval(checkEmails, 1000);
+setInterval(checkEmails, 30000);
