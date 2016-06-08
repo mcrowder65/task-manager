@@ -1,16 +1,14 @@
-<div style="text-align:center">
-	<button data-ng-click="getEmails()">Get all emails</button><br><br>
+<div data-ng-init="getEmails()" style="text-align:center">
 	<div data-ng-repeat="email in emails">
 		<div class="col-md-6">
         <div class="panel panel-primary">
-        <div class="panel panel-heading" id="heading">Email</div>
+
           <div class="panel-body">
-            <b>Sender email:</b> {{ email.senderEmail }}
-		    <b>Sender password:</b> {{ email.senderPassword }}	
-		    <b>Receiver email:</b> {{ email.receiverEmail }}
-		    <b>Email subject: </b> {{ email.subject }}<br>
-		    <b>Email body:</b> {{ email.emailBody }}
-		    <b>Email time:</b> {{ email.date }}	
+		    <b>Receiver:</b> {{ email.receiverEmail }}
+		    <b>Subject: </b> {{ email.subject }}<br>
+		    <b>Body:</b> {{ email.emailBody }}
+		    <b>Time:</b> {{ email.date }}<br>
+		    <button type="button" class="btn btn-danger" data-ng-click="deleteEmail(email)">Delete</button>
           </div>
         </div>
       </div>

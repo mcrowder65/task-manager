@@ -24,6 +24,15 @@ var port = server.address().port;
 					SERVER RECEIVERS
 ***************************************************/
 
+app.post('/deleteEmail', function(req, res){
+	email.remove({_id: req.body._id},
+	function(err, email){
+		if(email){
+			res.json({})
+		}
+	});
+	
+});
 var email = require('./models/email.js');
 app.post('/newEmail', function(req, res){
 		email.findOrCreate({

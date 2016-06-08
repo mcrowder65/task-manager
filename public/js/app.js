@@ -22,9 +22,11 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
             userID: localStorage.token
         });
     }
+    $scope.deleteEmail = function(email){
+        deleteEmail(email._id);
+    }
     $scope.getEmails = function(){
         $scope.emails = getEmails();
-        console.log(emails)
     }
     $scope.getSenderPassword = function() {
         $scope.senderPassword = getSenderPassword();
@@ -126,6 +128,24 @@ function verifyPasswords(initialPassword, confirmPassword){
             changePasswordBoxColor("red");
         }
     }
+}
+function deleteEmail(_id){
+    $.ajax
+    ({
+        url: "/deleteEmail",
+        dataType: "json",
+        type: "POST",
+        async: false,
+        data: {_id: _id},
+        success: function(data, status, headers, config){
+            window.location = '/#/profile';
+            window.location = '/#/allEmails';
+        }.bind(this),
+        error: function(data, status, headers, config){
+            console.log('error');
+            console.log(status);
+        }.bind(this)
+    });
 }
 var receiverEmail = '';
 function getReceiverEmail(){
@@ -285,15 +305,10 @@ function getEmails(){
         data: {id: localStorage.token},
         success: function(data, status, headers, config){
             emails = data;
-            
-
-            
             for(var i = 0; i < emails.length; i++) {
                 var date = new Date(emails[i].timeToSend)
-                console.log(date);
                 emails[i].date = date.getMonth() + "/" + date.getDate() + " " + date.toLocaleTimeString()
             }
-            console.log(emails);
         }.bind(this),
         error: function(data, status, headers, config){
         }.bind(this)
