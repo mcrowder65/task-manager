@@ -16,3 +16,18 @@ left:50%;
 input{
 	width: 200px;
 }
+
+#button{
+	position: relative;
+    top: 50%;
+}
+#wrapper {
+    text-align: center;
+}
+
+#successMessage{
+	width: 25%;
+  	margin-left: 37.5%;
+  	text-align: 'center';
+  	visibility: hidden;
+}

@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="public/css/addEmail.css">
 
-<div>
+<div data-ng-init="getSenderEmail(); getSenderPassword(); getReceiverEmail(); " id="wrapper">
         
     <div class="row">
 
@@ -9,9 +9,9 @@
         <div class="panel panel-primary">
         <div class="panel panel-heading" id="heading">Email settings</div>
           <div class="panel-body">
-            <b>Sending email account:</b> <input type="text" data-ng-value="getSenderEmail()" data-ng-model="senderEmail"/><br><br> 
-    		    <b>Sending email password:</b> <input type="text" data-ng-value="getSenderPassword()" data-ng-model="senderPassword"/><br><br>	
-    		    <b>Receiving email account:</b> <input type="text" data-ng-value="getReceiverEmail()" data-ng-model="receiverEmail"/><br><br>
+            <b>Sending email account:</b> <input type="text" data-ng-model="senderEmail"/><br><br> 
+    		    <b>Sending email password:</b> <input type="text" data-ng-model="senderPassword"/><br><br>	
+    		    <b>Receiving email account:</b> <input type="text" data-ng-model="receiverEmail"/><br><br>
           </div>
         </div>
       </div>
@@ -30,11 +30,11 @@
       </div>
 
       <!-- third -->
-      <div class="col-md-6">
-        <button data-ng-click="sendEmail()"> Submit email </button>
-      </div>
+      <button id="button" type="button" class="btn btn-primary" data-ng-click="sendEmail()"> Submit email </button>
+
 
     </div>
-       
-      
+    <br>
+    <div id="successMessage" class="alert alert-success" role="alert">Your reminder has been set!</div>
+      <!-- document.getElementById("successMessage").className = "alert alert-danger" -->
 </div>

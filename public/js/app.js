@@ -255,7 +255,7 @@ function sendEmailToServer(data){
         type: 'POST',
         data: data,
         success: function(data, status, headers, config){
-          console.log("success");
+          document.getElementById('successMessage').style.visibility = "visibility";
         }.bind(this),
         error: function(data, status, headers, config){
             console.log("error");
@@ -307,7 +307,7 @@ function getEmails(){
             emails = data;
             for(var i = 0; i < emails.length; i++) {
                 var date = new Date(emails[i].timeToSend)
-                emails[i].date = date.getMonth() + "/" + date.getDate() + " " + date.toLocaleTimeString()
+                emails[i].date = (date.getMonth() + 1) + "/" + date.getDate() + " " + date.toLocaleTimeString()
             }
         }.bind(this),
         error: function(data, status, headers, config){
