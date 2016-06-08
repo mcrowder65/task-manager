@@ -8,10 +8,15 @@ app.factory('simpleFactory', function(){
 });
 app.controller('SimpleController', function ($scope, simpleFactory) {
     $scope.sendEmail = function() {
-        var time = String($scope.dateToSend);
-        time = time.match("([Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec]* [0-9]* [0-9]{0,4})");
-        time = time[0];
-        var timeToSend = new Date(time + " " + $scope.timeToSend).getTime();
+        try {
+            var time = String($scope.dateToSend);
+            time = time.match("([Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec]* [0-9]* [0-9]{0,4})");
+            time = time[0];
+            var timeToSend = new Date(time + " " + $scope.timeToSend).getTime();
+        } catch(err) {
+            showEmailConfirmationBanner(false);
+            return; 
+        }
         sendEmailToServer({
             senderEmail: $scope.senderEmail,
             senderPassword: $scope.senderPassword,
@@ -129,6 +134,21 @@ function verifyPasswords(initialPassword, confirmPassword){
         }
     }
 }
+function showEmailConfirmationBanner(success){
+    if(success === true){
+        document.getElementById('successMessage').className = 'alert alert-success';
+        document.getElementById('successMessage').innerText = 'Your reminder has been set!';
+        document.getElementById('successMessage').style.visibility = "visible";
+    }
+    else{
+        document.getElementById("successMessage").className = "alert alert-danger";
+        document.getElementById("successMessage").innerText= "Something went wrong! Your reminder wasn't set.";
+        document.getElementById('successMessage').style.visibility = "visible";
+    }
+}
+/*******************************************************************************************************************/
+                                                //Server senders
+/*******************************************************************************************************************/
 function deleteEmail(_id){
     $.ajax
     ({
@@ -255,10 +275,11 @@ function sendEmailToServer(data){
         type: 'POST',
         data: data,
         success: function(data, status, headers, config){
-          document.getElementById('successMessage').style.visibility = "visibility";
+          showEmailConfirmationBanner(true);
+
         }.bind(this),
         error: function(data, status, headers, config){
-            console.log("error");
+          showEmailConfirmationBanner(false);
         }.bind(this)
     });
 }

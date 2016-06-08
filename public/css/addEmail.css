@@ -26,8 +26,8 @@ input{
 }
 
 #successMessage{
-	width: 25%;
-  	margin-left: 37.5%;
+	width: 30%;
+  	margin-left: 35%;
   	text-align: 'center';
   	visibility: hidden;
 }
