@@ -27,6 +27,12 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
             userID: localStorage.token
         });
     }
+
+    $scope.filterFn = function(email) {
+        // Do some tests
+
+        return true; // otherwise it won't be within the results
+    };
     $scope.deleteEmail = function(email){
         deleteEmail(email._id);
     }
