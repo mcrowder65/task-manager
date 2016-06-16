@@ -334,7 +334,7 @@ function getEmails(){
             emails = data;
             for(var i = 0; i < emails.length; i++) {
                 var date = new Date(emails[i].timeToSend)
-                emails[i].date = (date.getMonth() + 1) + "/" + date.getDate() + " " + date.toLocaleTimeString()
+                emails[i].date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
             }
         }.bind(this),
         error: function(data, status, headers, config){
