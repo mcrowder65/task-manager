@@ -44,7 +44,14 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
             });
         }
     }
-
+    $scope.hideFields = function(email, type){
+        if(type === 'body' && (email.emailBody == null || email.emailBody == "")){
+            document.getElementById("body" + email._id).style.display = "none";
+        }
+        if(type === 'subject' && (email.subject == null || email.subject == "")){
+            document.getElementById("subject" + email._id).style.display = "none";
+        }
+    }
     $scope.deleteEmail = function(email){
         deleteEmail(email._id);
     }

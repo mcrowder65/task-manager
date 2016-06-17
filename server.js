@@ -83,7 +83,6 @@ app.post('/newEmail', function(req, res){
 	});
 });
 app.post('/setEmail', function(req, res){
-	console.log(req.body)
 	email.update({_id: req.body._id}, {
 		senderEmail: req.body.senderEmail,
 		senderPassword: req.body.senderPassword,
