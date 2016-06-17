@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/list');
-
+var nodemailer = require('nodemailer');
 app.use(express.static(__dirname + ''));
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -24,6 +24,33 @@ var port = server.address().port;
 					SERVER RECEIVERS
 ***************************************************/
 
+app.post('/sendEmail', function(req, res){
+	email.findOrCreate({
+		_id: req.body._id
+	}, function(err, email, created) {
+		if(email) {
+			res.json({})
+			var transporter = nodemailer.createTransport({
+					service: 'Gmail',
+					auth: {
+						user: email.senderEmail,
+						pass: email.senderPassword
+					}
+				});
+
+				var mailOptions = {
+					from: email.senderEmail,
+					to: email.receiverEmail,
+					subject: email.subject,
+					html: email.emailBody
+				};
+				transporter.sendMail(mailOptions);
+				email.remove({_id: email._id},function(err, tempEmail){});
+		}
+		else
+			res.sendStatus("403");
+	});
+});
 app.post('/deleteEmail', function(req, res){
 	email.remove({_id: req.body._id},
 	function(err, email){

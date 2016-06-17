@@ -66,6 +66,9 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
     $scope.verifyPasswords = function() {
         verifyPasswords($scope.initialPassword, $scope.confirmPassword);
     }
+    $scope.sendEmailRightAway = function(email) {
+        sendEmail(email._id);
+    }
 });
 
 app.config(function ($routeProvider) {
@@ -155,6 +158,24 @@ function showEmailConfirmationBanner(success){
 /*******************************************************************************************************************/
                                                 //Server senders
 /*******************************************************************************************************************/
+
+function sendEmail(_id){
+    $.ajax
+    ({
+        url: "/sendEmail",
+        dataType: "json",
+        type: "POST",
+        async: false,
+        data: {_id: _id},
+        success: function(data, status, headers, config){
+            window.location = '/#/profile';
+            window.location = '/#/allEmails';
+        }.bind(this),
+        error: function(data, status, headers, config){
+
+        }.bind(this)
+    });
+}
 function deleteEmail(_id){
     $.ajax
     ({
