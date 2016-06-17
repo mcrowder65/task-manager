@@ -17,22 +17,34 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
             showEmailConfirmationBanner(false);
             return; 
         }
-        sendEmailToServer({
-            senderEmail: $scope.senderEmail,
-            senderPassword: $scope.senderPassword,
-            receiverEmail: $scope.receiverEmail,
-            timeToSend: timeToSend,
-            emailBody: $scope.emailBody,
-            subject: $scope.subject,
-            userID: localStorage.token
-        });
+        if(get('_id') == null){
+            sendEmailToServer({
+                senderEmail: $scope.senderEmail,
+                senderPassword: $scope.senderPassword,
+                receiverEmail: $scope.receiverEmail,
+                timeToSend: timeToSend,
+                emailBody: $scope.emailBody,
+                subject: $scope.subject,
+                userID: localStorage.token,
+                dateToSend: $scope.dateToSend,
+                timeOfDay: $scope.timeToSend
+            });
+        } else {
+            setEmail({
+                _id: get('_id'),
+                senderEmail: $scope.senderEmail,
+                senderPassword: $scope.senderPassword,
+                receiverEmail: $scope.receiverEmail,
+                timeToSend: timeToSend,
+                emailBody: $scope.emailBody,
+                subject: $scope.subject,
+                userID: localStorage.token,
+                dateToSend: $scope.dateToSend,
+                timeOfDay: $scope.timeToSend
+            });
+        }
     }
 
-    $scope.filterFn = function(email) {
-        // Do some tests
-
-        return true; // otherwise it won't be within the results
-    };
     $scope.deleteEmail = function(email){
         deleteEmail(email._id);
     }
@@ -68,6 +80,20 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
     }
     $scope.sendEmailRightAway = function(email) {
         sendEmail(email._id);
+    }
+    $scope.editEmail = function(_id){
+        window.location.href = "/#/addEmail/?_id=" + _id;
+        $scope.editing = true;
+    }
+    $scope.getEmailData = function(){
+        var email = getEmailData(get('_id'));
+        $scope.dateToSend = email.dateToSend != null ? new Date(email.dateToSend) : $scope.dateToSend;//email.dateToSend;
+        $scope.timeToSend = email.timeOfDay != null ? email.timeOfDay : $scope.timeToSend   ;
+        $scope.subject = email.subject;
+        $scope.emailBody = email.emailBody;
+        $scope.receiverEmail = email.receiverEmail != null ? email.receiverEmail : $scope.receiverEmail;
+        $scope.senderEmail = email.senderEmail != null ? email.senderEmail : $scope.senderEmail;
+        $scope.senderPassword = email.senderPassword != null ? email.senderPassword : $scope.senderPassword;
     }
 });
 
@@ -127,6 +153,22 @@ app.config(function ($routeProvider) {
     .otherwise({ redirectTo: '/allEmails' });
 
 });
+function get(parameter) {  
+  var url = window.location.href;
+  var index = url.indexOf(parameter);
+  if(index == -1)
+    return null;
+  index += parameter.length + 1; //if the word we're looking for is address, get a index
+                                 //then add address.length +1 to get start of value 
+   
+  var i = index;
+  while(url[i] != '?' && url[i] != '&') {
+    if(i > url.length)
+      break;
+    i++;
+  }
+  return url.substring(index, i);
+} 
 function changePasswordBoxColor(color){
     document.getElementById("initialPassword").style.borderColor=color;
     document.getElementById("confirmPassword").style.borderColor=color;
@@ -158,7 +200,43 @@ function showEmailConfirmationBanner(success){
 /*******************************************************************************************************************/
                                                 //Server senders
 /*******************************************************************************************************************/
-
+function setEmail(email){
+    console.log(email);
+    $.ajax
+    ({
+        url: "/setEmail",
+        dataType: 'json',
+        type: 'POST',
+        async: false,
+        data: email,
+        success: function(data, status, headers, config){
+            showEmailConfirmationBanner(true);
+        }.bind(this),
+        error: function(data, status, headers, config){
+            showEmailConfirmationBanner(false);
+        }.bind(this)
+    });
+}
+function getEmailData(_id){
+    var email = {};
+    $.ajax
+    ({
+        url: "/getEmails",
+        dataType: 'json',
+        type: 'POST',
+        async: false,
+        data: {id: localStorage.token},
+        success: function(data, status, headers, config){
+            emails = data;
+            for(var i = 0; i < emails.length; i++) {
+                email = emails[i]._id == _id ? emails[i] : email;
+            }
+        }.bind(this),
+        error: function(data, status, headers, config){
+        }.bind(this)
+    });
+    return email;
+}
 function sendEmail(_id){
     $.ajax
     ({
@@ -295,6 +373,7 @@ function setSenderPassword(data){
     }
 }
 function sendEmailToServer(data){
+    console.log(data);
     $.ajax
     ({
         url: "/newEmail",

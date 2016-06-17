@@ -9,7 +9,9 @@ var emailSchema = new Schema({
     timeToSend: Date,
     emailBody: String,
     subject: String,
-    userID: String
+    userID: String,
+    dateToSend: String,
+    timeOfDay: String
 });
 
 // add findOrCreate

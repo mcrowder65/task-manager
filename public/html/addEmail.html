@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="public/css/addEmail.css">
 
-<div data-ng-init="getSenderEmail(); getSenderPassword(); getReceiverEmail(); " id="wrapper">
+<div data-ng-init="getSenderEmail(); getSenderPassword(); getReceiverEmail(); getEmailData();" id="wrapper">
         
     <div class="row">
 
@@ -30,7 +30,7 @@
       </div>
 
       <!-- third -->
-      <button id="button" type="button" class="btn btn-primary" data-ng-click="sendEmail()"> Submit email </button>
+      <button id="button" type="button" class="btn btn-primary" data-ng-click="sendEmail()"> Set Reminder </button>
 
 
     </div>

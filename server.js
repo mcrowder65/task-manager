@@ -69,7 +69,9 @@ app.post('/newEmail', function(req, res){
 		emailBody: req.body.emailBody,
 		timeToSend: req.body.timeToSend,
 		subject: req.body.subject,
-		userID: req.body.userID
+		userID: req.body.userID,
+		dateToSend: req.body.dateToSend,
+		timeOfDay: req.body.timeOfDay
 	}, function(err, email, created) {
 		if (created) {
 			res.json({});
@@ -80,6 +82,26 @@ app.post('/newEmail', function(req, res){
 			res.sendStatus("403");
 	});
 });
+app.post('/setEmail', function(req, res){
+	console.log(req.body)
+	email.update({_id: req.body._id}, {
+		senderEmail: req.body.senderEmail,
+		senderPassword: req.body.senderPassword,
+		receiverEmail: req.body.receiverEmail,
+		emailBody: req.body.emailBody,
+		timeToSend: req.body.timeToSend,
+		subject: req.body.subject,
+		userID: req.body.userID,
+		dateToSend: req.body.dateToSend,
+		timeOfDay: req.body.timeOfDay
+	},
+	function(err, email) {
+		if(email)
+			res.json(req.body.receiverEmail);
+		else
+			res.sendStatus('403');
+	});
+})
 app.post('/getReceiverEmail', function(req, res) {
 	user.findOne({_id: req.body.id}, 
 	function(err, tempUser) {
