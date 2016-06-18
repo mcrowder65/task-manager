@@ -208,7 +208,6 @@ function showEmailConfirmationBanner(success){
                                                 //Server senders
 /*******************************************************************************************************************/
 function setEmail(email){
-    console.log(email);
     $.ajax
     ({
         url: "/setEmail",

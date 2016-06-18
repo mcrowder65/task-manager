@@ -30,25 +30,33 @@ function checkEmails() {
 	email.find({}, function(err, emails, created) {
 		for(var i = 0; i < emails.length; i++){
 			if(emails[i].timeToSend.getTime() < new Date().getTime()){
-				var transporter = nodemailer.createTransport({
-					service: 'Gmail',
-					auth: {
-						user: emails[i].senderEmail,
-						pass: emails[i].senderPassword
-					}
-				});
-
-				var mailOptions = {
-					from: emails[i].senderEmail,
-					to: emails[i].receiverEmail,
-					subject: emails[i].subject,
-					html: emails[i].emailBody
-				};
-				transporter.sendMail(mailOptions);
-				email.remove({_id: emails[i]._id},function(err, tempEmail){});
+				sendEmail(emails[i]);
 			}
 		}
 	});
 	
+}
+function sendEmail(emailObj){
+	var receiverEmails = emailObj.receiverEmail.split(",");
+
+	for(var i = 0; i < receiverEmails.length; i++){
+		var transporter = nodemailer.createTransport({
+			service: 'Gmail',
+			auth: {
+				user: emailObj.senderEmail,
+				pass: emailObj.senderPassword
+			}
+		});
+
+		var mailOptions = {
+			from: emailObj.senderEmail,
+			to: receiverEmails[i],
+			subject: emailObj.subject,
+			html: emailObj.emailBody
+		};
+		transporter.sendMail(mailOptions);
+	}
+	
+	email.remove({_id: emailObj._id},function(err, tempEmail){});
 }
 setInterval(checkEmails, 30000);

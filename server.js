@@ -30,7 +30,9 @@ app.post('/sendEmail', function(req, res){
 	}, function(err, email, created) {
 		if(email) {
 			res.json({})
-			var transporter = nodemailer.createTransport({
+			var receiverEmails = email.receiverEmail.split(",");
+			for(var i = 0; i < receiverEmails.length; i++){
+				var transporter = nodemailer.createTransport({
 					service: 'Gmail',
 					auth: {
 						user: email.senderEmail,
@@ -40,11 +42,12 @@ app.post('/sendEmail', function(req, res){
 
 				var mailOptions = {
 					from: email.senderEmail,
-					to: email.receiverEmail,
+					to: receiverEmails[i],
 					subject: email.subject,
 					html: email.emailBody
 				};
 				transporter.sendMail(mailOptions);
+			}
 				email.remove({_id: email._id},function(err, tempEmail){});
 		}
 		else
