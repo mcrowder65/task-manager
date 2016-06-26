@@ -8,43 +8,7 @@ app.factory('simpleFactory', function(){
 });
 
 app.controller('SimpleController', function ($scope, simpleFactory) {
-    $scope.sendEmail = function() {
-        try {
-            var time = String($scope.dateToSend);
-            time = time.match("([Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec]* [0-9]* [0-9]{0,4})");
-            time = time[0];
-            var timeToSend = new Date(time + " " + $scope.timeToSend).getTime();
-        } catch(err) {
-            showEmailConfirmationBanner(false);
-            return; 
-        }
-        if(get('_id') == null){
-            sendEmailToServer({
-                senderEmail: $scope.senderEmail,
-                senderPassword: $scope.senderPassword,
-                receiverEmail: $scope.receiverEmail,
-                timeToSend: timeToSend,
-                emailBody: $scope.emailBody,
-                subject: $scope.subject,
-                userID: localStorage.token,
-                dateToSend: $scope.dateToSend,
-                timeOfDay: $scope.timeToSend
-            });
-        } else {
-            setEmail({
-                _id: get('_id'),
-                senderEmail: $scope.senderEmail,
-                senderPassword: $scope.senderPassword,
-                receiverEmail: $scope.receiverEmail,
-                timeToSend: timeToSend,
-                emailBody: $scope.emailBody,
-                subject: $scope.subject,
-                userID: localStorage.token,
-                dateToSend: $scope.dateToSend,
-                timeOfDay: $scope.timeToSend
-            });
-        }
-    }
+    
     $scope.hideFields = function(email, type){
         if(type === 'body' && (email.emailBody == null || email.emailBody == "")){
             document.getElementById("body" + email._id).style.display = "none";
@@ -53,56 +17,57 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
             document.getElementById("subject" + email._id).style.display = "none";
         }
     }
+    //TODO add to different controller
     $scope.deleteEmail = function(email){
         deleteEmail(email._id);
     }
+    //TODO add to different controller
     $scope.getEmails = function(){
         $scope.emails = getEmails();
     }
     $scope.getSenderPassword = function() {
         $scope.senderPassword = getSenderPassword();
     }
+    //TODO add to different controller
     $scope.setSenderPassword = function() {
         setSenderPassword({_id: localStorage.token, senderPassword: $scope.senderPassword});
     }
     $scope.getSenderEmail = function() {
         $scope.senderEmail = getSenderEmail();
     }
+    //TODO add to different controller
     $scope.setSenderEmail = function() {
         setSenderEmail({_id: localStorage.token, senderEmail: $scope.senderEmail});
     }
+    //TODO add to different controller
     $scope.setReceiverEmail = function(){
         setReceiverEmail({_id: localStorage.token, receiverEmail: $scope.receiverEmail});
     }
-    $scope.getReceiverEmail = function() {
-        $scope.receiverEmail = getReceiverEmail();
-    }
+    //TODO add to different controller
     $scope.signUp = function() {
         signUpUser($scope.username, $scope.confirmPassword);
     }
+    //TODO add to different controller
     $scope.login = function() {
         login($scope.username, $scope.password);
     }
+    //TODO add to different controller
     $scope.verifyPasswords = function() {
         verifyPasswords($scope.initialPassword, $scope.confirmPassword);
     }
+    //TODO add to different controller
     $scope.sendEmailRightAway = function(email) {
         sendEmail(email._id);
     }
+    //TODO add to different controller
     $scope.editEmail = function(_id){
         window.location.href = "/#/addEmail/?_id=" + _id;
         $scope.editing = true;
     }
-    $scope.getEmailData = function(){
-        var email = getEmailData(get('_id'));
-        $scope.dateToSend = email.dateToSend != null ? new Date(email.dateToSend) : $scope.dateToSend;//email.dateToSend;
-        $scope.timeToSend = email.timeOfDay != null ? email.timeOfDay : $scope.timeToSend   ;
-        $scope.subject = email.subject;
-        $scope.emailBody = email.emailBody;
-        $scope.receiverEmail = email.receiverEmail != null ? email.receiverEmail : $scope.receiverEmail;
-        $scope.senderEmail = email.senderEmail != null ? email.senderEmail : $scope.senderEmail;
-        $scope.senderPassword = email.senderPassword != null ? email.senderPassword : $scope.senderPassword;
+     $scope.getReceiverEmail = function() {
+        $scope.receiverEmail = getReceiverEmail();
     }
+    
 });
 
 app.config(function ($routeProvider) {
@@ -161,6 +126,10 @@ app.config(function ($routeProvider) {
     .otherwise({ redirectTo: '/allEmails' });
 
 });
+/*******************************************************************************************************************/
+                                                //BASIC FUNCTIONS
+/*******************************************************************************************************************/
+
 
 function get(parameter) {  
   var url = window.location.href;
@@ -178,14 +147,14 @@ function get(parameter) {
   }
   return url.substring(index, i);
 } 
-
+//TODO add to different controller
 function changePasswordBoxColor(color){
     $( document ).ready(function() {
         $("#initialPassword").css("borderColor", color);
         $("confirmPassword").css("borderColor", color);
     });
 }
-
+//TODO add to different controller
 function verifyPasswords(initialPassword, confirmPassword){
     if(initialPassword !== confirmPassword){
         changePasswordBoxColor("red");
@@ -197,63 +166,13 @@ function verifyPasswords(initialPassword, confirmPassword){
         }
     }
 }
-function showEmailConfirmationBanner(success){
 
-    $( document ).ready(function() {
-        if(success === true){
-            $("#successMessage").className = 'alert alert-succes';
-            $("#successMessage").innerText = "Your reminder has been set!";
-        } else {
-            $("#successMessage").className = "alert alert-danger";
-            $("#successMessage").innerText = "Something went wrong! Your reminder wasn't set.";
-        }
-        $("#successMessage").css("visibility", "visible");
-            var millisecondsToWait = 1000;
-            setTimeout(function() {
-                 $('#successMessage').css("visibility", "hidden");
-            }, millisecondsToWait);
-    });
-}
 
 /*******************************************************************************************************************/
                                                 //Server senders
 /*******************************************************************************************************************/
-function setEmail(email){
-    $.ajax
-    ({
-        url: "/setEmail",
-        dataType: 'json',
-        type: 'POST',
-        async: false,
-        data: email,
-        success: function(data, status, headers, config){
-            showEmailConfirmationBanner(true);
-        }.bind(this),
-        error: function(data, status, headers, config){
-            showEmailConfirmationBanner(false);
-        }.bind(this)
-    });
-}
-function getEmailData(_id){
-    var email = {};
-    $.ajax
-    ({
-        url: "/getEmails",
-        dataType: 'json',
-        type: 'POST',
-        async: false,
-        data: {id: localStorage.token},
-        success: function(data, status, headers, config){
-            emails = data;
-            for(var i = 0; i < emails.length; i++) {
-                email = emails[i]._id == _id ? emails[i] : email;
-            }
-        }.bind(this),
-        error: function(data, status, headers, config){
-        }.bind(this)
-    });
-    return email;
-}
+
+//TODO add to different controller
 function sendEmail(_id){
     $.ajax
     ({
@@ -271,6 +190,7 @@ function sendEmail(_id){
         }.bind(this)
     });
 }
+//TODO add to different controller
 function deleteEmail(_id){
     $.ajax
     ({
@@ -284,10 +204,24 @@ function deleteEmail(_id){
             window.location = '/#/allEmails';
         }.bind(this),
         error: function(data, status, headers, config){
-            console.log('error');
-            console.log(status);
         }.bind(this)
     });
+}
+//TODO add to different controller
+function setReceiverEmail(data){
+    if(data.receiverEmail) {
+        $.ajax
+        ({
+            url: "/setReceiverEmail",
+            dataType: 'json',
+            type: 'POST',
+            data: data,
+            success: function(data, status, headers, config){
+            }.bind(this),
+            error: function(data, status, headers, config){
+            }.bind(this)
+        });
+    }
 }
 var receiverEmail = '';
 function getReceiverEmail(){
@@ -307,22 +241,6 @@ function getReceiverEmail(){
     });
     return receiverEmail;
 }
-function setReceiverEmail(data){
-    if(data.receiverEmail) {
-        $.ajax
-        ({
-            url: "/setReceiverEmail",
-            dataType: 'json',
-            type: 'POST',
-            data: data,
-            success: function(data, status, headers, config){
-                console.log('set receiverEmail to ' + data);
-            }.bind(this),
-            error: function(data, status, headers, config){
-            }.bind(this)
-        });
-    }
-}
 var senderEmail = '';
 function getSenderEmail(){
     $.ajax
@@ -340,6 +258,7 @@ function getSenderEmail(){
     });
     return senderEmail;
 }
+//TODO add to different controller
 function setSenderEmail(data){
     if(data.senderEmail) {
         $.ajax
@@ -373,6 +292,7 @@ function getSenderPassword(){
     });
     return senderPassword;
 }
+//TODO add to different controller
 function setSenderPassword(data){
     if(data.senderPassword) {
         $.ajax
@@ -389,23 +309,7 @@ function setSenderPassword(data){
         });
     }
 }
-function sendEmailToServer(data){
-    console.log(data);
-    $.ajax
-    ({
-        url: "/newEmail",
-        dataType: 'json',
-        type: 'POST',
-        data: data,
-        success: function(data, status, headers, config){
-          showEmailConfirmationBanner(true);
-
-        }.bind(this),
-        error: function(data, status, headers, config){
-          showEmailConfirmationBanner(false);
-        }.bind(this)
-    });
-}
+//TODO add to different controller
 function signUpUser(username, password){
     $.ajax
     ({
@@ -422,6 +326,7 @@ function signUpUser(username, password){
         }.bind(this)
     });
 }
+//TODO add to different controller
 function login(username, password){
     $.ajax
     ({
@@ -438,6 +343,7 @@ function login(username, password){
         }.bind(this)
     });
 }
+//TODO add to different controller
 var emails = [];
 function getEmails(){
     $.ajax
