@@ -29,8 +29,12 @@ app.post('/getEmails',
 function checkEmails() {
 	email.find({}, function(err, emails, created) {
 		for(var i = 0; i < emails.length; i++){
-			if(emails[i].timeToSend.getTime() < new Date().getTime()){
-				sendEmail(emails[i]);
+			if(emails[i].timeToSend != null) {
+				if(emails[i].timeToSend.getTime() < new Date().getTime()){
+					sendEmail(emails[i]);
+				}
+			} else if(emails[i].timeToSend == null) {
+				email.remove({_id: emails[i]._id}, function(err, tempEmail){});
 			}
 		}
 	});
@@ -59,4 +63,4 @@ function sendEmail(emailObj){
 	
 	email.remove({_id: emailObj._id},function(err, tempEmail){});
 }
-setInterval(checkEmails, 30000);
+setInterval(checkEmails, 5);
