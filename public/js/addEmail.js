@@ -72,8 +72,11 @@ function verifyInput(scope){
         return false;
     }
 
+    //TODO verify this
     var dateToSend = scope.dateToSend;
+    
     console.log("dateToSend: " + dateToSend);
+    //TODO verify this
     var timeToSend = scope.timeToSend;
     console.log("timeToSend: " + timeToSend);
     return true;
@@ -115,7 +118,7 @@ function setEmail(email){
         }.bind(this)
     });
 }
-
+//TODO make its own server receiver
 function getEmailData(_id){
     var email = {};
     $.ajax

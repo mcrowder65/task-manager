@@ -9,6 +9,7 @@ app.factory('simpleFactory', function(){
 
 app.controller('SimpleController', function ($scope, simpleFactory) {
     
+    //TODO add to all emails controller
     $scope.hideFields = function(email, type){
         if(type === 'body' && (email.emailBody == null || email.emailBody == "")){
             document.getElementById("body" + email._id).style.display = "none";
@@ -17,54 +18,57 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
             document.getElementById("subject" + email._id).style.display = "none";
         }
     }
-    //TODO add to different controller
+    //TODO add to all emails controller
     $scope.deleteEmail = function(email){
         deleteEmail(email._id);
     }
-    //TODO add to different controller
+    //TODO add to all emails controller
     $scope.getEmails = function(){
         $scope.emails = getEmails();
     }
+    //Used in allEmails and Profile controller
     $scope.getSenderPassword = function() {
         $scope.senderPassword = getSenderPassword();
     }
-    //TODO add to different controller
+    //TODO add to profile controller
     $scope.setSenderPassword = function() {
         setSenderPassword({_id: localStorage.token, senderPassword: $scope.senderPassword});
     }
+    //Used in allEmails and Profile controller
     $scope.getSenderEmail = function() {
         $scope.senderEmail = getSenderEmail();
     }
-    //TODO add to different controller
+    //TODO add to profile controller
     $scope.setSenderEmail = function() {
         setSenderEmail({_id: localStorage.token, senderEmail: $scope.senderEmail});
     }
-    //TODO add to different controller
+    //TODO add to profile controller
     $scope.setReceiverEmail = function(){
         setReceiverEmail({_id: localStorage.token, receiverEmail: $scope.receiverEmail});
     }
-    //TODO add to different controller
+    //TODO add to sign up controller
     $scope.signUp = function() {
         signUpUser($scope.username, $scope.confirmPassword);
     }
-    //TODO add to different controller
+    //TODO add to login controller
     $scope.login = function() {
         login($scope.username, $scope.password);
     }
-    //TODO add to different controller
+    //TODO add to sign up controller
     $scope.verifyPasswords = function() {
         verifyPasswords($scope.initialPassword, $scope.confirmPassword);
     }
-    //TODO add to different controller
+    //TODO add to all emails controller
     $scope.sendEmailRightAway = function(email) {
         sendEmail(email._id);
     }
-    //TODO add to different controller
+    //TODO add to all emails controller
     $scope.editEmail = function(_id){
         window.location.href = "/#/addEmail/?_id=" + _id;
         $scope.editing = true;
     }
-     $scope.getReceiverEmail = function() {
+    //used in allEmails and profile controller
+    $scope.getReceiverEmail = function() {
         $scope.receiverEmail = getReceiverEmail();
     }
     
@@ -147,14 +151,14 @@ function get(parameter) {
   }
   return url.substring(index, i);
 } 
-//TODO add to different controller
+//TODO add to sign up controller
 function changePasswordBoxColor(color){
     $( document ).ready(function() {
         $("#initialPassword").css("borderColor", color);
         $("confirmPassword").css("borderColor", color);
     });
 }
-//TODO add to different controller
+//TODO add to sign up controller
 function verifyPasswords(initialPassword, confirmPassword){
     if(initialPassword !== confirmPassword){
         changePasswordBoxColor("red");
@@ -172,7 +176,7 @@ function verifyPasswords(initialPassword, confirmPassword){
                                                 //Server senders
 /*******************************************************************************************************************/
 
-//TODO add to different controller
+//TODO add to allEmails controller
 function sendEmail(_id){
     $.ajax
     ({
@@ -190,7 +194,7 @@ function sendEmail(_id){
         }.bind(this)
     });
 }
-//TODO add to different controller
+//TODO add to allEmails controller
 function deleteEmail(_id){
     $.ajax
     ({
@@ -207,7 +211,7 @@ function deleteEmail(_id){
         }.bind(this)
     });
 }
-//TODO add to different controller
+//TODO add to profile controller
 function setReceiverEmail(data){
     if(data.receiverEmail) {
         $.ajax
@@ -223,6 +227,7 @@ function setReceiverEmail(data){
         });
     }
 }
+//TODO do i have to have this global variable?
 var receiverEmail = '';
 function getReceiverEmail(){
     
@@ -241,6 +246,7 @@ function getReceiverEmail(){
     });
     return receiverEmail;
 }
+//TODO do i have to have this global variable?
 var senderEmail = '';
 function getSenderEmail(){
     $.ajax
@@ -258,7 +264,8 @@ function getSenderEmail(){
     });
     return senderEmail;
 }
-//TODO add to different controller
+
+//TODO add to profile controller
 function setSenderEmail(data){
     if(data.senderEmail) {
         $.ajax
@@ -275,6 +282,7 @@ function setSenderEmail(data){
         });
     }
 }
+//TODO do i have to have this global variable?
 var senderPassword = '';
 function getSenderPassword(){
     $.ajax
@@ -292,7 +300,7 @@ function getSenderPassword(){
     });
     return senderPassword;
 }
-//TODO add to different controller
+//TODO add to profile controller
 function setSenderPassword(data){
     if(data.senderPassword) {
         $.ajax
@@ -309,7 +317,7 @@ function setSenderPassword(data){
         });
     }
 }
-//TODO add to different controller
+//TODO add to sign up controller
 function signUpUser(username, password){
     $.ajax
     ({
@@ -326,7 +334,7 @@ function signUpUser(username, password){
         }.bind(this)
     });
 }
-//TODO add to different controller
+//TODO add to login controller
 function login(username, password){
     $.ajax
     ({
@@ -343,7 +351,8 @@ function login(username, password){
         }.bind(this)
     });
 }
-//TODO add to different controller
+//TODO add to all emails controller
+//TODO do i need this global variable?
 var emails = [];
 function getEmails(){
     $.ajax
