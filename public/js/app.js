@@ -6,6 +6,7 @@ app.factory('simpleFactory', function(){
 
     return factory;
 });
+
 app.controller('SimpleController', function ($scope, simpleFactory) {
     $scope.sendEmail = function() {
         try {
@@ -160,6 +161,7 @@ app.config(function ($routeProvider) {
     .otherwise({ redirectTo: '/allEmails' });
 
 });
+
 function get(parameter) {  
   var url = window.location.href;
   var index = url.indexOf(parameter);
@@ -176,9 +178,12 @@ function get(parameter) {
   }
   return url.substring(index, i);
 } 
+
 function changePasswordBoxColor(color){
-    document.getElementById("initialPassword").style.borderColor=color;
-    document.getElementById("confirmPassword").style.borderColor=color;
+    $( document ).ready(function() {
+        $("#initialPassword").css("borderColor", color);
+        $("confirmPassword").css("borderColor", color);
+    });
 }
 
 function verifyPasswords(initialPassword, confirmPassword){
@@ -193,17 +198,23 @@ function verifyPasswords(initialPassword, confirmPassword){
     }
 }
 function showEmailConfirmationBanner(success){
-    if(success === true){
-        document.getElementById('successMessage').className = 'alert alert-success';
-        document.getElementById('successMessage').innerText = 'Your reminder has been set!';
-        document.getElementById('successMessage').style.visibility = "visible";
-    }
-    else{
-        document.getElementById("successMessage").className = "alert alert-danger";
-        document.getElementById("successMessage").innerText= "Something went wrong! Your reminder wasn't set.";
-        document.getElementById('successMessage').style.visibility = "visible";
-    }
+
+    $( document ).ready(function() {
+        if(success === true){
+            $("#successMessage").className = 'alert alert-succes';
+            $("#successMessage").innerText = "Your reminder has been set!";
+        } else {
+            $("#successMessage").className = "alert alert-danger";
+            $("#successMessage").innerText = "Something went wrong! Your reminder wasn't set.";
+        }
+        $("#successMessage").css("visibility", "visible");
+            var millisecondsToWait = 1000;
+            setTimeout(function() {
+                 $('#successMessage').css("visibility", "hidden");
+            }, millisecondsToWait);
+    });
 }
+
 /*******************************************************************************************************************/
                                                 //Server senders
 /*******************************************************************************************************************/
