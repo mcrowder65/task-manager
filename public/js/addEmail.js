@@ -68,7 +68,13 @@ function verifyInput(scope){
     var senderEmail = scope.senderEmail;
     var receiverEmail = scope.receiverEmail;
     var regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    if(!regex.test(senderEmail) || !regex.test(receiverEmail)) {
+    var receiverEmails = receiverEmail.split(',');
+    for(var i = 0; i < receiverEmails.length; i++) {
+        if(!regex.test(receiverEmails[i])){
+            return false;
+        }
+    }
+    if(!regex.test(senderEmail)) {
         return false;
     }
 

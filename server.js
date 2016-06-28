@@ -64,7 +64,7 @@ app.post('/deleteEmail', function(req, res){
 	
 });
 var email = require('./models/email.js');
-app.post('/newEmail', function(req, res){
+app.post('/newEmail', function(req, res) {
 		email.findOrCreate({
 		senderEmail: req.body.senderEmail,
 		senderPassword: req.body.senderPassword,
@@ -226,16 +226,6 @@ app.post('/getEmails', function(req, res) {
         }
 	});
 });
-
-
-
-
-
-
-
-
-
-
 
 
 
