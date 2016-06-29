@@ -194,7 +194,19 @@ app.post('/signup', function(req, res) {
 		}
 	});
 });
-
+app.post('/getEmailData', function(req, res){
+	email.findOne({_id: req.body._id},
+	function(err, tempEmail) {
+		console.log(String(tempEmail));
+		
+        if (tempEmail) {
+            res.json({data: tempEmail});
+       	} 
+        else if (err) {
+            res.sendStatus(403);
+        }
+	});
+});
 app.post('/login', function(req, res) {
 	user.findOne({username: req.body.username}, 
 	function(err, tempUser) {

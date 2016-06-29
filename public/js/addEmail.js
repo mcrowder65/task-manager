@@ -49,8 +49,8 @@ app.controller('addEmail', ['$scope', function ($scope) {
         }
     }
     $scope.getEmailData = function(){
-        var email = getEmailData(get('_id'));
-        $scope.dateToSend = email.dateToSend != null ? new Date(email.dateToSend) : $scope.dateToSend;//email.dateToSend;
+        var email = getEmailData(get('_id')).data;
+        $scope.dateToSend = email.dateToSend != null ? new Date(email.dateToSend) : $scope.dateToSend;
         $scope.timeToSend = email.timeOfDay != null ? email.timeOfDay : $scope.timeToSend   ;
         $scope.subject = email.subject;
         $scope.emailBody = email.emailBody;
@@ -64,7 +64,7 @@ app.controller('addEmail', ['$scope', function ($scope) {
                                                 //BASIC FUNCTIONS
 /*******************************************************************************************************************/
 
-function verifyInput(scope){
+function verifyInput(scope) {
     var senderEmail = scope.senderEmail;
     var receiverEmail = scope.receiverEmail;
     var regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -77,14 +77,6 @@ function verifyInput(scope){
     if(!regex.test(senderEmail)) {
         return false;
     }
-
-    //TODO verify this
-    var dateToSend = scope.dateToSend;
-    
-    console.log("dateToSend: " + dateToSend);
-    //TODO verify this
-    var timeToSend = scope.timeToSend;
-    console.log("timeToSend: " + timeToSend);
     return true;
 }
 function showEmailConfirmationBanner(success){
@@ -129,16 +121,16 @@ function getEmailData(_id){
     var email = {};
     $.ajax
     ({
-        url: "/getEmails",
+        url: "/getEmailData",
         dataType: 'json',
         type: 'POST',
         async: false,
-        data: {id: localStorage.token},
+        data: {_id: _id},
         success: function(data, status, headers, config){
-            emails = data;
-            for(var i = 0; i < emails.length; i++) {
-                email = emails[i]._id == _id ? emails[i] : email;
-            }
+            email = data;
+            // for(var i = 0; i < emails.length; i++) {
+            //     email = emails[i]._id == _id ? emails[i] : email;
+            // }
         }.bind(this),
         error: function(data, status, headers, config){
         }.bind(this)

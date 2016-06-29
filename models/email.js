@@ -13,7 +13,6 @@ var emailSchema = new Schema({
     dateToSend: String,
     timeOfDay: String
 });
-
 // add findOrCreate
 emailSchema.plugin(findOrCreate);
 

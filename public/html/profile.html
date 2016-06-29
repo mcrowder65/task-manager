@@ -1,14 +1,14 @@
 <link rel="stylesheet" type="text/css" href="public/css/profile.css">
-
-<div data-ng-init="getReceiverEmail(); getSenderEmail(); getSenderPassword(); " style="text-align:center">
-    <b>Receiving email account:</b> <input type="text" data-ng-value="receiverEmail" data-ng-model="receiverEmail"/>
-	<button type="button" class="btn btn-primary" data-ng-click="setReceiverEmail()">Set receiver</button><br><br>
-	<b>Sender email account:</b> <input type="text" data-ng-value="senderEmail" data-ng-model="senderEmail"/>
-	<button type="button" class="btn btn-primary" data-ng-click="setSenderEmail()">Set sender email</button><br><br>
-	<b>Sender email password:</b> <input type="text" data-ng-value="senderPassword" data-ng-model="senderPassword"/>
-	<button type="button" class="btn btn-primary" data-ng-click="setSenderPassword()">Set sender password</button><br><br>
+<div data-ng-controller="profile">
+	<div data-ng-init="getReceiverEmail(); getSenderEmail(); getSenderPassword(); " style="text-align:center">
+	    <b>Receiving email account:</b> <input type="text" data-ng-value="receiverEmail" data-ng-model="receiverEmail"/>
+		<button type="button" class="btn btn-primary" data-ng-click="setReceiverEmail()">Set receiver</button><br><br>
+		<b>Sender email account:</b> <input type="text" data-ng-value="senderEmail" data-ng-model="senderEmail"/>
+		<button type="button" class="btn btn-primary" data-ng-click="setSenderEmail()">Set sender email</button><br><br>
+		<b>Sender email password:</b> <input type="text" data-ng-value="senderPassword" data-ng-model="senderPassword"/>
+		<button type="button" class="btn btn-primary" data-ng-click="setSenderPassword()">Set sender password</button><br><br>
+	</div>
 </div>
-
 
 
 
