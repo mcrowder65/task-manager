@@ -9,17 +9,17 @@ app.factory('simpleFactory', function(){
 
 app.controller('SimpleController', function ($scope, simpleFactory) {
     
-    //Used in addEmail and Profile controller
+    //Used in addReminder and Profile controller
     $scope.getSenderPassword = function() {
         $scope.senderPassword = getSenderPassword();
     }
     
-    //Used in addEmail and Profile controller
+    //Used in addReminder and Profile controller
     $scope.getSenderEmail = function() {
         $scope.senderEmail = getSenderEmail();
     }
 
-    //Used in addEmail and profile controller
+    //Used in addReminder and profile controller
     $scope.getReceiverEmail = function() {
         $scope.receiverEmail = getReceiverEmail();
     }
@@ -32,12 +32,12 @@ app.config(function ($routeProvider) {
     .when('/#',
     {
         controller: 'SimpleController',
-        templateUrl: 'public/html/allEmails.html'
+        templateUrl: 'public/html/allReminders.html'
     })
-    .when('/allEmails',	
+    .when('/allReminders',	
     {
 		controller: 'SimpleController',
-        templateUrl: 'public/html/allEmails.html'
+        templateUrl: 'public/html/allReminders.html'
     })
     .when('/day',
     {
@@ -54,10 +54,10 @@ app.config(function ($routeProvider) {
     	controller: 'SimpleController',
         templateUrl: 'public/html/month.html'
     })
-    .when('/addEmail',
+    .when('/addReminder',
     {
     	controller: 'SimpleController',
-    	templateUrl: 'public/html/addEmail.html'
+    	templateUrl: 'public/html/addReminder.html'
     })
     .when('/profile',
     {
@@ -79,7 +79,7 @@ app.config(function ($routeProvider) {
         controller: 'SimpleController',
         templateUrl: 'public/html/logout.html'
     })
-    .otherwise({ redirectTo: '/allEmails' });
+    .otherwise({ redirectTo: '/allReminders' });
 
 });
 /*******************************************************************************************************************/

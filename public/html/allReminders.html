@@ -1,0 +1,20 @@
+<div data-ng-controller="allReminders">
+	<div data-ng-init="getReminders()" style="text-align:center">
+		<div data-ng-repeat="reminder in reminders | orderBy:'timeToSend'">
+			<div class="col-md-6">
+	        <div class="panel panel-primary">
+
+	          <div class="panel-body" >
+			    <div id="receiver"><b>Receiver:</b> {{ reminder.receiverEmail }}</div>
+			    <div id="subject{{reminder._id}}"  data-ng-value="hideFields(reminder, 'subject')"><b>Subject: </b> {{ reminder.subject }}<br></div>
+			    <div id="body{{reminder._id}}" data-ng-value="hideFields(reminder, 'body')"><b>Body:</b> {{ reminder.emailBody }}</div>
+			    <div id="time"><b>Time:</b> {{ reminder.date }}<br></div>
+			    <button type="button" class="btn btn-danger" data-ng-click="deleteReminder(reminder)">Delete</button>
+			    <button type="button" class="btn btn-success" data-ng-click="editReminder(reminder._id)">Edit</button>
+			    <button type="button" class="btn btn-info" data-ng-click="sendReminderImmediately(reminder)">Send now</button>
+	          </div>
+	        </div>
+	      </div>
+		</div>
+	</div>
+</div>

@@ -20,52 +20,69 @@ var port = server.address().port;
 });
 
 
-/**************************************************
-					SERVER RECEIVERS
-***************************************************/
+/*****************************************************************************************************************************************************************************************
+																					SERVER RECEIVERS
+******************************************************************************************************************************************************************************************/
 
-app.post('/sendEmail', function(req, res){
-	email.findOrCreate({
+
+/**************************************************************************************************************************************
+																					REMINDERS
+**************************************************************************************************************************************/
+
+var reminder = require('./models/email.js');
+app.post('/sendReminderImmediately', function(req, res){
+	reminder.findOrCreate({
 		_id: req.body._id
-	}, function(err, email, created) {
-		if(email) {
+	}, function(err, tempReminder, created) {
+		if(tempReminder) {
 			res.json({})
-			var receiverEmails = email.receiverEmail.split(",");
+			var receiverEmails = tempReminder.receiverEmail.split(",");
 			for(var i = 0; i < receiverEmails.length; i++){
 				var transporter = nodemailer.createTransport({
 					service: 'Gmail',
 					auth: {
-						user: email.senderEmail,
-						pass: email.senderPassword
+						user: tempReminder.senderEmail,
+						pass: tempReminder.senderPassword
 					}
 				});
 
 				var mailOptions = {
-					from: email.senderEmail,
+					from: tempReminder.senderEmail,
 					to: receiverEmails[i],
-					subject: email.subject,
-					html: email.emailBody
+					subject: tempReminder.subject,
+					html: tempReminder.emailBody
 				};
 				transporter.sendMail(mailOptions);
 			}
-				email.remove({_id: email._id},function(err, tempEmail){});
+				reminder.remove({_id: tempReminder._id},function(err, temp){});
 		}
 		else
 			res.sendStatus("403");
 	});
 });
-app.post('/deleteEmail', function(req, res){
-	email.remove({_id: req.body._id},
-	function(err, email){
-		if(email){
+app.post('/getReminder', function(req, res){
+	reminder.findOne({_id: req.body._id},
+	function(err, tempReminder) {
+        if (tempReminder) {
+            res.json({data: tempReminder});
+       	} 
+        else if (err) {
+            res.sendStatus(403);
+        }
+	});
+});
+app.post('/deleteReminder', function(req, res){
+	reminder.remove({_id: req.body._id},
+	function(err, tempReminder){
+		if(tempReminder){
 			res.json({})
 		}
 	});
 	
 });
-var email = require('./models/email.js');
-app.post('/newEmail', function(req, res) {
-		email.findOrCreate({
+
+app.post('/newReminder', function(req, res) {
+		reminder.findOrCreate({
 		senderEmail: req.body.senderEmail,
 		senderPassword: req.body.senderPassword,
 		receiverEmail: req.body.receiverEmail,
@@ -75,18 +92,18 @@ app.post('/newEmail', function(req, res) {
 		userID: req.body.userID,
 		dateToSend: req.body.dateToSend,
 		timeOfDay: req.body.timeOfDay
-	}, function(err, email, created) {
+	}, function(err, tempReminder, created) {
 		if (created) {
 			res.json({});
 		}
-		else if(email)
+		else if(tempReminder)
 			res.json({});
 		else
 			res.sendStatus("403");
 	});
 });
-app.post('/setEmail', function(req, res){
-	email.update({_id: req.body._id}, {
+app.post('/setReminder', function(req, res){
+	reminder.update({_id: req.body._id}, {
 		senderEmail: req.body.senderEmail,
 		senderPassword: req.body.senderPassword,
 		receiverEmail: req.body.receiverEmail,
@@ -97,35 +114,49 @@ app.post('/setEmail', function(req, res){
 		dateToSend: req.body.dateToSend,
 		timeOfDay: req.body.timeOfDay
 	},
-	function(err, email) {
-		if(email)
+	function(err, tempReminder) {
+		if(tempReminder)
 			res.json(req.body.receiverEmail);
 		else
 			res.sendStatus('403');
 	});
 })
-app.post('/getReceiverEmail', function(req, res) {
-	user.findOne({_id: req.body.id}, 
-	function(err, tempUser) {
+
+
+app.post('/getReminders', function(req, res) {
+	reminder.find({userID: req.body.id}, 
+	function(err, tempReminders) {
 		if (err) {
 		    res.sendStatus(403);
 		    return;
 		}
-        if (tempUser) {
-            res.json({email:tempUser.receiverEmail});
+        if (tempReminders) {
+            res.json(tempReminders);
        	} 
         else {
             res.sendStatus(403);
         }
 	});
 });
-app.post('/setReceiverEmail', function(req, res) {
-	user.update({_id: req.body._id}, {receiverEmail: req.body.receiverEmail},
-	function(err, user) {
-		if(user)
-			res.json(req.body.receiverEmail);
-		else
-			res.sendStatus('403');
+/**************************************************************************************************************************************
+																					USER STUFF
+**************************************************************************************************************************************/
+var user = require('./models/user.js');
+app.post('/signup', function(req, res) {
+	user.findOrCreate({
+		username: req.body.username,
+		password: user.hashPassword(req.body.password),
+		receiverEmail: '',
+		senderEmail: '',
+		senderPassword: ''
+	}, function(err, tempUser, created) {
+		if(created) {
+			var token = user.generateToken(tempUser.username);
+	        res.json({token: tempUser._id});
+		}
+		else if(!created){
+			res.sendStatus("403");
+		}
 	});
 });
 app.post('/getSenderPassword', function(req, res) {
@@ -176,37 +207,7 @@ app.post('/setSenderEmail', function(req, res) {
 			res.sendStatus('403');
 	});
 });
-var user = require('./models/user.js');
-app.post('/signup', function(req, res) {
-	user.findOrCreate({
-		username: req.body.username,
-		password: user.hashPassword(req.body.password),
-		receiverEmail: '',
-		senderEmail: '',
-		senderPassword: ''
-	}, function(err, tempUser, created) {
-		if(created) {
-			var token = user.generateToken(tempUser.username);
-	        res.json({token: tempUser._id});
-		}
-		else if(!created){
-			res.sendStatus("403");
-		}
-	});
-});
-app.post('/getEmailData', function(req, res){
-	email.findOne({_id: req.body._id},
-	function(err, tempEmail) {
-		console.log(String(tempEmail));
-		
-        if (tempEmail) {
-            res.json({data: tempEmail});
-       	} 
-        else if (err) {
-            res.sendStatus(403);
-        }
-	});
-});
+
 app.post('/login', function(req, res) {
 	user.findOne({username: req.body.username}, 
 	function(err, tempUser) {
@@ -223,25 +224,34 @@ app.post('/login', function(req, res) {
         }
 	});
 });
-app.post('/getEmails', function(req, res) {
-	email.find({userID: req.body.id}, 
-	function(err, emails) {
+
+
+
+
+app.post('/getReceiverEmail', function(req, res) {
+	user.findOne({_id: req.body.id}, 
+	function(err, tempUser) {
 		if (err) {
 		    res.sendStatus(403);
 		    return;
 		}
-        if (emails) {
-            res.json(emails);
+        if (tempUser) {
+            res.json({email:tempUser.receiverEmail});
        	} 
         else {
             res.sendStatus(403);
         }
 	});
 });
-
-
-
-
+app.post('/setReceiverEmail', function(req, res) {
+	user.update({_id: req.body._id}, {receiverEmail: req.body.receiverEmail},
+	function(err, user) {
+		if(user)
+			res.json(req.body.receiverEmail);
+		else
+			res.sendStatus('403');
+	});
+});
 
 
 

@@ -1,6 +1,6 @@
 var app= angular.module('app');
-app.controller('addEmail', ['$scope', function ($scope) {
-   $scope.sendEmail = function() {
+app.controller('addReminder', ['$scope', function ($scope) {
+   $scope.newReminder = function() {
         if($scope.senderEmail == undefined || $scope.senderEmail == null || $scope.senderEmail == ""
          || $scope.senderPassword == undefined || $scope.senderPassword == null || $scope.senderPassword == ""
          || $scope.receiverEmail == undefined || $scope.receiverEmail == null || $scope.receiverEmail == ""
@@ -9,7 +9,7 @@ app.controller('addEmail', ['$scope', function ($scope) {
          || (($scope.subject == undefined || $scope.subject == null || $scope.subject == "")
          && ($scope.emailBody == undefined || $scope.emailBody == null || $scope.emailBody == ""))
          || !verifyInput($scope)) {
-            showEmailConfirmationBanner(false);
+            showReminderConfirmationBanner(false);
             return;
         }
         try {
@@ -18,11 +18,11 @@ app.controller('addEmail', ['$scope', function ($scope) {
             time = time[0];
             var timeToSend = new Date(time + " " + $scope.timeToSend).getTime();
         } catch(err) {
-            showEmailConfirmationBanner(false);
+            showReminderConfirmationBanner(false);
             return; 
         }
         if(get('_id') == null){
-            sendEmailToServer({
+            newReminder({
                 senderEmail: $scope.senderEmail,
                 senderPassword: $scope.senderPassword,
                 receiverEmail: $scope.receiverEmail,
@@ -34,7 +34,7 @@ app.controller('addEmail', ['$scope', function ($scope) {
                 timeOfDay: $scope.timeToSend
             });
         } else {
-            setEmail({
+            setReminder({
                 _id: get('_id'),
                 senderEmail: $scope.senderEmail,
                 senderPassword: $scope.senderPassword,
@@ -48,15 +48,17 @@ app.controller('addEmail', ['$scope', function ($scope) {
             });
         }
     }
-    $scope.getEmailData = function(){
-        var email = getEmailData(get('_id')).data;
-        $scope.dateToSend = email.dateToSend != null ? new Date(email.dateToSend) : $scope.dateToSend;
-        $scope.timeToSend = email.timeOfDay != null ? email.timeOfDay : $scope.timeToSend   ;
-        $scope.subject = email.subject;
-        $scope.emailBody = email.emailBody;
-        $scope.receiverEmail = email.receiverEmail != null ? email.receiverEmail : $scope.receiverEmail;
-        $scope.senderEmail = email.senderEmail != null ? email.senderEmail : $scope.senderEmail;
-        $scope.senderPassword = email.senderPassword != null ? email.senderPassword : $scope.senderPassword;
+    $scope.getReminder = function() {
+        var reminder = getReminder(get('_id')).data;
+        if(reminder) {
+            $scope.dateToSend = reminder.dateToSend != null ? new Date(reminder.dateToSend) : $scope.dateToSend;
+            $scope.timeToSend = reminder.timeOfDay != null ? reminder.timeOfDay : $scope.timeToSend   ;
+            $scope.subject = reminder.subject;
+            $scope.emailBody = reminder.emailBody;
+            $scope.receiverEmail = reminder.receiverEmail != null ? reminder.receiverEmail : $scope.receiverEmail;
+            $scope.senderEmail = reminder.senderEmail != null ? reminder.senderEmail : $scope.senderEmail;
+            $scope.senderPassword = reminder.senderPassword != null ? reminder.senderPassword : $scope.senderPassword;
+        }
     }
    
 }]);
@@ -79,7 +81,7 @@ function verifyInput(scope) {
     }
     return true;
 }
-function showEmailConfirmationBanner(success){
+function showReminderConfirmationBanner(success){
 
     $( document ).ready(function() {
         if(success === true){
@@ -100,57 +102,55 @@ function showEmailConfirmationBanner(success){
 /*******************************************************************************************************************/
                                                 //Server senders
 /*******************************************************************************************************************/
-function setEmail(email){
+function setReminder(email){
     $.ajax
     ({
-        url: "/setEmail",
+        url: "/setReminder",
         dataType: 'json',
         type: 'POST',
         async: false,
         data: email,
         success: function(data, status, headers, config){
-            showEmailConfirmationBanner(true);
+            showReminderConfirmationBanner(true);
         }.bind(this),
         error: function(data, status, headers, config){
-            showEmailConfirmationBanner(false);
+            showReminderConfirmationBanner(false);
         }.bind(this)
     });
 }
-//TODO make its own server receiver
-function getEmailData(_id){
-    var email = {};
-    $.ajax
-    ({
-        url: "/getEmailData",
-        dataType: 'json',
-        type: 'POST',
-        async: false,
-        data: {_id: _id},
-        success: function(data, status, headers, config){
-            email = data;
-            // for(var i = 0; i < emails.length; i++) {
-            //     email = emails[i]._id == _id ? emails[i] : email;
-            // }
-        }.bind(this),
-        error: function(data, status, headers, config){
-        }.bind(this)
-    });
-    return email;
+function getReminder(_id){
+    var reminder = {};
+    if(_id) {
+    
+        $.ajax
+        ({
+            url: "/getReminder",
+            dataType: 'json',
+            type: 'POST',
+            async: false,
+            data: {_id: _id},
+            success: function(data, status, headers, config){
+                reminder = data;
+            }.bind(this),
+            error: function(data, status, headers, config){
+            }.bind(this)
+        });
+    }
+    return reminder;
 }
 
-function sendEmailToServer(data){
+function newReminder(data){
     $.ajax
     ({
-        url: "/newEmail",
+        url: "/newReminder",
         dataType: 'json',
         type: 'POST',
         data: data,
         success: function(data, status, headers, config){
-          showEmailConfirmationBanner(true);
-
+          showReminderConfirmationBanner(true);
         }.bind(this),
         error: function(data, status, headers, config){
-          showEmailConfirmationBanner(false);
+          showReminderConfirmationBanner(false);
         }.bind(this)
     });
 }

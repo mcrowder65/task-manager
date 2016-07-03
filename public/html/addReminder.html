@@ -1,6 +1,6 @@
-<link rel="stylesheet" type="text/css" href="public/css/addEmail.css">
-<div data-ng-controller="addEmail">
-  <div data-ng-init="getSenderEmail(); getSenderPassword(); getReceiverEmail(); getEmailData();" id="wrapper">
+<link rel="stylesheet" type="text/css" href="public/css/addReminder.css">
+<div data-ng-controller="addReminder">
+  <div data-ng-init="getSenderEmail(); getSenderPassword(); getReceiverEmail(); getReminder();" id="wrapper">
           
       <div class="row">
 
@@ -21,8 +21,8 @@
           <div class="panel panel-primary">
             <div class="panel-heading" id="heading">Reminder content</div>
             <div class="panel-body">
-              <b>Date to send email:</b><input type="date" data-ng-model="dateToSend"/><br><br>
-              <b>Time to send email: </b><input maxlength="5" class="digitsOnly" placeholder="18:35" type="text" data-ng-model="timeToSend"/><br><br>
+              <b>Date to send reminder:</b><input type="date" data-ng-model="dateToSend"/><br><br>
+              <b>Time to send reminder: </b><input maxlength="5" class="digitsOnly" placeholder="18:35" type="text" data-ng-model="timeToSend"/><br><br>
               <b>Subject: </b><input type="text" data-ng-model="subject"/><br><br>
               <b>Body: </b><input type="text" data-ng-model="emailBody"/><br><br>
             </div>
@@ -30,7 +30,7 @@
         </div>
 
         <!-- third -->
-        <button id="button" type="button" class="btn btn-primary" data-ng-click="sendEmail()"> Set Reminder </button>
+        <button id="button" type="button" class="btn btn-primary" data-ng-click="newReminder()"> Set Reminder </button>
 
 
       </div>
