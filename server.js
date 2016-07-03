@@ -2,9 +2,13 @@ var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/list');
-var nodemailer = require('nodemailer');
 app.use(express.static(__dirname + ''));
 var bodyParser = require('body-parser');
+var userValidator = require('./server/validators/userValidator');
+var reminderValidator = require('./server/validators/reminderValidator');
+var utilities = require('./server/utilities');
+var reminder = require('./server/models/email.js');
+var user = require('./server/models/user.js');
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({
@@ -14,11 +18,10 @@ app.use(bodyParser.urlencoded({
 
 var portNumber = 8000
 var server = app.listen(portNumber, function() {
-console.log("Started on port " + portNumber);
-var host = server.address().address;
-var port = server.address().port;
+	console.log("Started on port " + portNumber);
+	var host = server.address().address;
+	var port = server.address().port;
 });
-
 
 /*****************************************************************************************************************************************************************************************
 																					SERVER RECEIVERS
@@ -29,32 +32,16 @@ var port = server.address().port;
 																					REMINDERS
 **************************************************************************************************************************************/
 
-var reminder = require('./models/email.js');
-app.post('/sendReminderImmediately', function(req, res){
+
+app.post('/sendReminderImmediately', function(req, res) {
+
 	reminder.findOrCreate({
 		_id: req.body._id
 	}, function(err, tempReminder, created) {
 		if(tempReminder) {
 			res.json({})
-			var receiverEmails = tempReminder.receiverEmail.split(",");
-			for(var i = 0; i < receiverEmails.length; i++){
-				var transporter = nodemailer.createTransport({
-					service: 'Gmail',
-					auth: {
-						user: tempReminder.senderEmail,
-						pass: tempReminder.senderPassword
-					}
-				});
-
-				var mailOptions = {
-					from: tempReminder.senderEmail,
-					to: receiverEmails[i],
-					subject: tempReminder.subject,
-					html: tempReminder.emailBody
-				};
-				transporter.sendMail(mailOptions);
-			}
-				reminder.remove({_id: tempReminder._id},function(err, temp){});
+			utilities.sendReminder(tempReminder);
+			reminder.remove({_id: tempReminder._id},function(err, temp){});
 		}
 		else
 			res.sendStatus("403");
@@ -82,6 +69,10 @@ app.post('/deleteReminder', function(req, res){
 });
 
 app.post('/newReminder', function(req, res) {
+	if(!reminderValidator.validateNewReminder(req.body)){
+		res.sendStatus("403");
+		return;
+	}
 		reminder.findOrCreate({
 		senderEmail: req.body.senderEmail,
 		senderPassword: req.body.senderPassword,
@@ -141,7 +132,7 @@ app.post('/getReminders', function(req, res) {
 /**************************************************************************************************************************************
 																					USER STUFF
 **************************************************************************************************************************************/
-var user = require('./models/user.js');
+
 app.post('/signup', function(req, res) {
 	user.findOrCreate({
 		username: req.body.username,
@@ -199,6 +190,10 @@ app.post('/getSenderEmail', function(req, res) {
 	});
 });
 app.post('/setSenderEmail', function(req, res) {
+	if(!userValidator.validateSenderEmail(req.body.senderEmail)){
+		res.sendStatus('403');
+		return;
+	}
 	user.update({_id: req.body._id}, {senderEmail: req.body.senderEmail},
 	function(err, user) {
 		if(user)
@@ -244,6 +239,11 @@ app.post('/getReceiverEmail', function(req, res) {
 	});
 });
 app.post('/setReceiverEmail', function(req, res) {
+	if(!userValidator.validateReceiverEmail(req.body.receiverEmail)) {
+		res.sendStatus('403');
+		return;
+	}
+
 	user.update({_id: req.body._id}, {receiverEmail: req.body.receiverEmail},
 	function(err, user) {
 		if(user)

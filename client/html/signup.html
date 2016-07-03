@@ -1,0 +1,22 @@
+<link rel="stylesheet" type="text/css" href="client/css/signup.css">
+
+<div data-ng-controller="signup">
+	<div class="center-block" id="signupdiv">
+	    <div class="panel panel-primary">
+	    <div class="panel panel-heading">Register</div>
+	      <div class="panel-body">
+	        <b>Username:</b> <br><input type="text" data-ng-model="username"/><br><br> 
+		    <b>Password:</b> <br><input type="password" data-ng-change="verifyPasswords()" id="initialPassword" data-ng-model="initialPassword" /><br><br>	
+		    <b>Confirm password:</b> <br><input type="password" data-ng-change="verifyPasswords()" id="confirmPassword" data-ng-model="confirmPassword"/><br><br>
+		    <button data-ng-click="signUp()"> Sign up </button>
+	      </div>
+	    </div>
+	</div>
+
+	<p class="bg-danger center-block" id="passwordsDontMatch">Your passwords don't match.</p>
+	<p class="bg-danger center-block" id="shortPassword">Your password is too short</p>
+	<p class="bg-danger center-block" id="duplicateUser">That username is already taken</p>
+
+
+</div>
+

@@ -1,0 +1,21 @@
+<link rel="stylesheet" type="text/css" href="client/css/profile.css">
+<div data-ng-controller="profile">
+	<div data-ng-init="getReceiverEmail(); getSenderEmail(); getSenderPassword(); " style="text-align:center">
+	    <b>Receiving email account:</b> <input type="text" id="receiverEmailAccount" data-ng-value="receiverEmail" data-ng-model="receiverEmail"/>
+		<button type="button" class="btn btn-primary btn-xs" data-ng-click="setReceiverEmail()">Set</button><br><br>
+		<b>Sender email account:</b> <input type="text" id="senderEmailAccount" data-ng-value="senderEmail" data-ng-model="senderEmail"/>
+		<button type="button" class="btn btn-primary btn-xs" data-ng-click="setSenderEmail()">Set</button><br><br>
+		<b>Sender email password:</b> <input type="text" id="senderEmailPassword" data-ng-value="senderPassword" data-ng-model="senderPassword"/>
+		<button type="button" class="btn btn-primary btn-xs" data-ng-click="setSenderPassword()">Set</button><br><br>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+

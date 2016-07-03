@@ -3,64 +3,40 @@ var app = express();
 var mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/list');
 var bodyParser = require('body-parser');
+var utilities = require('./server/utilities');
+var reminder = require('./server/models/email');
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({
         extended: true
 }));
-var nodemailer = require('nodemailer');
 
-var email = require('./models/email.js');
+
 
 var portNumber = 7999
 var server = app.listen(portNumber, function() {
 console.log("Started on port " + portNumber);
-var host = server.address().address;3
+var host = server.address().address;
 var port = server.address().port;
 });
 
-app.post('/getEmails',
-	function (req, res){
-		email.find({},
-		function(err, tempEmail)
-		{});
-	}
-);
-function checkEmails() {
-	email.find({}, function(err, emails, created) {
-		for(var i = 0; i < emails.length; i++){
-			if(emails[i].timeToSend != null) {
-				if(emails[i].timeToSend.getTime() < new Date().getTime()){
-					sendEmail(emails[i]);
+
+function checkReminders() {
+	reminder.find({}, function(err, reminders, created) {
+		for(var i = 0; i < reminders.length; i++){
+			if(reminders[i].timeToSend != null) {
+				if(reminders[i].timeToSend.getTime() < new Date().getTime()){
+					sendReminder(reminders[i]);
 				}
-			} else if(emails[i].timeToSend == null) {
-				email.remove({_id: emails[i]._id}, function(err, tempEmail){});
+			} else if(reminders[i].timeToSend == null) {
+				reminder.remove({_id: reminders[i]._id}, function(err, tempReminder){});
 			}
 		}
 	});
 	
 }
-function sendEmail(emailObj){
-	var receiverEmails = emailObj.receiverEmail.split(",");
-
-	for(var i = 0; i < receiverEmails.length; i++){
-		var transporter = nodemailer.createTransport({
-			service: 'Gmail',
-			auth: {
-				user: emailObj.senderEmail,
-				pass: emailObj.senderPassword
-			}
-		});
-
-		var mailOptions = {
-			from: emailObj.senderEmail,
-			to: receiverEmails[i],
-			subject: emailObj.subject,
-			html: emailObj.emailBody
-		};
-		transporter.sendMail(mailOptions);
-	}
-	
-	email.remove({_id: emailObj._id},function(err, tempEmail){});
+function sendReminder(reminderObj){
+	utilities.sendReminder(reminderObj);
+	reminder.remove({_id: reminderObj._id},function(err, tempReminder){});
 }
-setInterval(checkEmails, 5);
+setInterval(checkReminders, 5);
