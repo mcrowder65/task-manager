@@ -9,12 +9,12 @@ app.factory('simpleFactory', function(){
 
 app.controller('SimpleController', function ($scope, simpleFactory) {
     
-    //Used in addReminder and Profile controller
+    //Used in addReminder and profile controller
     $scope.getSenderPassword = function() {
         $scope.senderPassword = getSenderPassword();
     }
     
-    //Used in addReminder and Profile controller
+    //Used in addReminder and profile controller
     $scope.getSenderEmail = function() {
         $scope.senderEmail = getSenderEmail();
     }

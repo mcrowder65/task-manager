@@ -1,5 +1,5 @@
 var nodemailer = require('nodemailer');
-
+var log = require('./models/log');
 module.exports = {
   validateEmailAddress: function (email) {
   	var regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -18,11 +18,19 @@ module.exports = {
 
 		var mailOptions = {
 			from: reminder.senderEmail,
-			to: receiverEmails[i].trim(),
+			to: receiverEmails[i],
 			subject: reminder.subject,
 			html: reminder.emailBody
 		};
-		transporter.sendMail(mailOptions);
+		transporter.sendMail(mailOptions, 
+			function(error, info) {
+			    if(error) {
+		    	   log.info(reminder + " " + error);
+			    }
+			}
+
+		);
+		
 	}
   }
 };

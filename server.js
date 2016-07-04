@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var userValidator = require('./server/validators/userValidator');
 var reminderValidator = require('./server/validators/reminderValidator');
 var utilities = require('./server/utilities');
-var reminder = require('./server/models/email.js');
+var reminder = require('./server/models/reminder.js');
 var user = require('./server/models/user.js');
 app.use(bodyParser.json());
 
@@ -32,7 +32,7 @@ var server = app.listen(portNumber, function() {
 																					REMINDERS
 **************************************************************************************************************************************/
 
-
+//TODO move to reminderDao
 app.post('/sendReminderImmediately', function(req, res) {
 
 	reminder.findOrCreate({
@@ -47,6 +47,7 @@ app.post('/sendReminderImmediately', function(req, res) {
 			res.sendStatus("403");
 	});
 });
+//TODO move to reminderDao
 app.post('/getReminder', function(req, res){
 	reminder.findOne({_id: req.body._id},
 	function(err, tempReminder) {
@@ -58,6 +59,7 @@ app.post('/getReminder', function(req, res){
         }
 	});
 });
+//TODO move to reminderDao
 app.post('/deleteReminder', function(req, res){
 	reminder.remove({_id: req.body._id},
 	function(err, tempReminder){
@@ -67,7 +69,7 @@ app.post('/deleteReminder', function(req, res){
 	});
 	
 });
-
+//TODO move to reminderDao
 app.post('/newReminder', function(req, res) {
 	if(!reminderValidator.validateNewReminder(req.body)){
 		res.sendStatus("403");
@@ -76,7 +78,7 @@ app.post('/newReminder', function(req, res) {
 		reminder.findOrCreate({
 		senderEmail: req.body.senderEmail,
 		senderPassword: req.body.senderPassword,
-		receiverEmail: req.body.receiverEmail,
+		receiverEmail: req.body.receiverEmail.replace(" ", ""),
 		emailBody: req.body.emailBody,
 		timeToSend: req.body.timeToSend,
 		subject: req.body.subject,
@@ -93,6 +95,7 @@ app.post('/newReminder', function(req, res) {
 			res.sendStatus("403");
 	});
 });
+//TODO move to reminderDao
 app.post('/setReminder', function(req, res){
 	reminder.update({_id: req.body._id}, {
 		senderEmail: req.body.senderEmail,
@@ -113,7 +116,7 @@ app.post('/setReminder', function(req, res){
 	});
 })
 
-
+//TODO move to reminderDao
 app.post('/getReminders', function(req, res) {
 	reminder.find({userID: req.body.id}, 
 	function(err, tempReminders) {
@@ -132,7 +135,7 @@ app.post('/getReminders', function(req, res) {
 /**************************************************************************************************************************************
 																					USER STUFF
 **************************************************************************************************************************************/
-
+//TODO move to userDao
 app.post('/signup', function(req, res) {
 	user.findOrCreate({
 		username: req.body.username,
@@ -150,6 +153,7 @@ app.post('/signup', function(req, res) {
 		}
 	});
 });
+//TODO move to userDao
 app.post('/getSenderPassword', function(req, res) {
 	user.findOne({_id: req.body.id}, 
 	function(err, tempUser) {
@@ -165,6 +169,7 @@ app.post('/getSenderPassword', function(req, res) {
         }
 	});
 });
+//TODO move to userDao
 app.post('/setSenderPassword', function(req, res) {
 	user.update({_id: req.body._id}, {senderPassword: req.body.senderPassword},
 	function(err, user) {
@@ -174,6 +179,7 @@ app.post('/setSenderPassword', function(req, res) {
 			res.sendStatus('403');
 	});
 });
+//TODO move to userDao
 app.post('/getSenderEmail', function(req, res) {
 	user.findOne({_id: req.body.id}, 
 	function(err, tempUser) {
@@ -189,6 +195,7 @@ app.post('/getSenderEmail', function(req, res) {
         }
 	});
 });
+//TODO move to userDao
 app.post('/setSenderEmail', function(req, res) {
 	if(!userValidator.validateSenderEmail(req.body.senderEmail)){
 		res.sendStatus('403');
@@ -202,7 +209,7 @@ app.post('/setSenderEmail', function(req, res) {
 			res.sendStatus('403');
 	});
 });
-
+//TODO move to userDao
 app.post('/login', function(req, res) {
 	user.findOne({username: req.body.username}, 
 	function(err, tempUser) {
@@ -220,9 +227,7 @@ app.post('/login', function(req, res) {
 	});
 });
 
-
-
-
+//TODO move to userDao
 app.post('/getReceiverEmail', function(req, res) {
 	user.findOne({_id: req.body.id}, 
 	function(err, tempUser) {
@@ -238,6 +243,7 @@ app.post('/getReceiverEmail', function(req, res) {
         }
 	});
 });
+//TODO move to userDao
 app.post('/setReceiverEmail', function(req, res) {
 	if(!userValidator.validateReceiverEmail(req.body.receiverEmail)) {
 		res.sendStatus('403');

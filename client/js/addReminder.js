@@ -64,7 +64,6 @@ app.controller('addReminder', ['$scope', function ($scope) {
     }
     $scope.displayField = function(field, id) {
         $(id).css("visibility", $scope[field] != "" ? "visible" : "hidden");
-        console.log(id);
     }
     
 }]);
