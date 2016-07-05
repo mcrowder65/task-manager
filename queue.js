@@ -39,4 +39,4 @@ function sendReminder(reminderObj){
 	reminder.remove({_id: reminderObj._id},function(err, tempReminder){}); 
 	
 }
-setInterval(checkReminders, 30000);
+setInterval(checkReminders, 10000);
