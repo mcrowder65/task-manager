@@ -59,13 +59,6 @@ app.controller('addReminder', ['$scope', function ($scope) {
             $scope.senderPassword = reminder.senderPassword != null ? reminder.senderPassword : $scope.senderPassword;
         }
     }
-    $scope.clearField = function(field) {
-        $scope[field] = "";
-    }
-    $scope.displayField = function(field, id) {
-        $(id).css("visibility", $scope[field] != "" ? "visible" : "hidden");
-    }
-    
 }]);
 /*******************************************************************************************************************/
                                                 //BASIC FUNCTIONS

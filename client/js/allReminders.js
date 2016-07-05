@@ -1,15 +1,6 @@
 var app= angular.module('app');
 app.controller('allReminders', ['$scope', function ($scope) {
 
-   $scope.hideFields = function(reminder, type) {
-       if(type === 'body' && (reminder.emailBody == null || reminder.emailBody == "")){
-            $("#body" + reminder._id).css("display", "none");
-        }
-        if(type === 'subject' && (reminder.subject == null || reminder.subject == "")) { 
-            $("#subject" + reminder._id).css("display", "none");
-        }
-    }
-
     $scope.deleteReminder = function(reminder){
         deleteReminder(reminder._id);
     }

@@ -27,6 +27,7 @@ function checkReminders() {
 			if(reminders[i].timeToSend != null) {
 				if(reminders[i].timeToSend.getTime() < new Date().getTime()){
 					sendReminder(reminders[i]);
+					break;
 				}
 			}
 		}
@@ -38,4 +39,4 @@ function sendReminder(reminderObj){
 	reminder.remove({_id: reminderObj._id},function(err, tempReminder){}); 
 	
 }
-setInterval(checkReminders, 60000);
+setInterval(checkReminders, 30000);
