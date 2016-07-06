@@ -25,3 +25,7 @@ Then go to add reminder, here you can edit the current sender/receivers if you w
 Set the date to send the reminder, time to send the reminder (military time only, and the time zone is in Eastern time, 
 I will update this shortly), subject, and body.  If you send yourself a text reminder and put a subject, it will always have 
 parenthesis wrapped around it.
+
+This website is available at <a href="http://107.170.133.61:8000/#">Task Manager</a><br>
+
+It is hosted using Digital Ocean.
