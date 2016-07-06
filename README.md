@@ -27,7 +27,7 @@ I will update this shortly), subject, and body.  If you send yourself a text rem
 parenthesis wrapped around it.
 
 If you set a time before the current time, the reminder will be sent immediately.<br>
-All of your reminders can be shown on the All Reminders tab, you can edit, delete, or even send the reminders immediately on that tab.  If there is a tab with incomplete stuff or nothing on it, it's because I'm working on it.
+All of your reminders can be shown on the All Reminders tab, you can edit, delete, or even send the reminders immediately on that tab.  If there is a tab with incomplete stuff or nothing on it, it's because I'm working on it. <br>
 This website is available at <a href="http://107.170.133.61:8000/#">Task Manager</a><br>
 
 It is hosted using Digital Ocean.
