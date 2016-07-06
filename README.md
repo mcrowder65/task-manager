@@ -4,11 +4,11 @@ This is a personal project I've been working on since the beginning of May, 2016
 
 The technology used includes MongoDB, Express, AngularJS, and NodeJS.  
 
-To create a reminder, sign up (don't trust my authentication with a password you use elsewhere), and in the Profile page, 
-set your receiving email account to your email, or even your phone number, separated by commas.  If you add your phone number,
+To create a reminder, sign up (don't trust my authentication with a password you use elsewhere), go to the Profile page, 
+set your receiving email account to your email, and also your phone number if wanted, separated by commas.  If you add your phone number,
 add it like so: 1112223333@provider.com
 
-Use the following instead of @provider.com<br>
+Use the following instead of @provider.com, depending on your mobile provider: <br>
 verizon: @vtext.com<br>
 t-mobile: @tmomail.net <br>
 at&t: @mms.att.net<br>
