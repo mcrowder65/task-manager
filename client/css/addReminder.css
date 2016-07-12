@@ -31,13 +31,3 @@ input{
   	text-align: 'center';
   	visibility: hidden;
 }
-
-#clearSubject { 
-	visibility:hidden;
-}
-#clearEmailBody{
-	visibility: hidden;
-}
-#clearTime{
-	visibility: hidden;
-}
