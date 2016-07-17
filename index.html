@@ -2,16 +2,25 @@
 
 <html data-ng-app="app">
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Task manager</title>
+
 		<link rel="stylesheet" type="text/css" href="libs/bootstrap-3.3.6-dist/css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/javascript" href="libs/bootstrap-3.3.6-dist/js/bootstrap.min.js">
-		<link rel="stylesheet" type="text/css" href="index.css">
+		<link rel="stylesheet" href="index.css" />
+    	<link rel="stylesheet" href="libs/meanMenu/meanmenu.css" media="all" />
 	</head>
+	
 	<body onload="auth()">
 		<script src="libs/jquery/jquery-2.2.3.js"></script>
-		<script type="text/javascript" src="libs/angular/angular.min.js"></script>
-		<script type="text/javascript" src="libs/angular/angular-route.js"></script>
-		
+
+
+		<script src="libs/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+		<script src="libs/bootstrap-3.3.6-dist/js/bootstrap.js"></script>
+		<script src="libs/angular/angular.min.js"></script>
+		<script src="libs/angular/angular-route.js"></script>
+		<script src="libs/meanMenu/jquery.meanmenu.js"></script>
+
 		<script src="client/js/app.js"></script>
 		<script src="client/js/day.js"></script>
 		<script src="client/js/addReminder.js"></script>
@@ -19,16 +28,19 @@
 		<script src="client/js/profile.js"></script>
 		<script src="client/js/signup.js"></script>
 		<script src="client/js/login.js"></script>
-		<nav class="navbar navbar-default" id="navbar">
-			 <a class="navbar-brand" href="/#/allEmails">Home</a>
-			 <ul class="nav navbar-nav">
-				 <li><a href="/#/day">Day</a></li>
-				 <li><a href="/#/week">Week</a></li>
-				 <li><a href="/#/month">Month</a></li>
-			 	<li><a href="/#/addReminder">Add Reminder</a></li>
-			 	<li><a href="/#/allReminders">All Reminders</a></li>
-			 </ul>
-		</nav>
+		<header>
+
+			<nav class="navbar navbar-default" id="navbar">
+				 <a class="navbar-brand" href="/#/allReminders">Home</a>
+				 <ul class="nav navbar-nav">
+					 <li><a href="/#/day">Day</a></li>
+					 <li><a href="/#/week">Week</a></li>
+					 <li><a href="/#/month">Month</a></li>
+				 	<li><a href="/#/addReminder">Add Reminder</a></li>
+				 	<li><a href="/#/allReminders">All Reminders</a></li>
+				 </ul>
+			</nav>
+		</header>
 		<div data-ng-view></div>
 		<div></div>
 
@@ -42,6 +54,7 @@
 			else {
 				$("#navbar").append("<ul class=\"nav navbar-nav navbar-right\" id='navStyle'><li><a href='/#/signup'>Sign up</a></li><li><a href='/#/login'>Log in</a></li></ul>");
 			}
+			$('header nav').meanmenu();
 		}
 		function logout(){
 			localStorage.token="";

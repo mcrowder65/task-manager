@@ -26,10 +26,9 @@ function verifyPasswords(initialPassword, confirmPassword){
 }
 
 function changePasswordBoxColor(color){
-    $( document ).ready(function() {
+
         $("#initialPassword").css("borderColor", color);
         $("#confirmPassword").css("borderColor", color);
-    });
 }
 /*******************************************************************************************************************/
                                                 //Server senders
