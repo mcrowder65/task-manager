@@ -12,6 +12,7 @@ app.controller('login', ['$scope', function ($scope) {
 /*******************************************************************************************************************/
 
 function login(username, password) {
+    username = username.toLowerCase();
     $.ajax
     ({
         url: "/login",

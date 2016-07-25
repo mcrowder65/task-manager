@@ -11,7 +11,7 @@
             <div class="panel-body">
               <b>Sending email account:</b> <input type="text" data-ng-model="senderEmail"/><br><br> 
               <b>Sending email password:</b> <input type="text" data-ng-model="senderPassword"/><br><br>	
-              <b>Receiving email account:</b> <input type="text" data-ng-model="receiverEmail"/> <button data-ng-show="receiverEmail != '' && receiverEmail != null" type="button" class="btn btn-primary btn-xs" data-ng-click="receiverEmail = ''" > Clear</button><br><br>
+              <b>Receiving email account:</b> <input type="text" id="receiverEmail" data-ng-model="receiverEmail"/> <button data-ng-show="receiverEmail != '' && receiverEmail != null" type="button" class="btn btn-primary btn-xs" data-ng-click="receiverEmail = ''; doSomething();" event-focus="click" event-focus-id="receiverEmail" > Clear</button><br><br>
             </div>
           </div>
         </div>

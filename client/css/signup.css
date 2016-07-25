@@ -2,21 +2,3 @@
 	width: 30%;
 	text-align: center;
 }
-
-#passwordsDontMatch {
-	text-align: center;
-	width: 30%;
-	visibility: hidden;
-}
-
-#shortPassword{
-	text-align: center;
-	width: 30%;
-	visibility: hidden;
-}
-
-#duplicateUser{
-	text-align: center;
-	width: 30%;
-	visibility: hidden;
-}

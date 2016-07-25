@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 
-var portNumber = 8000
+var portNumber = 80;
 var server = app.listen(portNumber, function() {
 	console.log("Started on port " + portNumber);
 	var host = server.address().address;

@@ -35,6 +35,7 @@ function changePasswordBoxColor(color){
 /*******************************************************************************************************************/
 
 function signUpUser(username, password){
+    username = username.toLowerCase();
     $.ajax
     ({
         url: "/signup",
