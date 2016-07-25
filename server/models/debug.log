@@ -20,25 +20,4 @@
   senderPassword: 'githubtester',
   senderEmail: 'matt.taskmanager@gmail.com' } Error: Invalid login: 535-5.7.8 Username and Password not accepted. Learn more at
 535 5.7.8  https://support.google.com/mail/answer/14257 k63sm1117960qte.9 - gsmtp
-2016-07-22T02:16:54.870Z - info: { __v: 0,
-  _id: 5791820c386ba139403d12a5,
-  timeOfDay: '4:00',
-  dateToSend: 'Wed Jul 20 2016 00:00:00 GMT-0400 (EDT)',
-  userID: '575899bd0d81e3ed0c3ce8df',
-  subject: 'hello',
-  timeToSend: Wed Jul 20 2016 04:00:00 GMT-0400 (EDT),
-  receiverEmail: 'mcrowder65@gmail.com,7036356741@vtext.com',
-  senderPassword: '22Boombeach',
-  senderEmail: 'cgentillon@buygobands.com' } Error: Invalid login: 535-5.7.8 Username and Password not accepted. Learn more at
-535 5.7.8  https://support.google.com/mail/answer/14257 p94sm6016989qkp.44 - gsmtp
-2016-07-22T02:16:54.879Z - info: { __v: 0,
-  _id: 5791820c386ba139403d12a5,
-  timeOfDay: '4:00',
-  dateToSend: 'Wed Jul 20 2016 00:00:00 GMT-0400 (EDT)',
-  userID: '575899bd0d81e3ed0c3ce8df',
-  subject: 'hello',
-  timeToSend: Wed Jul 20 2016 04:00:00 GMT-0400 (EDT),
-  receiverEmail: 'mcrowder65@gmail.com,7036356741@vtext.com',
-  senderPassword: '22Boombeach',
-  senderEmail: 'cgentillon@buygobands.com' } Error: Invalid login: 535-5.7.8 Username and Password not accepted. Learn more at
-535 5.7.8  https://support.google.com/mail/answer/14257 p65sm6061704qke.13 - gsmtp
+
