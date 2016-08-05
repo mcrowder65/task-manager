@@ -11,7 +11,7 @@
     	<link rel="stylesheet" href="libs/meanMenu/meanmenu.css" media="all" />
 	</head>
 	
-	<body onload="auth()">
+	<body onload="auth()" data-ng-controller="app">
 		<script src="libs/jquery/jquery-2.2.3.js"></script>
 
 
@@ -30,7 +30,7 @@
 		<script src="client/js/login.js"></script>
 		<header>
 
-			<nav class="navbar navbar-default" id="navbar">
+			<nav class="navbar navbar-default" id="navbar" data-ng-init="isLoggedIn()">
 				 <a class="navbar-brand" href="/#/allReminders">Home</a>
 				 <ul class="nav navbar-nav">
 					 <li><a href="/#/day">Day</a></li>
@@ -38,22 +38,24 @@
 					 <li><a href="/#/month">Month</a></li>
 				 	<li><a href="/#/addReminder">Add Reminder</a></li>
 				 	<li><a href="/#/allReminders">All Reminders</a></li>
+				 	<li data-ng-show="loggedIn == true"><a href="/#/profile">Profile</a></li>
+				 	<li data-ng-show="loggedIn == true"><a href="/#/" onclick="logout()">Log out</a></li>
+				 	<li data-ng-show="loggedIn == false"><a href="/#/signup">Sign up</a></li>
+				 	<li data-ng-show="loggedIn == false"><a href="/#/login">Log in</a></li>
 				 </ul>
+				 
 			</nav>
 		</header>
+		<br><br><br>
 		<div data-ng-view></div>
+		<br><br><br>
 		<div></div>
 
 	</body>
 
 	<script>
 		function auth(){
-			if(localStorage.token){
-				$("#navbar").append("<ul class='nav navbar-nav navbar-right' id='navStyle'><li><a href='/#/profile'>Profile</a></li><li><a onclick=\"logout()\" href='/#/'>Log out</a></li></ul>");
-			}
-			else {
-				$("#navbar").append("<ul class=\"nav navbar-nav navbar-right\" id='navStyle'><li><a href='/#/signup'>Sign up</a></li><li><a href='/#/login'>Log in</a></li></ul>");
-			}
+			
 			$('header nav').meanmenu();
 		}
 		function logout(){

@@ -7,7 +7,7 @@ app.factory('simpleFactory', function(){
     return factory;
 });
 
-app.controller('SimpleController', function ($scope, simpleFactory) {
+app.controller('app', function ($scope, simpleFactory) {
     
     //Used in addReminder and profile controller
     $scope.getSenderPassword = function() {
@@ -23,7 +23,9 @@ app.controller('SimpleController', function ($scope, simpleFactory) {
     $scope.getReceiverEmail = function() {
         $scope.receiverEmail = getReceiverEmail();
     }
-    
+    $scope.isLoggedIn = function() {
+        $scope.loggedIn = localStorage.token != null && localStorage.token != "";
+    }
 });
 
 app.config(function ($routeProvider) {
@@ -31,52 +33,52 @@ app.config(function ($routeProvider) {
 	$routeProvider
     .when('/#',
     {
-        controller: 'SimpleController',
+        controller: 'app',
         templateUrl: 'client/html/allReminders.html'
     })
     .when('/allReminders',	
     {
-		controller: 'SimpleController',
+		controller: 'app',
         templateUrl: 'client/html/allReminders.html'
     })
     .when('/day',
     {
-    	controller: 'SimpleController',
+    	controller: 'app',
         templateUrl: 'client/html/day.html'
     })
     .when('/week',
     {
-    	controller: 'SimpleController',
+    	controller: 'app',
         templateUrl: 'client/html/week.html'
     })
     .when('/month',
     {
-    	controller: 'SimpleController',
+    	controller: 'app',
         templateUrl: 'client/html/month.html'
     })
     .when('/addReminder',
     {
-    	controller: 'SimpleController',
+    	controller: 'app',
     	templateUrl: 'client/html/addReminder.html'
     })
     .when('/profile',
     {
-    	controller: 'SimpleController',
+    	controller: 'app',
     	templateUrl: 'client/html/profile.html'
     })
     .when('/signup',
     {
-    	controller: 'SimpleController',
+    	controller: 'app',
         templateUrl: 'client/html/signup.html'
     })
     .when('/login',
     {
-    	controller: 'SimpleController',
+    	controller: 'app',
         templateUrl: 'client/html/login.html'
     })
     .when('/logout',
     {
-        controller: 'SimpleController',
+        controller: 'app',
         templateUrl: 'client/html/logout.html'
     })
     .otherwise({ redirectTo: '/allReminders' });
