@@ -1,6 +1,7 @@
 <div data-ng-controller="allReminders">
     
 	<div data-ng-init="getReminders()" style="text-align:center">
+        <button class="btn btn-success" data-ng-click="getReminders()">Refresh</button><br><br>
         <input type="date" data-ng-model="day" data-ng-change="dayChange()"/> 
         <button class="btn btn-primary" data-ng-show="day != null" data-ng-click="day = null; endDay = null; addEndDateClickedChange('override')">Reset</button><br><br>
         <button class="btn btn-primary" data-ng-show="day != null" data-ng-model="addEndDateClicked" data-ng-click="addEndDateClickedChange(null);"> {{ addEndDateMessage }} </button><br><br>
