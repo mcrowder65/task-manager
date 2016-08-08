@@ -22,13 +22,13 @@ app.controller('allReminders', ['$scope', function ($scope) {
         if($scope.day == undefined || $scope.day == null) {
             return true;
         }
+        var lTempDay = new Date($scope.day).getTime();
+        var lTempDateToSend = new Date(dateToSend).getTime();
         if($scope.endDay != null) {
             var lTempEndDay = new Date($scope.endDay).getTime();
-            var lTempDateToSend = new Date(dateToSend).getTime();
-            var lTempDay = new Date($scope.day).getTime();
             return lTempDay <= lTempDateToSend && lTempDateToSend <= lTempEndDay;
         }
-        return $scope.day == dateToSend;
+        return lTempDay <= lTempDateToSend && lTempDateToSend <= lTempDay + (MILLISECONDS_IN_DAY - 1);
     }
 
     $scope.addEndDateClickedChange = function(override) {
