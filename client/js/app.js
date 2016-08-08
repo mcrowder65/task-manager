@@ -106,6 +106,23 @@ function get(parameter) {
   return url.substring(index, i);
 } 
 
+function removeGet(parameter) {
+  var url = window.location.href;
+  var index = url.indexOf(parameter);
+  if(index == -1)
+    return null;
+   
+  var i = index + parameter.length + 1;
+  while(url[i] != '?' && url[i] != '&') {
+    if(i > url.length)
+      break;
+    i++;
+  }
+//   console.log(url.substring(index, i));
+//   console.log(String(window.location.href).replace(url.substring(index, i), ""));
+  window.location.href = String(window.location.href).replace(url.substring(index, i), "");
+  //window.location.href = url.substring(0, index) + url.substring(i, url.length);
+}
 /*******************************************************************************************************************/
                                                 //Server senders
 /*******************************************************************************************************************/

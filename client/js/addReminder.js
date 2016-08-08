@@ -47,7 +47,9 @@ app.controller('addReminder', ['$scope', function($scope) {
     };
     $scope.getReminder = function() {
         var reminder = getReminder(get('_id')).data;
+        $scope.editing = false;
         if (reminder) {
+            $scope.editing = true;
             $scope.dateToSend = reminder.dateToSend != null ? new Date(reminder.dateToSend) : $scope.dateToSend;
             $scope.timeToSend = reminder.timeOfDay != null ? reminder.timeOfDay : $scope.timeToSend;
             $scope.subject = reminder.subject;
@@ -56,6 +58,14 @@ app.controller('addReminder', ['$scope', function($scope) {
             $scope.senderEmail = reminder.senderEmail != null ? reminder.senderEmail : $scope.senderEmail;
             $scope.senderPassword = reminder.senderPassword != null ? reminder.senderPassword : $scope.senderPassword;
         }
+    }
+    $scope.stopEditing = function() {
+        $scope.editing = false;
+        $scope.dateToSend = null;
+        $scope.timeToSend = "";
+        $scope.subject = "";
+        $scope.emailBody = "";
+        removeGet("_id");
     }
 }]);
 app.factory('focus', function($timeout, $window) {
