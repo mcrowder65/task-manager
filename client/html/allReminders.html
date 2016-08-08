@@ -1,18 +1,22 @@
 <div data-ng-controller="allReminders">
+    
 	<div data-ng-init="getReminders()" style="text-align:center">
+        <input type="date" data-ng-model="day" data-ng-change="dayChange()"/> <button data-ng-show="day != null" data-ng-click="day = null; endDay = null; addEndDateClickedChange('override')">Reset</button><br><br>
+        <button data-ng-show="day != null" data-ng-model="addEndDateClicked" data-ng-click="addEndDateClickedChange(null);"> {{ addEndDateMessage }} </button><br><br>
+        <input type="date" data-ng-show="addEndDateClicked" data-ng-model="endDay" data-ng-change="endDayChange();"/><br><br>
 		<div data-ng-repeat="reminder in reminders | orderBy:'timeToSend'">
-			<div class="col-md-6">
-	        <div class="panel panel-primary">
+			<div class="col-md-6" data-ng-show="showReminder(reminder.dateToSend)">
+                <div class="panel panel-primary" >
 
-	          <div class="panel-body" >
-			    <div id="receiver"><b>Receiver:</b> {{ reminder.receiverEmail }}</div>
-			    <div data-ng-show="reminder.subject != '' && reminder.subject != null"><b>Subject: </b> {{ reminder.subject }}<br></div>
-			    <div data-ng-show="reminder.emailBody != '' && reminder.emailBody != null"><b>Body:</b> {{ reminder.emailBody }}</div>
-			    <div id="time"><b>Time:</b> {{ reminder.date }}<br></div>
-			    <button type="button" class="btn btn-danger" data-ng-click="deleteReminder(reminder)">Delete</button>
-			    <button type="button" class="btn btn-success" data-ng-click="editReminder(reminder._id)">Edit</button>
-			    <button type="button" class="btn btn-info" data-ng-click="sendReminderImmediately(reminder)">Send now</button>
-	          </div>
+                <div class="panel-body">
+                    <div id="receiver"><b>Receiver:</b> {{ reminder.receiverEmail }}</div>
+                    <div data-ng-show="reminder.subject != '' && reminder.subject != null"><b>Subject: </b> {{ reminder.subject }}<br></div>
+                    <div data-ng-show="reminder.emailBody != '' && reminder.emailBody != null"><b>Body:</b> {{ reminder.emailBody }}</div>
+                    <div id="time"><b>Time:</b> {{ reminder.date }}<br></div>
+                    <button type="button" class="btn btn-danger" data-ng-click="deleteReminder(reminder)">Delete</button>
+                    <button type="button" class="btn btn-success" data-ng-click="editReminder(reminder._id)">Edit</button>
+                    <button type="button" class="btn btn-info" data-ng-click="sendReminderImmediately(reminder)">Send now</button>
+                </div>
 	        </div>
 	      </div>
 		</div>

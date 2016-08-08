@@ -1,6 +1,7 @@
 var app= angular.module('app');
+var MILLISECONDS_IN_DAY = 86400000;
 app.controller('allReminders', ['$scope', function ($scope) {
-
+    $scope.addEndDateMessage = "Add end date";
     $scope.deleteReminder = function(reminder){
         deleteReminder(reminder._id);
     }
@@ -15,6 +16,33 @@ app.controller('allReminders', ['$scope', function ($scope) {
 
     $scope.editReminder = function(_id){
         window.location.href = "/#/addReminder/?_id=" + _id;
+    }
+
+    $scope.showReminder = function(dateToSend) {
+        if($scope.day == undefined || $scope.day == null) {
+            return true;
+        }
+        if($scope.endDay != null) {
+            var lTempEndDay = new Date($scope.endDay).getTime();
+            var lTempDateToSend = new Date(dateToSend).getTime();
+            var lTempDay = new Date($scope.day).getTime();
+            return lTempDay <= lTempDateToSend && lTempDateToSend <= lTempEndDay;
+        }
+        return $scope.day == dateToSend;
+    }
+
+    $scope.addEndDateClickedChange = function(override) {
+        if(override != null) {
+            $scope.addEndDateClicked = false;
+            $scope.addEndDateMessage = "Add end date";
+            $scope.endDay = null;
+        } else {
+            $scope.addEndDateClicked = $scope.addEndDateClicked == null ? false : $scope.addEndDateClicked;
+            $scope.addEndDateClicked = !$scope.addEndDateClicked;
+            $scope.addEndDateMessage = $scope.addEndDateClicked ? "Remove end date" : "Add end date";
+            $scope.endDay = $scope.addEndDateClicked == false ? null : $scope.endDay;
+        }
+        
     }
 }]);
 
