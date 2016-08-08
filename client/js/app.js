@@ -1,6 +1,6 @@
 
 var app = angular.module('app', ['ngRoute']);
-
+var MILLISECONDS_IN_DAY = 86400000;
 app.factory('simpleFactory', function(){
     var factory = {};
 
@@ -25,6 +25,10 @@ app.controller('app', function ($scope, simpleFactory) {
     }
     $scope.isLoggedIn = function() {
         $scope.loggedIn = localStorage.token != null && localStorage.token != "";
+    }
+
+     $scope.getReminders = function(){
+        $scope.reminders = getReminders();
     }
 });
 
@@ -127,6 +131,27 @@ function removeGet(parameter) {
                                                 //Server senders
 /*******************************************************************************************************************/
 
+function getReminders() {
+    var reminders = [];
+    $.ajax
+    ({
+        url: "/getReminders",
+        dataType: 'json',
+        type: 'POST',
+        async: false,
+        data: {id: localStorage.token},
+        success: function(data, status, headers, config){
+            reminders = data;
+            for(var i = 0; i < reminders.length; i++) {
+                var date = new Date(reminders[i].timeToSend)
+                reminders[i].date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
+            }
+        }.bind(this),
+        error: function(data, status, headers, config){
+        }.bind(this)
+    });
+    return reminders;
+}
 function getReceiverEmail(){
     var receiverEmail = '';
     $.ajax

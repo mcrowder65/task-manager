@@ -1,6 +1,8 @@
 var app = angular.module('app');
 app.controller('addReminder', ['$scope', function($scope) {
     $scope.dateToSend = new Date();
+    $scope.showReminders = false;
+    $scope.showRemindersMessage = "Show reminders on same day";
     $scope.newReminder = function() {
         if ($scope.senderEmail == undefined || $scope.senderEmail == null || $scope.senderEmail == "" || $scope.senderPassword == undefined || $scope.senderPassword == null || $scope.senderPassword == "" || $scope.receiverEmail == undefined || $scope.receiverEmail == null || $scope.receiverEmail == "" || $scope.dateToSend == undefined || $scope.dateToSend == null || $scope.dateToSend == "" || $scope.timeToSend == undefined || $scope.timeToSend == null || $scope.timeToSend == "" || (($scope.subject == undefined || $scope.subject == null || $scope.subject == "") && ($scope.emailBody == undefined || $scope.emailBody == null || $scope.emailBody == ""))) {
             showReminderConfirmationBanner(false);
@@ -41,6 +43,15 @@ app.controller('addReminder', ['$scope', function($scope) {
                 timeOfDay: $scope.timeToSend
             });
         }
+        
+        $scope.reminders = getReminders();
+        $scope.toggleShowReminders();
+        $scope.toggleShowReminders();
+    }
+    $scope.toggleShowReminders = function() {
+        $scope.showReminders = !$scope.showReminders;
+        $scope.showRemindersMessage = !$scope.showReminders ? "Show reminders on same day" : "Don't show reminders on same day";
+        $scope.reminders = getReminders();
     }
     $scope.doSomething = function() {
         // do something awesome
@@ -67,6 +78,14 @@ app.controller('addReminder', ['$scope', function($scope) {
         $scope.subject = "";
         $scope.emailBody = "";
         removeGet("_id");
+    }
+    $scope.showReminder = function(dateToSend) {
+        if($scope.dateToSend == undefined || $scope.dateToSend == null) {
+            return false;
+        }
+        var lTempDay = new Date($scope.dateToSend).getTime();
+        var lTempDateToSend = new Date(dateToSend).getTime();
+        return lTempDay - MILLISECONDS_IN_DAY <= lTempDateToSend &&  lTempDateToSend  <= lTempDay;
     }
 }]);
 app.factory('focus', function($timeout, $window) {

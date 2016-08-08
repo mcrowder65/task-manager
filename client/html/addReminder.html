@@ -33,12 +33,33 @@
         </div>
 
         <!-- third -->
-        <button id="button" type="button" class="btn btn-primary" data-ng-click="newReminder()"> Set Reminder </button>
+        <button id="button" type="button" class="btn btn-primary" data-ng-click="newReminder()"> Set Reminder </button><br><br>
 
+        <button class="btn btn-info" data-ng-click="toggleShowReminders()"> {{ showRemindersMessage }} </button>
 
       </div>
       <br>
 
         <div id="successMessage" class="alert alert-success" role="alert">Your reminder has been set!</div>
+  </div>
+
+
+
+  <div data-ng-show="showReminders">  
+    <div data-ng-init="getReminders()" style="text-align:center">
+      <div data-ng-repeat="reminder in reminders | orderBy:'timeToSend'">
+        <div class="col-md-6" data-ng-show="showReminder(reminder.dateToSend)">
+                  <div class="panel panel-primary" >
+
+                  <div class="panel-body">
+                      <div id="receiver"><b>Receiver:</b> {{ reminder.receiverEmail }}</div>
+                      <div data-ng-show="reminder.subject != '' && reminder.subject != null"><b>Subject: </b> {{ reminder.subject }}<br></div>
+                      <div data-ng-show="reminder.emailBody != '' && reminder.emailBody != null"><b>Body:</b> {{ reminder.emailBody }}</div>
+                      <div id="time"><b>Time:</b> {{ reminder.date }}<br></div>
+                  </div>
+            </div>
+          </div>
+      </div>
+    </div>
   </div>
 </div>

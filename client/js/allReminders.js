@@ -1,14 +1,12 @@
 var app= angular.module('app');
-var MILLISECONDS_IN_DAY = 86400000;
+
 app.controller('allReminders', ['$scope', function ($scope) {
     $scope.addEndDateMessage = "Add end date";
     $scope.deleteReminder = function(reminder){
         deleteReminder(reminder._id);
     }
 
-    $scope.getReminders = function(){
-        $scope.reminders = getReminders();
-    }
+   
 
     $scope.sendReminderImmediately = function(reminder) {
         sendReminderImmediately(reminder._id);
@@ -68,27 +66,7 @@ function deleteReminder(_id) {
     });
 }
 
-function getReminders() {
-    var reminders = [];
-    $.ajax
-    ({
-        url: "/getReminders",
-        dataType: 'json',
-        type: 'POST',
-        async: false,
-        data: {id: localStorage.token},
-        success: function(data, status, headers, config){
-            reminders = data;
-            for(var i = 0; i < reminders.length; i++) {
-                var date = new Date(reminders[i].timeToSend)
-                reminders[i].date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
-            }
-        }.bind(this),
-        error: function(data, status, headers, config){
-        }.bind(this)
-    });
-    return reminders;
-}
+
 
 function sendReminderImmediately(_id) {
     $.ajax
