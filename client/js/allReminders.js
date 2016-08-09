@@ -2,20 +2,6 @@ var app= angular.module('app');
 
 app.controller('allReminders', ['$scope', function ($scope) {
     $scope.addEndDateMessage = "Add end date";
-    $scope.deleteReminder = function(reminder){
-        deleteReminder(reminder._id);
-    }
-
-   
-
-    $scope.sendReminderImmediately = function(reminder) {
-        sendReminderImmediately(reminder._id);
-    }
-
-    $scope.editReminder = function(_id){
-        window.location.href = "/#/addReminder/?_id=" + _id;
-    }
-
     $scope.showReminder = function(dateToSend) {
         if($scope.day == undefined || $scope.day == null) {
             return true;
@@ -43,46 +29,3 @@ app.controller('allReminders', ['$scope', function ($scope) {
         
     }
 }]);
-
-
-/**************************************************************************************************************************************
-                                                             SERVER SENDERS
-***************************************************************************************************************************************/
-
-function deleteReminder(_id) {
-    $.ajax
-    ({
-        url: "/deleteReminder",
-        dataType: "json",
-        type: "POST",
-        async: false,
-        data: {_id: _id},
-        success: function(data, status, headers, config){
-            window.location = '/#/profile';
-            window.location = '/#/allReminders';
-        }.bind(this),
-        error: function(data, status, headers, config){
-        }.bind(this)
-    });
-}
-
-
-
-function sendReminderImmediately(_id) {
-    $.ajax
-    ({
-        url: "/sendReminderImmediately",
-        dataType: "json",
-        type: "POST",
-        async: false,
-        data: {_id: _id},
-        success: function(data, status, headers, config){
-            window.location = '/#/profile';
-            window.location = '/#/allReminders';
-        }.bind(this),
-        error: function(data, status, headers, config){
-
-        }.bind(this)
-    });
-}
-

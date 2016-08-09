@@ -1,4 +1,5 @@
 var app = angular.module('app');
+
 app.controller('addReminder', ['$scope', function($scope) {
     $scope.dateToSend = new Date();
     $scope.showReminders = false;
@@ -73,7 +74,6 @@ app.controller('addReminder', ['$scope', function($scope) {
     }
     $scope.stopEditing = function() {
         $scope.editing = false;
-        $scope.dateToSend = null;
         $scope.timeToSend = "";
         $scope.subject = "";
         $scope.emailBody = "";
@@ -84,8 +84,10 @@ app.controller('addReminder', ['$scope', function($scope) {
             return false;
         }
         var lTempDay = new Date($scope.dateToSend).getTime();
+        // console.log(lTempDay);
         var lTempDateToSend = new Date(dateToSend).getTime();
-        return lTempDay - MILLISECONDS_IN_DAY <= lTempDateToSend &&  lTempDateToSend  <= lTempDay;
+        // console.log(lTempDateToSend);
+        return lTempDay - MILLISECONDS_IN_DAY <= lTempDateToSend && lTempDateToSend <= lTempDay;
     }
 }]);
 app.factory('focus', function($timeout, $window) {

@@ -56,6 +56,9 @@
                       <div data-ng-show="reminder.subject != '' && reminder.subject != null"><b>Subject: </b> {{ reminder.subject }}<br></div>
                       <div data-ng-show="reminder.emailBody != '' && reminder.emailBody != null"><b>Body:</b> {{ reminder.emailBody }}</div>
                       <div id="time"><b>Time:</b> {{ reminder.date }}<br></div>
+                      <button type="button" class="btn btn-danger" data-ng-click="deleteReminder(reminder._id); toggleShowReminders(); toggleShowReminders();">Delete</button>
+                      <button type="button" class="btn btn-success" data-ng-click="editReminder(reminder._id); toggleShowReminders(); toggleShowReminders();">Edit</button>
+                      <button type="button" class="btn btn-info" data-ng-click="sendReminderImmediately(reminder._id); toggleShowReminders(); toggleShowReminders();">Send now</button>
                   </div>
             </div>
           </div>

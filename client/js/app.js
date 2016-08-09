@@ -27,8 +27,21 @@ app.controller('app', function ($scope, simpleFactory) {
         $scope.loggedIn = localStorage.token != null && localStorage.token != "";
     }
 
-     $scope.getReminders = function(){
+    $scope.getReminders = function(){
         $scope.reminders = getReminders();
+    }
+    $scope.editReminder = function(_id){
+        window.location.href = "/#/addReminder/?_id=" + _id;
+    }
+    $scope.deleteReminder = function(_id) {
+        if(deleteReminder(_id)) {
+            $scope.reminders = getReminders();
+        }
+    }
+    $scope.sendReminderImmediately = function(_id) {
+        if(sendReminderImmediately(_id)){
+            $scope.reminders = getReminders();
+        }
     }
 });
 
@@ -122,15 +135,46 @@ function removeGet(parameter) {
       break;
     i++;
   }
-//   console.log(url.substring(index, i));
-//   console.log(String(window.location.href).replace(url.substring(index, i), ""));
   window.location.href = String(window.location.href).replace(url.substring(index, i), "");
-  //window.location.href = url.substring(0, index) + url.substring(i, url.length);
 }
 /*******************************************************************************************************************/
                                                 //Server senders
 /*******************************************************************************************************************/
+function deleteReminder(_id) {
+    var success = false;
+    $.ajax
+    ({
+        url: "/deleteReminder",
+        dataType: "json",
+        type: "POST",
+        async: false,
+        data: {_id: _id},
+        success: function(data, status, headers, config){
+            success = true;
+        }.bind(this),
+        error: function(data, status, headers, config){
+        }.bind(this)
+    });
+    return success;
+}
+function sendReminderImmediately(_id) {
+    var success = false;
+    $.ajax
+    ({
+        url: "/sendReminderImmediately",
+        dataType: "json",
+        type: "POST",
+        async: false,
+        data: {_id: _id},
+        success: function(data, status, headers, config){
+            success = true;
+        }.bind(this),
+        error: function(data, status, headers, config){
 
+        }.bind(this)
+    });
+    return success;
+}
 function getReminders() {
     var reminders = [];
     $.ajax
