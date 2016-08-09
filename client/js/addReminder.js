@@ -86,8 +86,10 @@ app.controller('addReminder', ['$scope', function($scope) {
         var lTemp = new Date($scope.dateToSend);
         lTemp.setHours(0,0,0,0);
         var lTempDay = lTemp.getTime();
-        var lTempDateToSend = new Date(dateToSend).getTime();
-        return lTempDay <= lTempDateToSend && lTempDateToSend <= lTempDay + MILLISECONDS_IN_DAY;
+        var lTempDateToSendTemp = new Date(dateToSend);
+        lTempDateToSendTemp.setHours(0,0,0,0);
+        var lTempDateToSend = lTempDateToSendTemp.getTime();
+        return lTempDay == lTempDateToSend;
     }
 }]);
 app.factory('focus', function($timeout, $window) {
