@@ -83,11 +83,11 @@ app.controller('addReminder', ['$scope', function($scope) {
         if($scope.dateToSend == undefined || $scope.dateToSend == null) {
             return false;
         }
-        var lTempDay = new Date($scope.dateToSend).getTime();
-        // console.log(lTempDay);
+        var lTemp = new Date($scope.dateToSend);
+        lTemp.setHours(0,0,0,0);
+        var lTempDay = lTemp.getTime();
         var lTempDateToSend = new Date(dateToSend).getTime();
-        // console.log(lTempDateToSend);
-        return lTempDay - MILLISECONDS_IN_DAY <= lTempDateToSend && lTempDateToSend <= lTempDay;
+        return lTempDay <= lTempDateToSend && lTempDateToSend <= lTempDay + MILLISECONDS_IN_DAY;
     }
 }]);
 app.factory('focus', function($timeout, $window) {
