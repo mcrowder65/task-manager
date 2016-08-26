@@ -4,6 +4,12 @@ app.controller('addReminder', ['$scope', function($scope) {
     $scope.dateToSend = new Date();
     $scope.showReminders = false;
     $scope.showRemindersMessage = "Show reminders on same day";
+    $scope.init = function() {
+        if(get('date') != null) {
+            var date = new Date(parseInt(get('date')));
+            $scope.dateToSend = date;
+        }
+    }
     $scope.newReminder = function() {
         if ($scope.senderEmail == undefined || $scope.senderEmail == null || $scope.senderEmail == "" || $scope.senderPassword == undefined || $scope.senderPassword == null || $scope.senderPassword == "" || $scope.receiverEmail == undefined || $scope.receiverEmail == null || $scope.receiverEmail == "" || $scope.dateToSend == undefined || $scope.dateToSend == null || $scope.dateToSend == "" || $scope.timeToSend == undefined || $scope.timeToSend == null || $scope.timeToSend == "" || (($scope.subject == undefined || $scope.subject == null || $scope.subject == "") && ($scope.emailBody == undefined || $scope.emailBody == null || $scope.emailBody == ""))) {
             showReminderConfirmationBanner(false);
@@ -19,6 +25,7 @@ app.controller('addReminder', ['$scope', function($scope) {
             return;
         }
         if (get('_id') == null) {
+
             newReminder({
                 senderEmail: $scope.senderEmail,
                 senderPassword: $scope.senderPassword,
@@ -73,11 +80,11 @@ app.controller('addReminder', ['$scope', function($scope) {
         }
     }
     $scope.stopEditing = function() {
-        $scope.editing = false;
-        $scope.timeToSend = "";
-        $scope.subject = "";
-        $scope.emailBody = "";
-        removeGet("_id");
+        // $scope.editing = false;
+        // $scope.timeToSend = "";
+        // $scope.subject = "";
+        // $scope.emailBody = "";
+        removeGet("_id", $scope.dateToSend.getTime());
     }
     $scope.showReminder = function(dateToSend) {
         if($scope.dateToSend == undefined || $scope.dateToSend == null) {

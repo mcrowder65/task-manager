@@ -123,7 +123,7 @@ function get(parameter) {
   return url.substring(index, i);
 } 
 
-function removeGet(parameter) {
+function removeGet(parameter, dateToSend) {
   var url = window.location.href;
   var index = url.indexOf(parameter);
   if(index == -1)
@@ -135,7 +135,7 @@ function removeGet(parameter) {
       break;
     i++;
   }
-  window.location.href = String(window.location.href).replace(url.substring(index, i), "");
+  window.location.href = String(window.location.href).replace(url.substring(index, i), "") + 'date=' + dateToSend;
 }
 /*******************************************************************************************************************/
                                                 //Server senders
