@@ -1,13 +1,15 @@
 var app = angular.module('app');
-
+var showRemindersMessage = "Show reminders on same day";
 app.controller('addReminder', ['$scope', function($scope) {
     $scope.dateToSend = new Date();
     $scope.showReminders = false;
-    $scope.showRemindersMessage = "Show reminders on same day";
+    $scope.showRemindersMessage = showRemindersMessage;
     $scope.init = function() {
         if(get('date') != null) {
             var date = new Date(parseInt(get('date')));
             $scope.dateToSend = date;
+            $scope.showReminders = true;
+            $scope.showRemindersMessage = "Don't show reminders on same day";
         }
     }
     $scope.newReminder = function() {
