@@ -1,11 +1,7 @@
 <link rel="stylesheet" type="text/css" href="client/css/addReminder.css">
 <div data-ng-controller="addReminder">
   <div data-ng-init="getSenderEmail(); getSenderPassword(); getReceiverEmail(); getReminder(); init();" id="wrapper">
-      <div data-ng-show="editing">
-        <div class="alert alert-danger" id="editingMessage" role="alert">You're editing a reminder!!!!!</div>
-        <button class="btn btn-primary" data-ng-click="stopEditing()"> Stop editing </button><br><br>
-        
-      </div>
+      
       <div class="row">
         <!-- first -->
         <div class="col-md-6">
@@ -30,8 +26,12 @@
               <b>Body: </b><input type="text" data-ng-model="emailBody"/> <button data-ng-show="emailBody != '' && emailBody != null" type="button" class="btn btn-primary btn-xs" tabindex="-1" data-ng-click="emailBody = ''"> Clear</button><br><br>
             </div>
           </div>
+        </div><br>
+        <div data-ng-show="editing">
+          <div class="alert alert-danger" id="editingMessage" role="alert">You're editing a reminder!!!!!</div>
+          <button class="btn btn-danger" data-ng-click="stopEditing()"> Stop editing </button>
+          <br><br>
         </div>
-
         <!-- third -->
         <button id="button" type="button" class="btn btn-primary" data-ng-click="newReminder()"> Set Reminder </button><br><br>
 
