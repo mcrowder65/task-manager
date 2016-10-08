@@ -47,7 +47,7 @@
 
   <div data-ng-show="showReminders">  
     <div data-ng-init="getReminders()" style="text-align:center">
-      <div data-ng-repeat="reminder in reminders | orderBy:'timeToSend'">
+      <div data-ng-repeat="reminder in reminders | orderBy:'timeToSend' | filter: {hidden: false }">
         <div class="col-md-6" data-ng-show="showReminder(reminder.dateToSend)">
                   <div class="panel panel-primary" >
 
@@ -58,6 +58,7 @@
                       <div id="time"><b>Time:</b> {{ reminder.date }}<br></div>
                       <button type="button" class="btn btn-danger" data-ng-click="deleteReminder(reminder._id); toggleShowReminders(); toggleShowReminders();">Delete</button>
                       <button type="button" class="btn btn-success" data-ng-click="editReminder(reminder._id); toggleShowReminders(); toggleShowReminders();">Edit</button>
+                      <button type="button" class="btn btn-warning" data-ng-click="hide(reminder)">Hide</button>
                       <button type="button" class="btn btn-info" data-ng-click="sendReminderImmediately(reminder._id); toggleShowReminders(); toggleShowReminders();">Send now</button>
                   </div>
             </div>

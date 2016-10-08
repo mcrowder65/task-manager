@@ -58,6 +58,7 @@ app.controller('addReminder', ['$scope', function($scope) {
         $scope.toggleShowReminders();
         $scope.toggleShowReminders();
     }
+    
     $scope.toggleShowReminders = function() {
         $scope.showReminders = !$scope.showReminders;
         $scope.showRemindersMessage = !$scope.showReminders ? "Show reminders on same day" : "Don't show reminders on same day";
@@ -82,10 +83,6 @@ app.controller('addReminder', ['$scope', function($scope) {
         }
     }
     $scope.stopEditing = function() {
-        // $scope.editing = false;
-        // $scope.timeToSend = "";
-        // $scope.subject = "";
-        // $scope.emailBody = "";
         removeGet("_id", $scope.dateToSend.getTime());
     }
     $scope.showReminder = function(dateToSend) {

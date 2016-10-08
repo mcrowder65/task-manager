@@ -43,6 +43,9 @@ app.controller('app', function ($scope, simpleFactory) {
             $scope.reminders = getReminders();
         }
     }
+    $scope.hide = function(reminder) {
+        reminder.hidden = true;
+    }
 });
 
 app.config(function ($routeProvider) {

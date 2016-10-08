@@ -6,7 +6,7 @@
         <button class="btn btn-primary" data-ng-show="day != null" data-ng-click="day = null; endDay = null; addEndDateClickedChange('override')">Reset</button><br><br>
         <button class="btn btn-primary" data-ng-show="day != null" data-ng-model="addEndDateClicked" data-ng-click="addEndDateClickedChange(null);"> {{ addEndDateMessage }} </button><br><br>
         <input type="date" data-ng-show="addEndDateClicked" data-ng-model="endDay" data-ng-change="endDayChange();"/><br><br>
-		<div data-ng-repeat="reminder in reminders | orderBy:'timeToSend'">
+		<div data-ng-repeat="reminder in reminders | orderBy:'timeToSend' | filter: {hidden: false }">
 			<div class="col-md-6" data-ng-show="showReminder(reminder.dateToSend)">
                 <div class="panel panel-primary" >
 
@@ -17,6 +17,7 @@
                     <div id="time"><b>Time:</b> {{ reminder.date }}<br></div>
                     <button type="button" class="btn btn-danger" data-ng-click="deleteReminder(reminder._id)">Delete</button>
                     <button type="button" class="btn btn-success" data-ng-click="editReminder(reminder._id)">Edit</button>
+                    <button type="button" class="btn btn-warning" data-ng-click="hide(reminder)">Hide</button>
                     <button type="button" class="btn btn-info" data-ng-click="sendReminderImmediately(reminder._id)">Send now</button>
                 </div>
 	        </div>
