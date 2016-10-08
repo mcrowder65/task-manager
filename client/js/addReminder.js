@@ -1,8 +1,8 @@
 var app = angular.module('app');
-var showRemindersMessage = "Show reminders on same day";
+var showRemindersMessage = "Don't show reminders on same day";
 app.controller('addReminder', ['$scope', function($scope) {
     $scope.dateToSend = new Date();
-    $scope.showReminders = false;
+    $scope.showReminders = true;
     $scope.showRemindersMessage = showRemindersMessage;
     $scope.init = function() {
         if(get('date') != null) {
@@ -61,7 +61,7 @@ app.controller('addReminder', ['$scope', function($scope) {
     
     $scope.toggleShowReminders = function() {
         $scope.showReminders = !$scope.showReminders;
-        $scope.showRemindersMessage = !$scope.showReminders ? "Show reminders on same day" : "Don't show reminders on same day";
+        $scope.showRemindersMessage = !$scope.showReminders ? "Show reminders on same day":  "Don't show reminders on same day" ;
         $scope.reminders = getReminders();
     }
     $scope.doSomething = function() {
