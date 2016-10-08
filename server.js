@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 
-var portNumber = 80;
+var portNumber = 3000;
 var server = app.listen(portNumber, function() {
 	console.log("Started on port " + portNumber);
 	var host = server.address().address;
@@ -84,7 +84,8 @@ app.post('/newReminder', function(req, res) {
 		subject: req.body.subject,
 		userID: req.body.userID,
 		dateToSend: req.body.dateToSend,
-		timeOfDay: req.body.timeOfDay
+		timeOfDay: req.body.timeOfDay,
+		hidden: false
 	}, function(err, tempReminder, created) {
 		if (created) {
 			res.json({});
@@ -106,7 +107,8 @@ app.post('/setReminder', function(req, res){
 		subject: req.body.subject,
 		userID: req.body.userID,
 		dateToSend: req.body.dateToSend,
-		timeOfDay: req.body.timeOfDay
+		timeOfDay: req.body.timeOfDay,
+		hidden: false
 	},
 	function(err, tempReminder) {
 		if(tempReminder)
