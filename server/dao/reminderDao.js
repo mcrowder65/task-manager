@@ -27,11 +27,9 @@ module.exports = {
 		});
 	},
 	deleteReminder: function(req, res) {
-		console.log(req.body);
 		reminder.remove({_id: req.body._id},
 		function(err, tempReminder){
 			if(tempReminder){
-				console.log(tempReminder);
 				res.json({})
 			}
 		});

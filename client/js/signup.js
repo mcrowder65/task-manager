@@ -1,8 +1,21 @@
 var app= angular.module('app');
-app.controller('signup', ['$scope', function ($scope) {
+app.controller('signup', ['$scope', '$http', function ($scope, $http) {
 
     $scope.signUp = function() {
-        signUpUser($scope.username, $scope.confirmPassword);
+        $scope.username = $scope.username.toLowerCase();
+        var username = $scope.username;
+        var password = $scope.confirmPassword;
+        $http({
+            method: 'POST',
+            url: '/signup',
+            data: {username: username, password: password}
+        }).then(function successCallback(response) {
+            localStorage.token = response.data.token;
+            window.location="/index.html";
+        }, function errorCallback(response) {
+            localStorage.token="";
+            throw new Error("signup busted!");
+        });
     }
 
     $scope.verifyPasswords = function() {
@@ -26,28 +39,6 @@ function verifyPasswords(initialPassword, confirmPassword){
 }
 
 function changePasswordBoxColor(color){
-
-        $("#initialPassword").css("borderColor", color);
-        $("#confirmPassword").css("borderColor", color);
-}
-/*******************************************************************************************************************/
-                                                //Server senders
-/*******************************************************************************************************************/
-
-function signUpUser(username, password){
-    username = username.toLowerCase();
-    $.ajax
-    ({
-        url: "/signup",
-        dataType: 'json',
-        type: 'POST',
-        data: {username: username, password: password},
-        success: function(data, status, headers, config){
-            localStorage.token = data.token;
-            window.location="/index.html";
-        }.bind(this),
-        error: function(data, status, headers, config){
-            localStorage.token="";
-        }.bind(this)
-    });
+    $("#initialPassword").css("borderColor", color);
+    $("#confirmPassword").css("borderColor", color);
 }

@@ -1,6 +1,6 @@
 var app = angular.module('app');
 var showRemindersMessage = "Don't show reminders on same day";
-app.controller('addReminder', ['$scope', function($scope) {
+app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
     $scope.dateToSend = new Date();
     $scope.showReminders = true;
     $scope.showRemindersMessage = showRemindersMessage;
@@ -27,30 +27,47 @@ app.controller('addReminder', ['$scope', function($scope) {
             return;
         }
         if (get('_id') == null) {
-
-            newReminder({
-                senderEmail: $scope.senderEmail,
-                senderPassword: $scope.senderPassword,
-                receiverEmail: $scope.receiverEmail,
-                timeToSend: timeToSend,
-                emailBody: $scope.emailBody,
-                subject: $scope.subject,
-                userID: localStorage.token,
-                dateToSend: $scope.dateToSend,
-                timeOfDay: $scope.timeToSend
+            $http({
+              method: 'POST',
+              url: '/newReminder',
+              data: {
+                    senderEmail: $scope.senderEmail,
+                    senderPassword: $scope.senderPassword,
+                    receiverEmail: $scope.receiverEmail,
+                    timeToSend: timeToSend,
+                    emailBody: $scope.emailBody,
+                    subject: $scope.subject,
+                    userID: localStorage.token,
+                    dateToSend: $scope.dateToSend,
+                    timeOfDay: $scope.timeToSend
+                }
+            }).then(function successCallback(response) {
+                showReminderConfirmationBanner(true);
+            }, function errorCallback(response) {
+                showReminderConfirmationBanner(false);
+                throw new Error("new reminder might be busted!");
             });
         } else {
-            setReminder({
-                _id: get('_id'),
-                senderEmail: $scope.senderEmail,
-                senderPassword: $scope.senderPassword,
-                receiverEmail: $scope.receiverEmail,
-                timeToSend: timeToSend,
-                emailBody: $scope.emailBody,
-                subject: $scope.subject,
-                userID: localStorage.token,
-                dateToSend: $scope.dateToSend,
-                timeOfDay: $scope.timeToSend
+            $http({
+              method: 'POST',
+              url: '/setReminder',
+              data: {
+                    _id: get('_id'),
+                    senderEmail: $scope.senderEmail,
+                    senderPassword: $scope.senderPassword,
+                    receiverEmail: $scope.receiverEmail,
+                    timeToSend: timeToSend,
+                    emailBody: $scope.emailBody,
+                    subject: $scope.subject,
+                    userID: localStorage.token,
+                    dateToSend: $scope.dateToSend,
+                    timeOfDay: $scope.timeToSend
+                }
+            }).then(function successCallback(response) {
+                showReminderConfirmationBanner(true);
+            }, function errorCallback(response) {
+                showReminderConfirmationBanner(false);
+                throw new Error("set reminder might be busted!");
             });
         }
         
@@ -69,9 +86,12 @@ app.controller('addReminder', ['$scope', function($scope) {
         focus('receiverEmail');
     };
     $scope.getReminder = function() {
-        var reminder = getReminder(get('_id')).data;
-        $scope.editing = false;
-        if (reminder) {
+        $http({
+            method: 'POST',
+            url: '/getReminder',
+            data: { _id: get('_id')}
+        }).then(function successCallback(response) {
+            var reminder = response.data.data;
             $scope.editing = true;
             $scope.dateToSend = reminder.dateToSend != null ? new Date(reminder.dateToSend) : $scope.dateToSend;
             $scope.timeToSend = reminder.timeOfDay != null ? reminder.timeOfDay : $scope.timeToSend;
@@ -80,7 +100,9 @@ app.controller('addReminder', ['$scope', function($scope) {
             $scope.receiverEmail = reminder.receiverEmail != null ? reminder.receiverEmail : $scope.receiverEmail;
             $scope.senderEmail = reminder.senderEmail != null ? reminder.senderEmail : $scope.senderEmail;
             $scope.senderPassword = reminder.senderPassword != null ? reminder.senderPassword : $scope.senderPassword;
-        }
+        }, function errorCallback(response) {
+            throw new Error("get reminder is busted!");
+        });
     }
     $scope.stopEditing = function() {
         removeGet("_id", $scope.dateToSend.getTime());
@@ -146,58 +168,5 @@ function showReminderConfirmationBanner(success) {
         setTimeout(function() {
             $('#successMessage').css("visibility", "hidden");
         }, millisecondsToWait);
-    });
-}
-
-/*******************************************************************************************************************/
-//Server senders
-/*******************************************************************************************************************/
-function setReminder(email) {
-    $.ajax({
-        url: "/setReminder",
-        dataType: 'json',
-        type: 'POST',
-        async: false,
-        data: email,
-        success: function(data, status, headers, config) {
-            showReminderConfirmationBanner(true);
-        }.bind(this),
-        error: function(data, status, headers, config) {
-            showReminderConfirmationBanner(false);
-        }.bind(this)
-    });
-}
-
-function getReminder(_id) {
-    var reminder = {};
-    if (_id) {
-
-        $.ajax({
-            url: "/getReminder",
-            dataType: 'json',
-            type: 'POST',
-            async: false,
-            data: { _id: _id },
-            success: function(data, status, headers, config) {
-                reminder = data;
-            }.bind(this),
-            error: function(data, status, headers, config) {}.bind(this)
-        });
-    }
-    return reminder;
-}
-
-function newReminder(data) {
-    $.ajax({
-        url: "/newReminder",
-        dataType: 'json',
-        type: 'POST',
-        data: data,
-        success: function(data, status, headers, config) {
-            showReminderConfirmationBanner(true);
-        }.bind(this),
-        error: function(data, status, headers, config) {
-            showReminderConfirmationBanner(false);
-        }.bind(this)
     });
 }

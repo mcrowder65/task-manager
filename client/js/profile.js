@@ -1,16 +1,40 @@
 var app= angular.module('app');
-app.controller('profile', ['$scope', function ($scope) {
+app.controller('profile', ['$scope', '$http', function ($scope, $http) {
 
     $scope.setSenderPassword = function() {
-        setSenderPassword({_id: localStorage.token, senderPassword: $scope.senderPassword});
+        $http({
+            method: 'POST',
+            url: '/setSenderPassword',
+            data: { _id:localStorage.token, senderPassword: $scope.senderPassword }
+        }).then(function successCallback(response) {
+            outline("senderEmailPassword", "lime");
+        }, function errorCallback(response) {
+            throw new Error("setSenderPassword busted!");
+        });
     }
 
     $scope.setSenderEmail = function() {
-        setSenderEmail({_id: localStorage.token, senderEmail: $scope.senderEmail});
+        $http({
+            method: 'POST',
+            url: '/setSenderEmail',
+            data: {_id: localStorage.token, senderEmail: $scope.senderEmail}
+        }).then(function successCallback(response) {
+            outline("senderEmailAccount", "lime");
+        }, function errorCallback(response) {
+            throw new Error("setSenderEmail busted!");
+        });
     }
 
     $scope.setReceiverEmail = function(){
-        setReceiverEmail({_id: localStorage.token, receiverEmail: $scope.receiverEmail});
+        $http({
+            method: 'POST',
+            url: '/setReceiverEmail',
+            data: {_id: localStorage.token, receiverEmail: $scope.receiverEmail}
+        }).then(function successCallback(response) {
+            outline("receiverEmailAccount", "lime");
+        }, function errorCallback(response) {
+            throw new Error("setReceiverEmail busted!");
+        });
     }
 }]);
 /*******************************************************************************************************************
@@ -23,64 +47,4 @@ function outline(id, color){
     setTimeout(function() {
         $(id).css("borderColor", "initial");
     }, millisecondsToWait);
-}
-
-/*******************************************************************************************************************/
-                                                //Server senders
-/*******************************************************************************************************************/
-
-function setSenderPassword(data) {
-    if(data.senderPassword) {
-        $.ajax
-        ({
-            url: "/setSenderPassword",
-            dataType: 'json',
-            type: 'POST',
-            data: data,
-            success: function(data, status, headers, config){
-                senderPassword = data.senderPassword;
-                outline("senderEmailPassword", "lime");
-            }.bind(this),
-            error: function(data, status, headers, config) {
-                outline("senderEmailPassword", "red");
-            }.bind(this)
-        });
-    }
-}
-
-function setSenderEmail(data) {
-    if(data.senderEmail) {
-        $.ajax
-        ({
-            url: "/setSenderEmail",
-            dataType: 'json',
-            type: 'POST',
-            data: data,
-            success: function(data, status, headers, config){
-                senderEmail = data.senderEmail;
-                outline("senderEmailAccount", "lime");
-            }.bind(this),
-            error: function(data, status, headers, config){
-                outline("senderEmailAccount", "red");
-            }.bind(this)
-        });
-    }
-}
-
-function setReceiverEmail(data){
-    if(data.receiverEmail) {
-        $.ajax
-        ({
-            url: "/setReceiverEmail",
-            dataType: 'json',
-            type: 'POST',
-            data: data,
-            success: function(data, status, headers, config){
-                outline("receiverEmailAccount", "lime");
-            }.bind(this),
-            error: function(data, status, headers, config){
-                outline("receiverEmailAccount", "red");
-            }.bind(this)
-        });
-    }
 }

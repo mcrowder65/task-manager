@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({
         extended: true
 }));
 
- 
+
 var portNumber = 80;
 var server = app.listen(portNumber, function() {
 	console.log("Started on port " + portNumber);
@@ -33,7 +33,6 @@ app.post('/getReminder', function(req, res){
 	reminderDAO.getReminder(req, res);
 });
 app.post('/deleteReminder', function(req, res){
-	console.log('delete reminder');
 	reminderDAO.deleteReminder(req, res);
 });
 app.post('/newReminder', function(req, res) {
