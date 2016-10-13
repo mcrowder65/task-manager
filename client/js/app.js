@@ -7,41 +7,89 @@ app.factory('simpleFactory', function(){
     return factory;
 });
 
-app.controller('app', function ($scope, simpleFactory) {
+app.controller('app', function ($scope, simpleFactory, $http) {
     
-    //Used in addReminder and profile controller
     $scope.getSenderPassword = function() {
-        $scope.senderPassword = getSenderPassword();
+        $http({
+          method: 'POST',
+          url: '/getSenderPassword',
+          data: { id:localStorage.token }
+        }).then(function successCallback(response) {
+            $scope.senderPassword = response.data.senderPassword;
+        }, function errorCallback(response) {
+            throw new Error("Retrieving sender password broke!");
+        });
     }
     
     //Used in addReminder and profile controller
     $scope.getSenderEmail = function() {
-        $scope.senderEmail = getSenderEmail();
+        $http({
+            method: 'POST',
+            url: '/getSenderEmail',
+            data: {id:localStorage.token }
+        }).then(function successCallback(response) {
+            $scope.senderEmail = response.data.senderEmail;
+        }, function errorCallback(response) {
+            throw new Error("getSenderEmail busted!");
+        });
     }
 
     //Used in addReminder and profile controller
     $scope.getReceiverEmail = function() {
-        $scope.receiverEmail = getReceiverEmail();
+        $http({
+            method: 'POST',
+            url: '/getReceiverEmail',
+            data: {id:localStorage.token }
+        }).then(function successCallback(response) {
+            $scope.receiverEmail = response.data.email;
+        }, function errorCallback(response) {
+            throw new Error("getReceiverEmail busted!");
+        });
     }
     $scope.isLoggedIn = function() {
         $scope.loggedIn = localStorage.token != null && localStorage.token != "";
     }
 
     $scope.getReminders = function(){
-        $scope.reminders = getReminders();
+        $http({
+            method: 'POST',
+            url: '/getReminders',
+            data: { id:localStorage.token }
+        }).then(function successCallback(response) {
+            var reminders = response.data;
+            for(var i = 0; i < reminders.length; i++) {
+                var date = new Date(reminders[i].timeToSend)
+                reminders[i].date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
+            }
+            $scope.reminders = reminders;
+        }, function errorCallback(response) {
+            throw new Error("getReminders busted!");
+        });
     }
     $scope.editReminder = function(_id){
         window.location.href = "/#/addReminder/?_id=" + _id;
     }
     $scope.deleteReminder = function(_id) {
-        if(deleteReminder(_id)) {
-            $scope.reminders = getReminders();
-        }
+        $http({
+            method: 'POST',
+            url: '/deleteReminder',
+            data: { _id: _id }
+        }).then(function successCallback(response) {
+            $scope.getReminders();
+        }, function errorCallback(response) {
+            throw new Error("deleteReminder busted!");
+        });
     }
     $scope.sendReminderImmediately = function(_id) {
-        if(sendReminderImmediately(_id)){
-            $scope.reminders = getReminders();
-        }
+        $http({
+            method: 'POST',
+            url: '/sendReminderImmediately',
+            data: { _id: _id }
+        }).then(function successCallback(response) {
+            $scope.getReminders();
+        }, function errorCallback(response) {
+            throw new Error("sendReminderImmediately busted!!!");
+        });
     }
     $scope.hide = function(reminder) {
         reminder.hidden = true;
@@ -140,133 +188,6 @@ function removeGet(parameter, dateToSend) {
   }
   window.location.href = String(window.location.href).replace(url.substring(index, i), "") + 'date=' + dateToSend;
 }
-/*******************************************************************************************************************/
-                                                //Server senders
-/*******************************************************************************************************************/
-function deleteReminder(_id) {
-    var success = false;
-    $.ajax
-    ({
-        url: "/deleteReminder",
-        dataType: "json",
-        type: "POST",
-        async: false,
-        data: {_id: _id},
-        success: function(data, status, headers, config){
-            success = true;
-        }.bind(this),
-        error: function(data, status, headers, config){
-        }.bind(this)
-    });
-    return success;
-}
-function sendReminderImmediately(_id) {
-    var success = false;
-    $.ajax
-    ({
-        url: "/sendReminderImmediately",
-        dataType: "json",
-        type: "POST",
-        async: false,
-        data: {_id: _id},
-        success: function(data, status, headers, config){
-            success = true;
-        }.bind(this),
-        error: function(data, status, headers, config){
-
-        }.bind(this)
-    });
-    return success;
-}
-function getReminders() {
-    var reminders = [];
-    $.ajax
-    ({
-        url: "/getReminders",
-        dataType: 'json',
-        type: 'POST',
-        async: false,
-        data: {id: localStorage.token},
-        success: function(data, status, headers, config){
-            reminders = data;
-            for(var i = 0; i < reminders.length; i++) {
-                var date = new Date(reminders[i].timeToSend)
-                reminders[i].date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
-            }
-        }.bind(this),
-        error: function(data, status, headers, config){
-        }.bind(this)
-    });
-    return reminders;
-}
-function getReceiverEmail(){
-    var receiverEmail = '';
-    $.ajax
-    ({
-        url: "/getReceiverEmail",
-        dataType: 'json',
-        type: 'POST',
-        async: false,
-        data: {id: localStorage.token},
-        success: function(data, status, headers, config){
-            receiverEmail = data.email;
-        }.bind(this),
-        error: function(data, status, headers, config){
-        }.bind(this)
-    });
-    return receiverEmail;
-}
-
-function getSenderEmail(){
-    var senderEmail = '';
-    $.ajax
-    ({
-        url: "/getSenderEmail",
-        dataType: 'json',
-        type: 'POST',
-        async: false,
-        data: {id: localStorage.token},
-        success: function(data, status, headers, config){
-            senderEmail = data.senderEmail;
-        }.bind(this),
-        error: function(data, status, headers, config){
-        }.bind(this)
-    });
-    return senderEmail;
-}
-
-function getSenderPassword() {
-    var senderPassword = '';
-    $.ajax
-    ({
-        url: "/getSenderPassword",
-        dataType: 'json',
-        type: 'POST',
-        async: false,
-        data: {id: localStorage.token},
-        success: function(data, status, headers, config){
-            senderPassword = data.senderPassword;
-        }.bind(this),
-        error: function(data, status, headers, config){
-        }.bind(this)
-    });
-    return senderPassword;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

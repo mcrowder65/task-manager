@@ -54,7 +54,7 @@ app.controller('addReminder', ['$scope', function($scope) {
             });
         }
         
-        $scope.reminders = getReminders();
+        $scope.getReminders();
         $scope.toggleShowReminders();
         $scope.toggleShowReminders();
     }
@@ -62,7 +62,7 @@ app.controller('addReminder', ['$scope', function($scope) {
     $scope.toggleShowReminders = function() {
         $scope.showReminders = !$scope.showReminders;
         $scope.showRemindersMessage = !$scope.showReminders ? "Show reminders on same day":  "Don't show reminders on same day" ;
-        $scope.reminders = getReminders();
+        $scope.getReminders();
     }
     $scope.doSomething = function() {
         // do something awesome
