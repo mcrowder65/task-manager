@@ -43,6 +43,7 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
                 }
             }).then(function successCallback(response) {
                 showReminderConfirmationBanner(true);
+                $scope.getReminders();
             }, function errorCallback(response) {
                 showReminderConfirmationBanner(false);
                 throw new Error("new reminder might be busted!");
@@ -65,13 +66,14 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
                 }
             }).then(function successCallback(response) {
                 showReminderConfirmationBanner(true);
+                $scope.getReminders();
             }, function errorCallback(response) {
                 showReminderConfirmationBanner(false);
                 throw new Error("set reminder might be busted!");
             });
         }
         
-        $scope.getReminders();
+        
         $scope.toggleShowReminders();
         $scope.toggleShowReminders();
     }
