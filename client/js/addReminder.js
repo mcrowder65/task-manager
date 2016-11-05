@@ -27,6 +27,15 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
             return;
         }
         if (get('_id') == null) {
+            var ids = [];
+            if($scope.reminders) {
+              for(var i = 0; i < $scope.reminders.length; i++) {
+                if($scope.reminders[i].hidden) {
+                  ids.push($scope.reminders[i]._id);
+                }
+              }
+            }
+
             $http({
               method: 'POST',
               url: '/newReminder',
@@ -43,7 +52,7 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
                 }
             }).then(function successCallback(response) {
                 showReminderConfirmationBanner(true);
-                $scope.getReminders();
+                $scope.getReminders(ids);
             }, function errorCallback(response) {
                 showReminderConfirmationBanner(false);
                 alert("new reminder might be busted!");
@@ -90,6 +99,7 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
         focus();
     };
     $scope.getReminder = function() {
+      if(get('_id')) {
         $http({
             method: 'POST',
             url: '/getReminder',
@@ -105,9 +115,11 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
             $scope.senderEmail = reminder.senderEmail != null ? reminder.senderEmail : $scope.senderEmail;
             $scope.senderPassword = reminder.senderPassword != null ? reminder.senderPassword : $scope.senderPassword;
         }, function errorCallback(response) {
-          alert("get reminder is busted!");
+            alert("get reminder is busted!");
             throw new Error("get reminder is busted!");
         });
+      }
+
     }
     $scope.stopEditing = function() {
         removeGet("_id", $scope.dateToSend.getTime());

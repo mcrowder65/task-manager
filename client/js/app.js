@@ -53,16 +53,24 @@ app.controller('app', function ($scope, simpleFactory, $http) {
         $scope.loggedIn = localStorage.token != null && localStorage.token != "";
     }
 
-    $scope.getReminders = function(){
+    $scope.getReminders = function(ids) {
         $http({
             method: 'POST',
             url: '/getReminders',
-            data: { id:localStorage.token }
+            data: { id: localStorage.token }
         }).then(function successCallback(response) {
             var reminders = response.data;
             for(var i = 0; i < reminders.length; i++) {
                 var date = new Date(reminders[i].timeToSend)
-                reminders[i].date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
+                reminders[i].date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString();
+            }
+            if(ids) {
+
+              for(var i = 0; i < reminders.length; i++) {
+                if(ids.indexOf(reminders[i]._id) > -1) {
+                  reminders[i].hidden = true;
+                }
+              }
             }
             $scope.reminders = reminders;
         }, function errorCallback(response) {
@@ -70,6 +78,7 @@ app.controller('app', function ($scope, simpleFactory, $http) {
             throw new Error("getReminders busted!");
         });
     }
+
     $scope.editReminder = function(_id){
         window.location.href = "/#/addReminder/?_id=" + _id;
     }
@@ -163,7 +172,14 @@ app.config(function ($routeProvider) {
                                                 //BASIC FUNCTIONS
 /*******************************************************************************************************************/
 
-
+function indexOf(scopeReminders, reminders) {
+  for(var i = 0; i < scopeReminders.length; i++) {
+    if(scopeReminders[i].id === reminders[i].id) {
+      return i;
+    }
+  }
+  return -1;
+}
 function get(parameter) {
   var url = window.location.href;
   var index = url.indexOf(parameter);
