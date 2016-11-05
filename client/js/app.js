@@ -8,7 +8,7 @@ app.factory('simpleFactory', function(){
 });
 
 app.controller('app', function ($scope, simpleFactory, $http) {
-    
+
     $scope.getSenderPassword = function() {
         $http({
           method: 'POST',
@@ -17,10 +17,11 @@ app.controller('app', function ($scope, simpleFactory, $http) {
         }).then(function successCallback(response) {
             $scope.senderPassword = response.data.senderPassword;
         }, function errorCallback(response) {
+            alert("Retrieving sender password broke!");
             throw new Error("Retrieving sender password broke!");
         });
     }
-    
+
     //Used in addReminder and profile controller
     $scope.getSenderEmail = function() {
         $http({
@@ -30,6 +31,7 @@ app.controller('app', function ($scope, simpleFactory, $http) {
         }).then(function successCallback(response) {
             $scope.senderEmail = response.data.senderEmail;
         }, function errorCallback(response) {
+            alert("getSenderEmail busted!");
             throw new Error("getSenderEmail busted!");
         });
     }
@@ -43,6 +45,7 @@ app.controller('app', function ($scope, simpleFactory, $http) {
         }).then(function successCallback(response) {
             $scope.receiverEmail = response.data.email;
         }, function errorCallback(response) {
+            alert("getReceiverEmail busted!");
             throw new Error("getReceiverEmail busted!");
         });
     }
@@ -63,6 +66,7 @@ app.controller('app', function ($scope, simpleFactory, $http) {
             }
             $scope.reminders = reminders;
         }, function errorCallback(response) {
+            alert("getReminders busted!");
             throw new Error("getReminders busted!");
         });
     }
@@ -77,6 +81,7 @@ app.controller('app', function ($scope, simpleFactory, $http) {
         }).then(function successCallback(response) {
             $scope.getReminders();
         }, function errorCallback(response) {
+            alert("deleteReminder busted!");
             throw new Error("deleteReminder busted!");
         });
     }
@@ -88,6 +93,8 @@ app.controller('app', function ($scope, simpleFactory, $http) {
         }).then(function successCallback(response) {
             $scope.getReminders();
         }, function errorCallback(response) {
+
+            alert("sendReminderImmediately busted!!!");
             throw new Error("sendReminderImmediately busted!!!");
         });
     }
@@ -104,7 +111,7 @@ app.config(function ($routeProvider) {
         controller: 'app',
         templateUrl: 'client/html/allReminders.html'
     })
-    .when('/allReminders',	
+    .when('/allReminders',
     {
 		controller: 'app',
         templateUrl: 'client/html/allReminders.html'
@@ -157,14 +164,14 @@ app.config(function ($routeProvider) {
 /*******************************************************************************************************************/
 
 
-function get(parameter) {  
+function get(parameter) {
   var url = window.location.href;
   var index = url.indexOf(parameter);
   if(index == -1)
     return null;
   index += parameter.length + 1; //if the word we're looking for is address, get a index
-                                 //then add address.length +1 to get start of value 
-   
+                                 //then add address.length +1 to get start of value
+
   var i = index;
   while(url[i] != '?' && url[i] != '&') {
     if(i > url.length)
@@ -172,14 +179,14 @@ function get(parameter) {
     i++;
   }
   return url.substring(index, i);
-} 
+}
 
 function removeGet(parameter, dateToSend) {
   var url = window.location.href;
   var index = url.indexOf(parameter);
   if(index == -1)
     return null;
-   
+
   var i = index + parameter.length + 1;
   while(url[i] != '?' && url[i] != '&') {
     if(i > url.length)
@@ -188,6 +195,3 @@ function removeGet(parameter, dateToSend) {
   }
   window.location.href = String(window.location.href).replace(url.substring(index, i), "") + 'date=' + dateToSend;
 }
-
-
-

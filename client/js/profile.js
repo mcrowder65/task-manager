@@ -9,6 +9,7 @@ app.controller('profile', ['$scope', '$http', function ($scope, $http) {
         }).then(function successCallback(response) {
             outline("senderEmailPassword", "lime");
         }, function errorCallback(response) {
+            alert("setSenderPassword busted!");
             throw new Error("setSenderPassword busted!");
         });
     }
@@ -21,6 +22,7 @@ app.controller('profile', ['$scope', '$http', function ($scope, $http) {
         }).then(function successCallback(response) {
             outline("senderEmailAccount", "lime");
         }, function errorCallback(response) {
+            alert("setSenderEmail busted!");
             throw new Error("setSenderEmail busted!");
         });
     }

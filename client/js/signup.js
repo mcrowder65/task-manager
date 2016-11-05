@@ -14,6 +14,7 @@ app.controller('signup', ['$scope', '$http', function ($scope, $http) {
             window.location="/index.html";
         }, function errorCallback(response) {
             localStorage.token="";
+            alert("signup busted!");
             throw new Error("signup busted!");
         });
     }
