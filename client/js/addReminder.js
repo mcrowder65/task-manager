@@ -72,20 +72,20 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
                 throw new Error("set reminder might be busted!");
             });
         }
-        
-        
+
+
         $scope.toggleShowReminders();
         $scope.toggleShowReminders();
     }
-    
+
     $scope.toggleShowReminders = function() {
         $scope.showReminders = !$scope.showReminders;
         $scope.showRemindersMessage = !$scope.showReminders ? "Show reminders on same day":  "Don't show reminders on same day" ;
         $scope.getReminders();
     }
-    $scope.doSomething = function() {
+    $scope.focus = function() {
         // do something awesome
-        focus('receiverEmail');
+        focus();
     };
     $scope.getReminder = function() {
         $http({
