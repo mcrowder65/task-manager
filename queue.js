@@ -14,15 +14,14 @@ app.use(bodyParser.urlencoded({
 
 
 var portNumber = 7999
-var server = app.listen(portNumber, function() {
+var server = app.listen(portNumber, () => {
 console.log("Started on port " + portNumber);
 var host = server.address().address;
 var port = server.address().port;
-});
+}); 
 
-
-function checkReminders() {
-	reminder.find({}, function(err, reminders, created) {
+checkReminders = () => {
+	reminder.find({}, (err, reminders, created) => {
 		for(var i = 0; i < reminders.length; i++){
 			if(reminders[i].timeToSend != null) {
 				if(reminders[i].timeToSend.getTime() < new Date().getTime()){
@@ -32,11 +31,11 @@ function checkReminders() {
 			}
 		}
 	});
-	
+
 }
-function sendReminder(reminderObj){
+sendReminder = (reminderObj) => {
 	utilities.sendReminder(reminderObj);
-	reminder.remove({_id: reminderObj._id},function(err, tempReminder){}); 
-	
+	reminder.remove({_id: reminderObj._id}, (err, tempReminder) => {});
+
 }
 setInterval(checkReminders, 10000);
