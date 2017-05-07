@@ -1,16 +1,36 @@
-<link rel="stylesheet" type="text/css" href="client/css/signup.css">
+<link rel="stylesheet" type="text/css" href="client/css/styles.css">
 
-<div data-ng-controller="signup">
-	<div class="center-block" id="signupdiv">
-	    <div class="panel panel-primary">
-	    <div class="panel panel-heading">Register</div>
-	      <div class="panel-body">
-	        <b>Username:</b> <br><input type="text" data-ng-model="username"/><br><br> 
-		    <b>Password:</b> <br><input type="password" data-ng-change="verifyPasswords()" id="initialPassword" data-ng-model="initialPassword" /><br><br>	
-		    <b>Confirm password:</b> <br><input type="password" data-ng-change="verifyPasswords()" id="confirmPassword" data-ng-model="confirmPassword"/><br><br>
-		    <button data-ng-click="signUp()"> Sign up </button>
-	      </div>
-	    </div>
+<style>
+	.wrapper {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-template-rows: repeat(1, 0fr);
+	}
+
+	.signup-card {
+		grid-column: 1/3;
+		grid-row: 1;
+		justify-self: center;
+		width: 400px;
+		text-align: center;
+	}
+
+</style>
+<div class="wrapper" data-ng-controller="signup">
+	<div class="card signup-card">
+	    <h3>Register</h3>
+			<div>
+				<md-input-container>
+					<label>Username</label>
+					<input type="text" data-ng-model="username"/>
+				</md-input-container>
+			</div>
+			<div>
+				<md-input-container>
+					<label>Password</label>
+					<input type="password" data-ng-model="password"/>
+				</md-input-container>
+			</div>
+	    <md-button class="button" data-ng-click="signUp()">Sign up</md-button>
 	</div>
 </div>
-

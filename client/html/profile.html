@@ -1,21 +1,56 @@
-<link rel="stylesheet" type="text/css" href="client/css/profile.css">
-<div data-ng-controller="profile">
-	<div data-ng-init="getReceiverEmail(); getSenderEmail(); getSenderPassword(); " style="text-align:center">
-	    <input type="text" id="receiverEmailAccount" data-ng-value="receiverEmail" data-ng-model="receiverEmail" placeholder="Receiving email account"/>
-		<button type="button" class="btn btn-primary btn-xs" data-ng-click="setReceiverEmail()">Set</button><br><br>
-		<input type="text" id="senderEmailAccount" data-ng-value="senderEmail" data-ng-model="senderEmail" placeholder="Sender email account"/>
-		<button type="button" class="btn btn-primary btn-xs" data-ng-click="setSenderEmail()">Set</button><br><br>
-        <input type="text" id="senderEmailPassword" data-ng-value="senderPassword" data-ng-model="senderPassword" placeholder="Sender email password"/>
-		<button type="button" class="btn btn-primary btn-xs" data-ng-click="setSenderPassword()">Set</button><br><br>
+<link rel="stylesheet" type="text/css" href="client/css/styles.css">
+
+<style>
+	.wrapper {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-template-rows: repeat(1, 1fr);
+	}
+
+	.profile {
+		margin-left: 5px;
+		margin-right: 5px;
+		grid-column: 1/3;
+		grid-row: 1;
+		justify-self: center;
+		width: 60%;
+	}
+
+	.profile-header {
+		text-align: center;
+	}
+
+	md-input-container {
+		width: 200px;
+	}
+</style>
+<div data-ng-controller="profile" class="wrapper">
+	<div class="profile card">
+		<div class="profile-header">
+			<h3>Profile</h3>
+		</div>
+		<div data-ng-init="getReceiverEmail(); getSenderEmail(); getSenderPassword();" style="text-align:center">
+			<div>
+				<md-input-container>
+					<label>Receiving email account</label>
+					<input type="text" data-ng-model="receiverEmail" data-ng-value="receiverEmail" required>
+				</md-input-container>
+
+			</div>
+			<div>
+				<md-input-container>
+					<label>Sending email account</label>
+					<input type="text" data-ng-model="senderEmail" data-ng-value="senderEmail" required>
+				</md-input-container>
+
+			</div>
+			<md-input-container>
+				<label>Sender email password</label>
+				<input type="text" data-ng-model="senderPassword" data-ng-value="senderPassword" required>
+			</md-input-container>
+			<div>
+				<button type="button" class="btn btn-primary" data-ng-click="setSenderPassword(); setReceiverEmail(); setSenderEmail(); openToast('Profile set');">Set</button>
+			</div>
+		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
