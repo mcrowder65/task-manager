@@ -20,7 +20,7 @@ module.exports = {
 		function(err, tempReminder) {
 	        if (tempReminder) {
 	            res.json({data: tempReminder});
-	       	} 
+	       	}
 	        else if (err) {
 	            res.sendStatus(403);
 	        }
@@ -33,7 +33,7 @@ module.exports = {
 				res.json({})
 			}
 		});
-	}, 
+	},
 	newReminder: function(req, res) {
 		if(!reminderValidator.validateNewReminder(req.body)){
 			res.sendStatus("403");
@@ -48,6 +48,7 @@ module.exports = {
 			subject: req.body.subject,
 			userID: req.body.userID,
 			dateToSend: req.body.dateToSend,
+			milliseconds: new Date(req.body.timeToSend).getTime(),
 			timeOfDay: req.body.timeOfDay,
 			hidden: false
 		}, function(err, tempReminder, created) {
@@ -69,6 +70,7 @@ module.exports = {
 			timeToSend: req.body.timeToSend,
 			subject: req.body.subject,
 			userID: req.body.userID,
+			milliseconds: new Date(req.body.timeToSend).getTime(),
 			dateToSend: req.body.dateToSend,
 			timeOfDay: req.body.timeOfDay,
 			hidden: false
@@ -81,7 +83,7 @@ module.exports = {
 		});
 	},
 	getReminders: function(req, res) {
-		reminder.find({userID: req.body.id}, 
+		reminder.find({userID: req.body.id},
 		function(err, tempReminders) {
 			if (err) {
 			    res.sendStatus(403);
@@ -89,7 +91,7 @@ module.exports = {
 			}
 	        if (tempReminders) {
 	            res.json(tempReminders);
-	       	} 
+	       	}
 	        else {
 	            res.sendStatus(403);
 	        }

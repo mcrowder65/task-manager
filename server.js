@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({
         extended: true
 }));
 
-
+//TODO change this to either run on production or locally.
 var portNumber = 80;
 var server = app.listen(portNumber, function() {
 	console.log("Started on port " + portNumber);
@@ -68,11 +68,3 @@ app.post('/getReceiverEmail', function(req, res) {
 app.post('/setReceiverEmail', function(req, res) {
 	userDAO.setReceiverEmail(req, res);
 });
-
-
-
-
-
-
-
-

@@ -12,7 +12,8 @@ var emailSchema = new Schema({
     userID: String,
     dateToSend: String,
     timeOfDay: String,
-    hidden: Boolean
+    hidden: Boolean,
+    milliseconds: Number
 });
 // add findOrCreate
 emailSchema.plugin(findOrCreate);
