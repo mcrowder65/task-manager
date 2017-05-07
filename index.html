@@ -8,20 +8,20 @@
 
 		<link rel="stylesheet" type="text/css" href="libs/bootstrap-3.3.6-dist/css/bootstrap.min.css">
 		<link rel="stylesheet" href="index.css" />
-    	<link rel="stylesheet" href="libs/meanmenu/meanmenu.css" media="all" />
-    	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="libs/favicon.ico" />
-        <link rel="icon" type="image/png" href="libs/favicon.ico"/>
+  	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="libs/favicon.ico" />
+    <link rel="icon" type="image/png" href="libs/favicon.ico"/>
+		<link rel="stylesheet" href="node_modules/angular-material/angular-material.css">
 	</head>
-	
-	<body onload="auth()" data-ng-controller="app">
+
+	<body data-ng-controller="app">
 		<script src="libs/jquery/jquery-2.2.3.js"></script>
-
-
 		<script src="libs/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 		<script src="libs/bootstrap-3.3.6-dist/js/bootstrap.js"></script>
-		<script src="libs/angular/angular.min.js"></script>
-		<script src="libs/angular/angular-route.js"></script>
-		<script src="libs/meanmenu/jquery.meanmenu.js"></script>
+		<script src="node_modules/angular/angular.min.js"></script>
+		<script src="node_modules/angular-route/angular-route.js"></script>
+		<script src="node_modules/angular-aria/angular-aria.js"></script>
+    <script src="node_modules/angular-animate/angular-animate.js"></script>
+    <script src="node_modules/angular-material/angular-material.js"></script>
 
 		<script src="client/js/app.js"></script>
 		<script src="client/js/addReminder.js"></script>
@@ -34,40 +34,25 @@
 			<nav class="navbar navbar-default" id="navbar" data-ng-init="isLoggedIn()">
 				 <a class="navbar-brand" href="/#/allReminders">Home</a>
 				 <ul class="nav navbar-nav">
-				 	<li><a href="/#/addReminder">Add Reminder</a></li>
-				 	<li><a href="/#/allReminders">All Reminders</a></li>
-				 	<li data-ng-show="loggedIn == true"><a href="/#/profile">Profile</a></li>
-				 	<li data-ng-show="loggedIn == true"><a href="/#/" onclick="logout()">Log out</a></li>
-				 	<li data-ng-show="loggedIn == false"><a href="/#/signup">Sign up</a></li>
-				 	<li data-ng-show="loggedIn == false"><a href="/#/login">Log in</a></li>
+				 	<li><a href="/#!/addReminder">Add Reminder</a></li>
+				 	<li><a href="/#!/allReminders">All Reminders</a></li>
+				 	<li data-ng-show="loggedIn == true"><a href="/#!/profile">Profile</a></li>
+				 	<li data-ng-show="loggedIn == true"><a href="/#!/" onclick="logout()">Log out</a></li>
+				 	<li data-ng-show="loggedIn == false"><a href="/#!/signup">Sign up</a></li>
+				 	<li data-ng-show="loggedIn == false"><a href="/#!/login">Log in</a></li>
 				 </ul>
-				 
+
 			</nav>
 		</header>
-		<br><br><br>
 		<div data-ng-view></div>
-		<br><br><br>
 		<div></div>
 
 	</body>
 
 	<script>
-		function auth(){
-			
-			$('header nav').meanmenu();
-		}
 		function logout(){
 			localStorage.token="";
 			window.location="/index.html";
 		}
 	</script>
 </html>
-
-
-
-
-
-
-
-
-

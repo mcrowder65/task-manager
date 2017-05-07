@@ -2,3 +2,11 @@ node_modules/*
 resume*
 
 *.log
+
+emailer/.metadata*
+emailer/.recommenders*
+emailer/emailer/.classpath
+emailer/emailer/.project
+emailer/emailer/.settings*
+emailer/emailer/bin*
+emailer/RemoteSystemsTempFiles/.project

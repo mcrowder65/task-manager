@@ -173,17 +173,18 @@ app.directive('eventFocus', function(focus) {
 function showReminderConfirmationBanner(success) {
 
     $(document).ready(function() {
+      //TODO need to take this away!!! 
         if (success === true) {
-            $("#successMessage").attr("class", "alert alert-success");
-            $("#successMessage").text("Your reminder has been set!");
+            $("#success-message").attr("class", "alert alert-success");
+            $("#success-message").text("Your reminder has been set!");
         } else {
-            $("#successMessage").attr("class", "alert alert-danger");
-            $("#successMessage").text("Something went wrong! Your reminder wasn't set.");
+            $("#success-message").attr("class", "alert alert-danger");
+            $("#success-message").text("Something went wrong! Your reminder wasn't set.");
         }
-        $("#successMessage").css("visibility", "visible");
+        $("#success-message").css("visibility", "visible");
         var millisecondsToWait = 2000;
         setTimeout(function() {
-            $('#successMessage').css("visibility", "hidden");
+            $('#success-message').css("visibility", "hidden");
         }, millisecondsToWait);
     });
 }
