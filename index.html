@@ -8,11 +8,11 @@
 
 		<link rel="stylesheet" type="text/css" href="libs/bootstrap-3.3.6-dist/css/bootstrap.min.css">
 		<link rel="stylesheet" href="index.css" />
-    	<link rel="stylesheet" href="libs/meanmenu/meanmenu.css" media="all" />
-    	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="libs/favicon.ico" />
-        <link rel="icon" type="image/png" href="libs/favicon.ico"/>
+  	<link rel="stylesheet" href="libs/meanmenu/meanmenu.css" media="all" />
+  	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="libs/favicon.ico" />
+    <link rel="icon" type="image/png" href="libs/favicon.ico"/>
 	</head>
-	
+
 	<body onload="auth()" data-ng-controller="app">
 		<script src="libs/jquery/jquery-2.2.3.js"></script>
 
@@ -41,19 +41,16 @@
 				 	<li data-ng-show="loggedIn == false"><a href="/#/signup">Sign up</a></li>
 				 	<li data-ng-show="loggedIn == false"><a href="/#/login">Log in</a></li>
 				 </ul>
-				 
+
 			</nav>
 		</header>
-		<br><br><br>
 		<div data-ng-view></div>
-		<br><br><br>
 		<div></div>
 
 	</body>
 
 	<script>
-		function auth(){
-			
+		function auth() {
 			$('header nav').meanmenu();
 		}
 		function logout(){
@@ -62,12 +59,3 @@
 		}
 	</script>
 </html>
-
-
-
-
-
-
-
-
-
