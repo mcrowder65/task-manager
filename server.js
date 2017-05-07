@@ -17,8 +17,13 @@ app.use(bodyParser.urlencoded({
         extended: true
 }));
 
-//TODO change this to either run on production or locally.
 var portNumber = 80;
+process.argv.forEach((val, index, array) => {
+  if(val === '--port') {
+    portNumber = array[index + 1];
+  }
+});
+
 var server = app.listen(portNumber, function() {
 	console.log("Started on port " + portNumber);
 	var host = server.address().address;

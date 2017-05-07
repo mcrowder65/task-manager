@@ -2,7 +2,10 @@
   "name": "node-todo",
   "version": "0.0.0",
   "description": "Simple todo application.",
-  "start": "node server.js",
+  "scripts": {
+    "start": "node server.js --port 80",
+    "dev": "node server.js --port 3000"
+  },
   "main": "server.js",
   "author": "Scotch",
   "dependencies": {
