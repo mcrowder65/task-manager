@@ -1,37 +1,37 @@
 var app= angular.module('app');
-app.controller('profile', ['$scope', '$http', function ($scope, $http) {
+app.controller('profile', ['$scope', '$http', ($scope, $http) => {
 
-    $scope.setSenderPassword = function() {
+    $scope.setSenderPassword = () => {
         $http({
             method: 'POST',
             url: '/setSenderPassword',
             data: { _id:localStorage.token, senderPassword: $scope.senderPassword }
-        }).then(function successCallback(response) {
-        }, function errorCallback(response) {
+        }).then(successCallback = (response) => {
+        }, errorCallback = (response) => {
             alert("setSenderPassword busted!");
             throw new Error("setSenderPassword busted!");
         });
     }
 
-    $scope.setSenderEmail = function() {
+    $scope.setSenderEmail = () => {
         $http({
             method: 'POST',
             url: '/setSenderEmail',
             data: {_id: localStorage.token, senderEmail: $scope.senderEmail}
-        }).then(function successCallback(response) {
-        }, function errorCallback(response) {
+        }).then(successCallback = (response) => {
+        }, errorCallback = (response) => {
             alert("setSenderEmail busted!");
             throw new Error("setSenderEmail busted!");
         });
     }
 
-    $scope.setReceiverEmail = function(){
+    $scope.setReceiverEmail = () => {
         $http({
             method: 'POST',
             url: '/setReceiverEmail',
             data: {_id: localStorage.token, receiverEmail: $scope.receiverEmail}
-        }).then(function successCallback(response) {
-        }, function errorCallback(response) {
+        }).then(successCallback = (response) =>{
+        }, errorCallback = (response) =>{
             throw new Error("setReceiverEmail busted!");
         });
     }
