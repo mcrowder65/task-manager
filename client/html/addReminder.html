@@ -11,7 +11,10 @@
     grid-column: 1/3;
     grid-row: 1;
     justify-self: center;
+    width: 400px;
     text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
   .set-reminder-button {
@@ -28,10 +31,6 @@
     grid-column: 1/3;
     min-width: 20%;
     justify-self: center;
-  }
-
-  input {
-  	/*width: 200px;*/
   }
 
   #success-message {
@@ -57,16 +56,42 @@
     margin-top: 10px;
   }
 
+  md-input-container {
+      width: 60%;
+  }
 </style>
 <div data-ng-controller="addReminder">
+
   <div class="wrapper" data-ng-init="getSenderEmail(); getSenderPassword(); getReceiverEmail(); getReminder(); init();" id="wrapper">
     <div class="card reminder-content">
       <h3>Reminder content</h3>
-      <b>Receiving email account:</b> <input type="text" id="receiverEmail" data-ng-model="receiverEmail"/> <button data-ng-show="receiverEmail != '' && receiverEmail != null" type="button" class="btn btn-primary btn-xs" data-ng-click="receiverEmail = ''; focus();" event-focus="click" event-focus-id="receiverEmail" > Clear</button><br><br>
-      <b>Date to send reminder:</b><input type="date" data-ng-model="dateToSend"/><br><br>
-      <b>Time to send reminder: </b><input maxlength="5" placeholder="18:35" type="text" data-ng-model="timeToSend" id="timeToSend"/> <button data-ng-show="timeToSend != '' && timeToSend != null" type="button" class="btn btn-primary btn-xs" tabindex="-1" data-ng-click="timeToSend=''; focus();" event-focus="click" event-focus-id="timeToSend"> Clear</button><br><br>
-      <b>Subject: </b><input type="text" data-ng-model="subject" id="subject"/> <button data-ng-show="subject != '' && subject != null" type="button" class="btn btn-primary btn-xs" tabindex="-1" data-ng-click="subject = ''; focus();" event-focus="click" event-focus-id="subject"> Clear</button><br><br>
-      <b>Body: </b> <textarea type="text" data-ng-model="emailBody" id="emailBody"> </textarea><button data-ng-show="emailBody != '' && emailBody != null" type="button" class="btn btn-primary btn-xs" tabindex="-1" data-ng-click="emailBody = ''; focus();" event-focus="click" event-focus-id="emailBody"> Clear</button><br><br>
+      <div>
+        <md-input-container>
+          <label>Receiving email account</label>
+          <input type="text" data-ng-model="receiverEmail" required>
+        </md-input-container>
+      </div>
+      <div>
+        <md-datepicker ng-model="dateToSend"></md-datepicker>
+      </div>
+      <div>
+        <md-input-container>
+          <label>Time to send reminder</label>
+          <input type="text" data-ng-model="timeToSend" required md-maxlength="5">
+        </md-input-container>
+      </div>
+      <div>
+        <md-input-container>
+          <label>Subject</label>
+          <input type="text" data-ng-model="subject" required>
+        </md-input-container>
+      </div>
+      <div>
+        <md-input-container>
+          <label>Body</label>
+          <input type="text" data-ng-model="emailBody">
+        </md-input-container>
+      </div>
     </div>
 
     <button type="button" class="btn btn-primary set-reminder-button" data-ng-click="newReminder()"> Set Reminder </button><br><br>

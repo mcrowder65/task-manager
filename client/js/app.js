@@ -1,5 +1,5 @@
 
-var app = angular.module('app', ['ngRoute']);
+var app = angular.module('app', ['ngRoute', 'ngMaterial']);
 var MILLISECONDS_IN_DAY = 86400000;
 app.factory('simpleFactory', function(){
     var factory = {};
@@ -115,30 +115,15 @@ app.controller('app', function ($scope, simpleFactory, $http) {
 app.config(function ($routeProvider) {
 
 	$routeProvider
-    .when('/#',
+    .when('/#!',
     {
         controller: 'app',
         templateUrl: 'client/html/allReminders.html'
     })
     .when('/allReminders',
     {
-		controller: 'app',
-        templateUrl: 'client/html/allReminders.html'
-    })
-    .when('/day',
-    {
-    	controller: 'app',
-        templateUrl: 'client/html/day.html'
-    })
-    .when('/week',
-    {
-    	controller: 'app',
-        templateUrl: 'client/html/week.html'
-    })
-    .when('/month',
-    {
-    	controller: 'app',
-        templateUrl: 'client/html/month.html'
+	    controller: 'app',
+      templateUrl: 'client/html/allReminders.html'
     })
     .when('/addReminder',
     {
@@ -153,17 +138,17 @@ app.config(function ($routeProvider) {
     .when('/signup',
     {
     	controller: 'app',
-        templateUrl: 'client/html/signup.html'
+      templateUrl: 'client/html/signup.html'
     })
     .when('/login',
     {
     	controller: 'app',
-        templateUrl: 'client/html/login.html'
+      templateUrl: 'client/html/login.html'
     })
     .when('/logout',
     {
-        controller: 'app',
-        templateUrl: 'client/html/logout.html'
+      controller: 'app',
+      templateUrl: 'client/html/logout.html'
     })
     .otherwise({ redirectTo: '/allReminders' });
 
