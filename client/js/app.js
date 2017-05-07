@@ -7,7 +7,7 @@ app.factory('simpleFactory', function(){
     return factory;
 });
 
-app.controller('app', function ($scope, simpleFactory, $http) {
+app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
 
     $scope.getSenderPassword = function() {
         $http({
@@ -110,6 +110,10 @@ app.controller('app', function ($scope, simpleFactory, $http) {
     $scope.hide = function(reminder) {
         reminder.hidden = true;
     }
+    $scope.openToast = function($event) {
+      $mdToast.showSimple($event);
+    };
+
 });
 
 app.config(function ($routeProvider) {
