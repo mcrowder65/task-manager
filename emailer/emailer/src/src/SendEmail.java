@@ -9,6 +9,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 
+import models.Reminder;
+
 public class SendEmail implements Runnable {
 
 	private Reminder reminder;
@@ -31,7 +33,7 @@ public class SendEmail implements Runnable {
 			Properties props = new Properties();
 
 			props.put("mail.smtp.host", "smtp.gmail.com");
-			props.put("mail.from", "matt.taskmanager@gmail.com");
+			props.put("mail.from", reminder.getSenderEmail());
 			props.put("mail.smtp.starttls.enable", "true");
 			props.put("mail.smtp.port", "587");
 			props.setProperty("mail.debug", "true");

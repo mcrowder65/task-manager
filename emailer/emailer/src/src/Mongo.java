@@ -10,6 +10,8 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
+import models.Reminder;
+
 public class Mongo {
 	public void connect() {
 		MongoClient mongoClient;
@@ -19,7 +21,6 @@ public class Mongo {
 			DBCollection coll = db.getCollection("emails");
 			Date date = new Date();
 
-			System.out.println(date.getTime());
 			DBObject query = new BasicDBObject("milliseconds", new BasicDBObject("$lt", date.getTime()));
 			List<DBObject> obj = coll.find(query).toArray();
 			System.out.println(obj);

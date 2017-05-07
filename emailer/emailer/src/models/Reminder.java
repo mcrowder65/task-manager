@@ -1,4 +1,6 @@
-package src;
+package models;
+
+import src.Tools;
 
 public class Reminder {
 	private Id _id;
