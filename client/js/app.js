@@ -80,7 +80,7 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
     }
 
     $scope.editReminder = function(_id){
-        window.location.href = "/#/addReminder/?_id=" + _id;
+        window.location.href = "/#!/addReminder/?_id=" + _id;
     }
     $scope.deleteReminder = function(_id) {
         $http({
