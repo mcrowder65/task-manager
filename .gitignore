@@ -10,3 +10,5 @@ emailer/emailer/.project
 emailer/emailer/.settings*
 emailer/emailer/bin*
 emailer/RemoteSystemsTempFiles/.project
+
+client_secret.json
