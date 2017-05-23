@@ -22,6 +22,7 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
             time = time.match("([Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec]* [0-9]* [0-9]{0,4})");
             time = time[0];
             var timeToSend = new Date(time + " " + $scope.timeToSend).getTime();
+
         } catch (err) {
             showReminderConfirmationBanner(false);
             return;
@@ -43,7 +44,7 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
                     senderEmail: $scope.senderEmail,
                     senderPassword: $scope.senderPassword,
                     receiverEmail: $scope.receiverEmail,
-                    timeToSend: timeToSend,
+                    timeToSend,
                     emailBody: $scope.emailBody,
                     subject: $scope.subject,
                     userID: localStorage.token,
@@ -55,8 +56,7 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
                 $scope.getReminders(ids);
             }, function errorCallback(response) {
                 showReminderConfirmationBanner(false);
-                alert("new reminder might be busted!");
-                throw new Error("new reminder might be busted!");
+                console.error("new reminder might be busted!");
             });
         } else {
             $http({
@@ -79,7 +79,6 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
                 $scope.getReminders();
             }, function errorCallback(response) {
                 showReminderConfirmationBanner(false);
-                alert("set reminder might be busted!");
                 throw new Error("set reminder might be busted!");
             });
         }
@@ -115,7 +114,6 @@ app.controller('addReminder', ['$scope', '$http', function($scope, $http) {
             $scope.senderEmail = reminder.senderEmail != null ? reminder.senderEmail : $scope.senderEmail;
             $scope.senderPassword = reminder.senderPassword != null ? reminder.senderPassword : $scope.senderPassword;
         }, function errorCallback(response) {
-            alert("get reminder is busted!");
             throw new Error("get reminder is busted!");
         });
       }
@@ -173,7 +171,7 @@ app.directive('eventFocus', function(focus) {
 function showReminderConfirmationBanner(success) {
 
     $(document).ready(function() {
-      //TODO need to take this away!!! 
+      //TODO need to take this away!!!
         if (success === true) {
             $("#success-message").attr("class", "alert alert-success");
             $("#success-message").text("Your reminder has been set!");

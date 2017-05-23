@@ -41,6 +41,7 @@ app.post('/deleteReminder', function(req, res){
 	reminderDAO.deleteReminder(req, res);
 });
 app.post('/newReminder', function(req, res) {
+  console.log('newReminder');
 	reminderDAO.newReminder(req, res);
 });
 app.post('/setReminder', function(req, res){

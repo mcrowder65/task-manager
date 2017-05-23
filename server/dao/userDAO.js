@@ -1,6 +1,23 @@
 var user =  require('../models/user.js');
 var userValidator = require('../validators/userValidator');
+const getById = async (_id) => {
+	return new Promise( async (resolve, reject) => {
+		user.findOne({
+			_id
+		},
+			(err, tempUser) => {
+				if(err) {
+					reject(err);
+				} else {
+					resolve(tempUser);
+				}
+			}
+		)
+	});
+
+};
 module.exports = {
+	getById,
 	signup: function(req, res) {
 		user.findOrCreate({
 			username: req.body.username,
@@ -18,7 +35,7 @@ module.exports = {
 		});
 	},
 	getSenderPassword: function(req, res) {
-		user.findOne({_id: req.body.id}, 
+		user.findOne({_id: req.body.id},
 		function(err, tempUser) {
 			if (err) {
 			    res.sendStatus(403);
@@ -43,7 +60,7 @@ module.exports = {
 		});
 	},
 	getSenderEmail: function(req, res) {
-		user.findOne({_id: req.body.id}, 
+		user.findOne({_id: req.body.id},
 		function(err, tempUser) {
 			if (err) {
 			    res.sendStatus(403);
@@ -51,7 +68,7 @@ module.exports = {
 			}
 	        if (tempUser) {
 	            res.json({senderEmail: tempUser.senderEmail});
-	       	} 
+	       	}
 	        else {
 	            res.sendStatus(403);
 	        }
@@ -73,7 +90,7 @@ module.exports = {
 		});
 	},
 	login: function(req, res) {
-		user.findOne({username: req.body.username}, 
+		user.findOne({username: req.body.username},
 		function(err, tempUser) {
 			if (err) {
 			    res.sendStatus(403);
@@ -82,14 +99,14 @@ module.exports = {
 	        if (tempUser && tempUser.checkPassword(req.body.password)) {
 	            var token = tempUser._id;
 	            res.json({token:token});
-	       	} 
+	       	}
 	        else {
 	            res.sendStatus(403);
 	        }
 		});
 	},
 	getReceiverEmail: function(req, res) {
-		user.findOne({_id: req.body.id}, 
+		user.findOne({_id: req.body.id},
 		function(err, tempUser) {
 			if (err) {
 			    res.sendStatus(403);
@@ -97,7 +114,7 @@ module.exports = {
 			}
 	        if (tempUser) {
 	            res.json({email:tempUser.receiverEmail});
-	       	} 
+	       	}
 	        else {
 	            res.sendStatus(403);
 	        }

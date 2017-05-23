@@ -12,7 +12,7 @@ var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
 
-// Load client secrets from a local file.
+//Load client secrets from a local file.
 fs.readFile('client_secret.json', function processClientSecrets(err, content) {
   if (err) {
     console.log('Error loading client secret file: ' + err);
@@ -97,54 +97,22 @@ function storeToken(token) {
   console.log('Token stored to ' + TOKEN_PATH);
 }
 
-/**
- * Lists the next 10 events on the user's primary calendar.
- *
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- */
-function listEvents(auth) {
-  console.log(auth)
-  var calendar = google.calendar('v3');
-  calendar.events.list({
-    auth: auth,
-    calendarId: 'primary',
-    timeMin: (new Date()).toISOString(),
-    maxResults: 10,
-    singleEvents: true,
-    orderBy: 'startTime'
-  }, function(err, response) {
-    if (err) {
-      console.log('The API returned an error: ' + err);
-      return;
-    }
-    var events = response.items;
-    if (events.length == 0) {
-      console.log('No upcoming events found.');
-    } else {
-      console.log('Upcoming 10 events:');
-      for (var i = 0; i < events.length; i++) {
-        var event = events[i];
-        var start = event.start.dateTime || event.start.date;
-        console.log('%s - %s', start, event.summary);
-      }
-    }
-  });
-}
-
 function create(auth) {
+
   console.log('auth ', auth);
   var event = {
    "end": {
-    "dateTime": "2017-05-17T09:00:00-07:00"
+    "dateTime": "2017-05-22T23:00:00.000Z"
    },
    "start": {
-    "dateTime": "2017-05-17T09:00:00-07:00"
+    "dateTime": "2017-05-22T23:00:00.000Z"
    },
-   "description": "hello"
+   "description": "hello",
+   "summary": "Title"
   };
   var calendar = google.calendar('v3');
   calendar.events.insert({
-    auth: auth,
+    auth,
     calendarId: 'primary',
     resource: event,
   }, function(err, event) {
