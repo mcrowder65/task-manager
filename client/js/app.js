@@ -31,7 +31,6 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
         }).then(function successCallback(response) {
             $scope.senderEmail = response.data.senderEmail;
         }, function errorCallback(response) {
-            alert("getSenderEmail busted!");
             throw new Error("getSenderEmail busted!");
         });
     }
@@ -45,7 +44,6 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
         }).then(function successCallback(response) {
             $scope.receiverEmail = response.data.email;
         }, function errorCallback(response) {
-            alert("getReceiverEmail busted!");
             throw new Error("getReceiverEmail busted!");
         });
     }
@@ -74,7 +72,6 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
             }
             $scope.reminders = reminders;
         }, function errorCallback(response) {
-            alert("getReminders busted!");
             throw new Error("getReminders busted!");
         });
     }
@@ -86,7 +83,7 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
         $http({
             method: 'POST',
             url: '/deleteReminder',
-            data: { _id: _id }
+            data: { _id }
         }).then(function successCallback(response) {
             $scope.getReminders();
         }, function errorCallback(response) {

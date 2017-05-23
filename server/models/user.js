@@ -17,7 +17,8 @@ var userSchema = new Schema({
     receiverEmail: String,
     senderEmail: String,
     senderPassword: String,
-    password: String
+    password: String,
+    clientSecret: String
 });
 
 // hash the password
