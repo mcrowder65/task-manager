@@ -1,41 +1,61 @@
-var express = require('express');
-var app = express();
 var mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/list');
-var bodyParser = require('body-parser');
 var utilities = require('./server/utilities');
 var reminder = require('./server/models/reminder');
-app.use(bodyParser.json());
-
-app.use(bodyParser.urlencoded({
-        extended: true
-}));
 
 
 
-var portNumber = 7999
-var server = app.listen(portNumber, () => {
-console.log("Started on port " + portNumber);
-var host = server.address().address;
-var port = server.address().port;
-}); 
 
-checkReminders = () => {
-	reminder.find({}, (err, reminders, created) => {
-		for(var i = 0; i < reminders.length; i++){
-			if(reminders[i].timeToSend != null) {
-				if(reminders[i].timeToSend.getTime() < new Date().getTime()){
-					sendReminder(reminders[i]);
-					break;
-				}
-			}
-		}
-	});
+const checkReminders = async () => {
+  return new Promise( async (resolve, reject) => {
+    try {
+      reminder.find({}, async (err, reminders, created) => {
+    		for(var i = 0; i < reminders.length; i++){
+    			if(reminders[i].timeToSend != null) {
+    				if(reminders[i].timeToSend.getTime() < new Date().getTime()){
+    					await sendReminder(reminders[i]);
+              resolve();
+    					break;
+    				}
+    			}
+    		}
+    	});
+    } catch(error) {
+      reject(error);
+    }
 
+  });
 }
-sendReminder = (reminderObj) => {
-	utilities.sendReminder(reminderObj);
-	reminder.remove({_id: reminderObj._id}, (err, tempReminder) => {});
+const sendReminder = async (reminderObj) => {
 
+  return new Promise( async (resolve, reject) => {
+    try {
+      await utilities.sendReminder(reminderObj);
+      await removeReminder(reminderObj);
+      resolve();
+    } catch(error) {
+      reject(error);
+    }
+  });
+
+  async function removeReminder(reminderObj) {
+    return new Promise( async (resolve, reject) => {
+      reminder.remove({_id: reminderObj._id}, (err, tempReminder) => {
+        if(err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
 }
-setInterval(checkReminders, 10000);
+
+try {
+  let result = (async () => {
+    await checkReminders();
+  })();
+  db.disconnect();
+} catch(error) {
+  console.error(error);
+}
