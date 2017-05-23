@@ -11,7 +11,6 @@ var reminder = require('./server/models/reminder.js');
 var reminderDAO = require('./server/dao/reminderDAO.js');
 var user = require('./server/models/user.js');
 var userDAO = require('./server/dao/userDAO.js');
-var watch = require('node-watch');
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({
@@ -29,11 +28,6 @@ var server = app.listen(portNumber, () => {
 	console.log("Started on port " + portNumber);
 	var host = server.address().address;
 	var port = server.address().port;
-});
-
-
-watch('./', { recursive: true }, function(evt, name) {
-  console.log('%s changed.', name);
 });
 
 app.post('/sendReminderImmediately', function(req, res) {
