@@ -2,6 +2,9 @@ var app= angular.module('app');
 
 app.controller('allReminders', ['$scope', function ($scope) {
     $scope.addEndDateMessage = "Add end date";
+    $scope.init = async () => {
+      $scope.reminders = $scope.getReminders();
+    }
     $scope.showReminder = function(dateToSend) {
         if($scope.day == undefined || $scope.day == null) {
             return true;

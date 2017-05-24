@@ -55,15 +55,42 @@
   .reminder-card {
     margin-top: 5px;
     margin-bottom: 5px;
+    text-align: center;
   }
 
   md-input-container {
       width: 60%;
   }
+
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1;
+  }
+
+  .delete-button {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .edit-button {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .send-now-button {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .reminders {
+    display: grid;
+  }
+
 </style>
 <div data-ng-controller="addReminder">
 
-  <div class="wrapper" data-ng-init="getSenderEmail(); getSenderPassword(); getReceiverEmail(); getReminder(); init();" id="wrapper">
+  <div class="wrapper" data-ng-init="init()" id="wrapper">
     <div class="card reminder-content">
       <h3>Reminder content</h3>
       <div>
@@ -95,35 +122,32 @@
       </div>
     </div>
 
-    <button type="button" class="btn btn-primary set-reminder-button" data-ng-click="newReminder()"> Set Reminder </button><br><br>
+    <md-button type="button" class="set-reminder-button" data-ng-click="newReminder()"> Set Reminder </md-button><br><br>
 
-    <button class="btn btn-info show-reminders-button" data-ng-click="toggleShowReminders()"> {{ showRemindersMessage }} </button>
+    <md-button class="show-reminders-button" data-ng-click="toggleShowReminders()"> {{ showRemindersMessage }} </md-button>
     <div class="editing-alerts" data-ng-show="editing">
       <div class="alert alert-danger" role="alert">You're editing a reminder!!!!!</div>
-      <button class="btn btn-danger" data-ng-click="stopEditing()"> Stop editing </button>
+      <md-button class="btn btn-danger" data-ng-click="stopEditing()"> Stop editing </md-button>
       <br><br>
     </div>
-    <div id="success-message" class="alert alert-success" role="alert">Your reminder has been set!</div>
   </div>
 
 
-
-  <div data-ng-show="showReminders">
-    <div data-ng-init="getReminders()" style="text-align:center">
-      <div data-ng-repeat="reminder in reminders | orderBy:'timeToSend' | filter: {hidden: false }">
-        <div class="col-md-6" data-ng-show="showReminder(reminder.dateToSend)">
-          <div class="card reminder-card">
-              <div id="receiver"><b>Receiver:</b> {{ reminder.receiverEmail }}</div>
-              <div data-ng-show="reminder.subject != '' && reminder.subject != null"><b>Subject: </b> {{ reminder.subject }}<br></div>
-              <div data-ng-show="reminder.emailBody != '' && reminder.emailBody != null"><b>Body:</b> {{ reminder.emailBody }}</div>
-              <div id="time"><b>Time:</b> {{ reminder.date }}<br></div>
-              <button type="button" class="btn btn-danger" data-ng-click="deleteReminder(reminder._id); toggleShowReminders(); toggleShowReminders();">Delete</button>
-              <button type="button" class="btn btn-success" data-ng-click="editReminder(reminder._id); toggleShowReminders(); toggleShowReminders();">Edit</button>
-              <button type="button" class="btn btn-warning" data-ng-click="hide(reminder)">Hide</button>
-              <button type="button" class="btn btn-info" data-ng-click="sendReminderImmediately(reminder._id); toggleShowReminders(); toggleShowReminders();">Send now</button>
-          </div>
+  <div class="reminders" data-ng-show="showReminders" data-ng-init="init()">
+    <div data-ng-repeat="reminder in reminders | orderBy: 'timeToSend' | filter: { hidden: false }">
+      <div class="card reminder-card" data-ng-class="computeClass()">
+        <div>{{ reminder.receiverEmail }}</div>
+        <div>{{ reminder.subject }}</div>
+        <div>{{ reminder.emailBody }}</div>
+        <div>{{ reminder.date }}<br></div>
+        <div class="button-grid">
+          <md-button type="button" class="delete-button button red" data-ng-click="deleteReminder(reminder._id); toggleShowReminders(); toggleShowReminders();">Delete</md-button>
+          <md-button type="button" class="edit-button button green" data-ng-click="editReminder(reminder._id); toggleShowReminders(); toggleShowReminders();">Edit</md-button>
+          <md-button type="button" class="send-now-button button lightblue" data-ng-click="sendReminderImmediately(reminder._id); toggleShowReminders(); toggleShowReminders();">Send now</md-button>
         </div>
       </div>
     </div>
   </div>
+
+
 </div>

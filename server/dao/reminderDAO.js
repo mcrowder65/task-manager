@@ -2,6 +2,7 @@ var reminder = require('../models/reminder.js');
 var reminderValidator = require('../validators/reminderValidator.js');
 var utilities = require('../utilities.js');
 var googlecalendar = require('../googlecalendar/googlecalendar.js');
+var constants = require ('../constants.js');
 
 const newReminder = async (req, res) => {
 	if(!reminderValidator.validateNewReminder(req.body)){
@@ -37,7 +38,7 @@ const getReminder = (req, res) => {
 	reminder.findOne({_id: req.body._id},
 	function(err, tempReminder) {
 				if (tempReminder) {
-						res.json({data: tempReminder});
+						res.json(tempReminder);
 				}
 				else if (err) {
 						res.sendStatus(403);
@@ -124,6 +125,30 @@ const getById = (_id) => {
 		});
 	});
 };
+
+const getByDay = async (day, userID) => {
+	return new Promise( (resolve, reject) => {
+		try {
+			const zeroHours = new Date(day).setHours(0, 0, 0, 0);
+			const dayLater = new Date(day).setHours(24, 0, 0, -1);
+			const reminders = reminder.find({
+				milliseconds: {
+					$gt: zeroHours,
+					$lt: dayLater
+				},
+				userID
+			}, async (err, reminders) => {
+				if(err) {
+					reject(err);
+				} else {
+					resolve(reminders);
+				}
+			})
+		} catch(error) {
+			reject(error);
+		}
+	});
+}
 module.exports = {
 	sendReminderImmediately,
 	getReminder,
@@ -131,5 +156,6 @@ module.exports = {
 	newReminder,
 	setReminder,
 	getReminders,
-	getById
+	getById,
+	getByDay
 };

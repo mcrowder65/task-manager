@@ -30,6 +30,26 @@ var server = app.listen(portNumber, () => {
 	var port = server.address().port;
 });
 
+app.post('/getRemindersByDay', async (req, res) => {
+  try {
+    const reminders = await reminderDAO.getByDay(req.body.currentDay, req.body.id);
+    res.json(reminders)
+  } catch(error) {
+    res.sendStatus(500);
+  }
+});
+
+app.post('/getByUserId', async (req, res) => {
+  try {
+    //TODO once object spread is supported, change to object spread
+    let user = await userDAO.getById(req.body._id);
+    user.clientSecret = null;
+    user.password = null;
+    res.json(user);
+  } catch(error) {
+    res.sendStatus(500);
+  }
+});
 app.post('/sendReminderImmediately', (req, res) => {
 	reminderDAO.sendReminderImmediately(req, res);
 });
@@ -65,9 +85,6 @@ app.post('/setSenderEmail', (req, res) => {
 });
 app.post('/login', (req, res) => {
 	userDAO.login(req, res);
-});
-app.post('/getReceiverEmail', (req, res) => {
-	userDAO.getReceiverEmail(req, res);
 });
 app.post('/setReceiverEmail', (req, res) => {
 	userDAO.setReceiverEmail(req, res);

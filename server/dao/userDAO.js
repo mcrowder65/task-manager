@@ -105,21 +105,6 @@ module.exports = {
 	        }
 		});
 	},
-	getReceiverEmail: function(req, res) {
-		user.findOne({_id: req.body.id},
-		function(err, tempUser) {
-			if (err) {
-			    res.sendStatus(403);
-			    return;
-			}
-	        if (tempUser) {
-	            res.json({email:tempUser.receiverEmail});
-	       	}
-	        else {
-	            res.sendStatus(403);
-	        }
-		});
-	},
 	setReceiverEmail: function(req, res) {
 		if(!userValidator.validateReceiverEmail(req.body.receiverEmail)) {
 			res.sendStatus('403');

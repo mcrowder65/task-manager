@@ -9,80 +9,49 @@ app.factory('simpleFactory', function(){
 
 app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
 
-    $scope.getSenderPassword = function() {
-        $http({
-          method: 'POST',
-          url: '/getSenderPassword',
-          data: { id:localStorage.token }
-        }).then(function successCallback(response) {
-            $scope.senderPassword = response.data.senderPassword;
-        }, function errorCallback(response) {
-            alert("Retrieving sender password broke!");
-            throw new Error("Retrieving sender password broke!");
-        });
-    }
-
-    //Used in addReminder and profile controller
-    $scope.getSenderEmail = function() {
-        $http({
-            method: 'POST',
-            url: '/getSenderEmail',
-            data: {id:localStorage.token }
-        }).then(function successCallback(response) {
-            $scope.senderEmail = response.data.senderEmail;
-        }, function errorCallback(response) {
-            throw new Error("getSenderEmail busted!");
-        });
-    }
-
-    //Used in addReminder and profile controller
-    $scope.getReceiverEmail = function() {
-        $http({
-            method: 'POST',
-            url: '/getReceiverEmail',
-            data: {id:localStorage.token }
-        }).then(function successCallback(response) {
-            $scope.receiverEmail = response.data.email;
-        }, function errorCallback(response) {
-            throw new Error("getReceiverEmail busted!");
-        });
-    }
     $scope.isLoggedIn = function() {
         $scope.loggedIn = localStorage.token != null && localStorage.token != "";
     }
     $scope.logout = () => {
-      console.log('logout');
       localStorage.token = '';
-      window.location = '/index.html';
     }
     $scope.reroute = (url) => {
       window.location = url;
     }
-    $scope.getReminders = function(ids) {
-        $http({
-            method: 'POST',
-            url: '/getReminders',
-            data: { id: localStorage.token }
-        }).then(function successCallback(response) {
-            var reminders = response.data;
-            for(var i = 0; i < reminders.length; i++) {
-                var date = new Date(reminders[i].timeToSend)
-                reminders[i].date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString();
-            }
-            if(ids) {
+    $scope.getReminders = async () => {
+      const response = await $http({
+        method: 'POST',
+        url: '/getReminders',
+        data: {
+          id: localStorage.token
+        }
+      });
+      return response.data.map( (reminder) => {
+        const date = new Date(reminder.timeToSend)
+        reminder.date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
+        console.log(reminder)
+        return reminder;
+      });
 
-              for(var i = 0; i < reminders.length; i++) {
-                if(ids.indexOf(reminders[i]._id) > -1) {
-                  reminders[i].hidden = true;
-                }
-              }
-            }
-            $scope.reminders = reminders;
-        }, function errorCallback(response) {
-            throw new Error("getReminders busted!");
-        });
     }
 
+    $scope.getRemindersByDay = async (date) => {
+      const response = await $http({
+        method: 'POST',
+        url: '/getRemindersByDay',
+        data: {
+          currentDay: date || new Date(),
+          id: localStorage.token //TODO move this to be a jwt or something which contains the uid?
+        }
+      });
+      return response.data.map( (reminder) => {
+        const date = new Date(reminder.timeToSend)
+        reminder.date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
+        //TODO change to object spread when it becomes available
+        return reminder;
+      });
+
+    }
     $scope.editReminder = function(_id){
         window.location.href = "/#!/addReminder/?_id=" + _id;
     }
@@ -111,6 +80,18 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
             throw new Error("sendReminderImmediately busted!!!");
         });
     }
+
+    $scope.getById = async () => {
+      const response = await $http({
+        method: 'POST',
+        url: '/getByUserId',
+        data: {
+          _id: localStorage.token //TODO move to jwt
+        }
+      });
+      return response.data;
+    }
+
     $scope.hide = function(reminder) {
         reminder.hidden = true;
     }
