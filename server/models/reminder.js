@@ -13,7 +13,7 @@ var emailSchema = new Schema({
     dateToSend: String,
     timeOfDay: String,
     hidden: Boolean,
-    milliseconds: Number,
+    milliseconds: Number, 
     eid: String
 });
 // add findOrCreate

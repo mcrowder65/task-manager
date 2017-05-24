@@ -24,53 +24,51 @@ process.argv.forEach((val, index, array) => {
   }
 });
 
-var server = app.listen(portNumber, function() {
+var server = app.listen(portNumber, () => {
 	console.log("Started on port " + portNumber);
 	var host = server.address().address;
 	var port = server.address().port;
 });
 
-
-app.post('/sendReminderImmediately', function(req, res) {
+app.post('/sendReminderImmediately', (req, res) => {
 	reminderDAO.sendReminderImmediately(req, res);
 });
-app.post('/getReminder', function(req, res){
+app.post('/getReminder', (req, res) => {
 	reminderDAO.getReminder(req, res);
 });
-app.post('/deleteReminder', function(req, res){
+app.post('/deleteReminder', (req, res) => {
 	reminderDAO.deleteReminder(req, res);
 });
-app.post('/newReminder', function(req, res) {
-  console.log('newReminder');
+app.post('/newReminder', (req, res) => {
 	reminderDAO.newReminder(req, res);
 });
-app.post('/setReminder', function(req, res){
+app.post('/setReminder', (req, res) => {
 	reminderDAO.setReminder(req, res);
 })
-app.post('/getReminders', function(req, res) {
+app.post('/getReminders', (req, res) => {
 	reminderDAO.getReminders(req, res);
 });
-app.post('/signup', function(req, res) {
+app.post('/signup', (req, res) => {
 	userDAO.signup(req, res);
 });
-app.post('/getSenderPassword', function(req, res) {
+app.post('/getSenderPassword', (req, res) => {
 	userDAO.getSenderPassword(req, res);
 });
-app.post('/setSenderPassword', function(req, res) {
+app.post('/setSenderPassword', (req, res) => {
 	userDAO.setSenderPassword(req, res);
 });
-app.post('/getSenderEmail', function(req, res) {
+app.post('/getSenderEmail', (req, res) => {
 	userDAO.getSenderEmail(req, res);
 });
-app.post('/setSenderEmail', function(req, res) {
+app.post('/setSenderEmail', (req, res) => {
 	userDAO.setSenderEmail(req, res);
 });
-app.post('/login', function(req, res) {
+app.post('/login', (req, res) => {
 	userDAO.login(req, res);
 });
-app.post('/getReceiverEmail', function(req, res) {
+app.post('/getReceiverEmail', (req, res) => {
 	userDAO.getReceiverEmail(req, res);
 });
-app.post('/setReceiverEmail', function(req, res) {
+app.post('/setReceiverEmail', (req, res) => {
 	userDAO.setReceiverEmail(req, res);
 });
