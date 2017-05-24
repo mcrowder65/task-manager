@@ -7,7 +7,7 @@ app.factory('simpleFactory', () => {
     return factory;
 });
 
-app.controller('app', ($scope, simpleFactory, $http, $mdToast) => {
+app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
 
     $scope.isLoggedIn = () => {
         $scope.loggedIn = localStorage.token != null && localStorage.token != "";
@@ -59,8 +59,8 @@ app.controller('app', ($scope, simpleFactory, $http, $mdToast) => {
         window.location.href = "/#!/addReminder/?_id=" + _id;
     }
 
-    $scope.deleteReminder = (_id) => {
-      $http({
+    $scope.deleteReminder = async (_id) => {
+      await $http({
           method: 'POST',
           url: '/deleteReminder',
           data: {
@@ -68,8 +68,8 @@ app.controller('app', ($scope, simpleFactory, $http, $mdToast) => {
           }
       });
     }
-    $scope.sendReminderImmediately = (_id) => {
-      $http({
+    $scope.sendReminderImmediately = async (_id) => {
+      await $http({
         method: 'POST',
         url: '/sendReminderImmediately',
         data: {
