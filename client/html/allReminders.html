@@ -4,8 +4,12 @@
     margin-top: 5px;
     margin-bottom: 5px;
   }
+
+  .all-reminders {
+    margin-top: 10px;
+  }
 </style>
-<div data-ng-controller="allReminders">
+<div class="all-reminders" data-ng-controller="allReminders">
 
 	<div data-ng-init="getReminders()" style="text-align:center">
         <button class="btn btn-success" data-ng-click="getReminders()">Refresh</button><br><br>
