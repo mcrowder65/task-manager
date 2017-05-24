@@ -65,8 +65,13 @@ app.post('/newReminder', (req, res) => {
 app.post('/setReminder', (req, res) => {
 	reminderDAO.setReminder(req, res);
 })
-app.post('/getReminders', (req, res) => {
-	reminderDAO.getReminders(req, res);
+app.post('/getReminders', async (req, res) => {
+  try {
+    const reminders = await reminderDAO.getReminders(req.body.id);
+    res.json(reminders);
+  } catch(error) {
+    res.json(500);
+  }
 });
 app.post('/signup', (req, res) => {
 	userDAO.signup(req, res);

@@ -22,33 +22,33 @@ var userSchema = new Schema({
 });
 
 // hash the password
-userSchema.statics.hashPassword = function(password) {
+userSchema.statics.hashPassword = (password) => {
     return bcrypt.hashSync(password, SALT);
 };
 
 // check the password
-userSchema.methods.checkPassword = function(password) {
+userSchema.methods.checkPassword = (password) => {
     return bcrypt.compareSync(password, this.password);
 };
 
 // Generate a token for a client
-userSchema.statics.generateToken = function(username) {
+userSchema.statics.generateToken = (username) => {
     return jwt.sign({ username: username }, SECRET);
 };
 
 // Verify the token from a client. Call the callback with a user object if successful or null otherwise.
-userSchema.statics.verifyToken = function(token,cb) {
+userSchema.statics.verifyToken = (token,cb) => {
     if (!token) {
         cb(null);
         return;
     }
     // decrypt the token and verify that the encoded user id is valid
-    jwt.verify(token, SECRET, function(err, decoded) {
+    jwt.verify(token, SECRET, (err, decoded) => {
         if (!decoded) {
             cb(null);
             return;
         }
-        User.findOne({username: decoded.username},function(err,user) {
+        User.findOne({username: decoded.username}, (err,user) => {
 	    if (err) {
 		cb(null);
 	    } else {

@@ -1,24 +1,26 @@
 var app= angular.module('app');
 
-app.controller('allReminders', ['$scope', function ($scope) {
+app.controller('allReminders', ['$scope', ($scope) => {
     $scope.addEndDateMessage = "Add end date";
     $scope.init = async () => {
-      $scope.reminders = $scope.getReminders();
+      $scope.reminders = await $scope.getReminders();
+      console.log($scope.reminders);
     }
-    $scope.showReminder = function(dateToSend) {
-        if($scope.day == undefined || $scope.day == null) {
-            return true;
-        }
-        var lTempDay = new Date($scope.day).getTime();
-        var lTempDateToSend = new Date(dateToSend).getTime();
-        if($scope.endDay != null) {
-            var lTempEndDay = new Date($scope.endDay).getTime();
-            return lTempDay <= lTempDateToSend && lTempDateToSend <= lTempEndDay;
-        }
-        return lTempDay <= lTempDateToSend && lTempDateToSend <= lTempDay + (MILLISECONDS_IN_DAY - 1);
+    $scope.showReminder = (dateToSend) => {
+      console.log('showReminder')
+      if($scope.day == undefined || $scope.day == null) {
+          return true;
+      }
+      var lTempDay = new Date($scope.day).getTime();
+      var lTempDateToSend = new Date(dateToSend).getTime();
+      if($scope.endDay != null) {
+          var lTempEndDay = new Date($scope.endDay).getTime();
+          return lTempDay <= lTempDateToSend && lTempDateToSend <= lTempEndDay;
+      }
+      return lTempDay <= lTempDateToSend && lTempDateToSend <= lTempDay + (MILLISECONDS_IN_DAY - 1);
     }
 
-    $scope.addEndDateClickedChange = function(override) {
+    $scope.addEndDateClickedChange = (override) => {
         if(override != null) {
             $scope.addEndDateClicked = false;
             $scope.addEndDateMessage = "Add end date";

@@ -23,7 +23,8 @@ app.controller('addReminder', ['$scope', '$http', async ($scope, $http) => {
     $scope.computeClass = () => {
       console.log('computeClass')
     }
-    $scope.newReminder = () => {
+    
+    $scope.newReminder = async () => {
         if ($scope.senderEmail == undefined || $scope.senderEmail == null || $scope.senderEmail == "" || $scope.senderPassword == undefined || $scope.senderPassword == null || $scope.senderPassword == "" || $scope.receiverEmail == undefined || $scope.receiverEmail == null || $scope.receiverEmail == "" || $scope.dateToSend == undefined || $scope.dateToSend == null || $scope.dateToSend == "" || $scope.timeToSend == undefined || $scope.timeToSend == null || $scope.timeToSend == "" || (($scope.subject == undefined || $scope.subject == null || $scope.subject == "") && ($scope.emailBody == undefined || $scope.emailBody == null || $scope.emailBody == ""))) {
             $scope.openToast('Something went wrong');
             return;
@@ -93,16 +94,13 @@ app.controller('addReminder', ['$scope', '$http', async ($scope, $http) => {
                 console.error('error while setting reminder ', response);
             });
         }
-
-
-        $scope.toggleShowReminders();
-        $scope.toggleShowReminders();
+        $scope.reminders = await $scope.getRemindersByDay();
     }
 
-    $scope.toggleShowReminders = function() {
-        $scope.showReminders = !$scope.showReminders;
-        $scope.showRemindersMessage = !$scope.showReminders ? "Show reminders on same day":  "Don't show reminders on same day" ;
-        $scope.reminders = $scope.getRemindersByDay();
+    $scope.toggleShowReminders = async () => {
+      $scope.showReminders = !$scope.showReminders;
+      $scope.showRemindersMessage = !$scope.showReminders ? "Show reminders on same day":  "Don't show reminders on same day" ;
+      $scope.reminders = await $scope.getRemindersByDay();
     }
 
     $scope.getReminder = async () => {

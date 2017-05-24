@@ -18,14 +18,14 @@ const getById = async (_id) => {
 };
 module.exports = {
 	getById,
-	signup: function(req, res) {
+	signup: (req, res) => {
 		user.findOrCreate({
 			username: req.body.username,
 			password: user.hashPassword(req.body.password),
 			receiverEmail: '',
 			senderEmail: '',
 			senderPassword: ''
-		}, function(err, tempUser, created) {
+		}, (err, tempUser, created) => {
 			if(created) {
 				var token = user.generateToken(tempUser.username);
 		        res.json({token: tempUser._id});
@@ -34,9 +34,9 @@ module.exports = {
 			}
 		});
 	},
-	getSenderPassword: function(req, res) {
+	getSenderPassword: (req, res) => {
 		user.findOne({_id: req.body.id},
-		function(err, tempUser) {
+		(err, tempUser) => {
 			if (err) {
 			    res.sendStatus(403);
 			    return;
@@ -48,9 +48,9 @@ module.exports = {
 	        }
 		});
 	},
-	setSenderPassword: function(req, res) {
+	setSenderPassword: (req, res) => {
 		user.update({_id: req.body._id}, {senderPassword: req.body.senderPassword},
-		function(err, user) {
+		(err, user) => {
 			if(user) {
 				res.json(req.body.senderPassword);
 			}
@@ -59,9 +59,9 @@ module.exports = {
 			}
 		});
 	},
-	getSenderEmail: function(req, res) {
+	getSenderEmail: (req, res) => {
 		user.findOne({_id: req.body.id},
-		function(err, tempUser) {
+		(err, tempUser) => {
 			if (err) {
 			    res.sendStatus(403);
 			    return;
@@ -74,13 +74,13 @@ module.exports = {
 	        }
 		});
 	},
-	setSenderEmail: function(req, res) {
+	setSenderEmail: (req, res) => {
 		if(!userValidator.validateSenderEmail(req.body.senderEmail)){
 			res.sendStatus('403');
 			return;
 		}
 		user.update({_id: req.body._id}, {senderEmail: req.body.senderEmail},
-		function(err, user) {
+		(err, user) => {
 			if(user) {
 				res.json(req.body.senderEmail);
 			}
@@ -89,9 +89,9 @@ module.exports = {
 			}
 		});
 	},
-	login: function(req, res) {
+	login: (req, res) => {
 		user.findOne({username: req.body.username},
-		function(err, tempUser) {
+		(err, tempUser) => {
 			if (err) {
 			    res.sendStatus(403);
 			    return;
@@ -105,13 +105,13 @@ module.exports = {
 	        }
 		});
 	},
-	setReceiverEmail: function(req, res) {
+	setReceiverEmail: (req, res) => {
 		if(!userValidator.validateReceiverEmail(req.body.receiverEmail)) {
 			res.sendStatus('403');
 			return;
 		}
 		user.update({_id: req.body._id}, {receiverEmail: req.body.receiverEmail},
-		function(err, user) {
+		(err, user) => {
 			if(user)
 				res.json(req.body.receiverEmail);
 			else

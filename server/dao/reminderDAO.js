@@ -23,7 +23,7 @@ const newReminder = async (req, res) => {
 		timeOfDay: req.body.timeOfDay,
 		hidden: false,
 		eid
-	}, function(err, tempReminder, created) {
+	}, (err, tempReminder, created) => {
 		if (created) {
 			res.json({});
 		}
@@ -36,7 +36,7 @@ const newReminder = async (req, res) => {
 
 const getReminder = (req, res) => {
 	reminder.findOne({_id: req.body._id},
-	function(err, tempReminder) {
+ (err, tempReminder) => {
 				if (tempReminder) {
 						res.json(tempReminder);
 				}
@@ -48,11 +48,11 @@ const getReminder = (req, res) => {
 const sendReminderImmediately = (req, res) => {
 	reminder.findOrCreate({
 		_id: req.body._id
-	}, function(err, tempReminder, created) {
+	}, (err, tempReminder, created) => {
 		if(tempReminder) {
 			res.json({})
 			utilities.sendReminder(tempReminder);
-			reminder.remove({_id: tempReminder._id},function(err, temp){});
+			reminder.remove({_id: tempReminder._id},(err, temp)=>{});
 		}
 		else
 			res.sendStatus("403");
@@ -61,11 +61,8 @@ const sendReminderImmediately = (req, res) => {
 
 const deleteReminder = async (req, res) => {
 	const reminderObject = await getById(req.body._id);
-	console.log('req.body ', req.body);
-	console.log('reminderObject ', reminderObject);
 	googlecalendar.remove(reminderObject.eid, reminderObject.userID);
-	reminder.remove({_id: req.body._id},
-	function(err, tempReminder){
+	reminder.remove({_id: req.body._id}, (err, tempReminder) => {
 		if(tempReminder){
 			res.json({})
 		}
@@ -88,27 +85,25 @@ const setReminder = async (req, res) => {
 		timeOfDay: req.body.timeOfDay,
 		hidden: false,
 		eid: reminderObject.eid
-	},
-	function(err, tempReminder) {
+	}, (err, tempReminder) => {
 		if(tempReminder)
 			res.json(req.body.receiverEmail);
 		else
 			res.sendStatus('403');
 	});
 };
-const getReminders = (req, res) => {
-	reminder.find({userID: req.body.id},
-	function(err, tempReminders) {
-		if (err) {
-				res.sendStatus(403);
+const getReminders = async (userID) => {
+	return new Promise( (resolve, reject) => {
+		reminder.find({
+			userID
+		}, (err, tempReminders) => {
+			if (err) {
+				reject(err);
 				return;
-		}
-				if (tempReminders) {
-						res.json(tempReminders);
-				}
-				else {
-						res.sendStatus(403);
-				}
+			} else {
+				resolve(tempReminders);
+			}
+		});
 	});
 };
 

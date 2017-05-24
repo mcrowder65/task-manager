@@ -1,7 +1,7 @@
 var utilities = require('../utilities');
 
 module.exports = {
-  validateReceiverEmail: function (receiverEmails) {
+  validateReceiverEmail: (receiverEmails) => {
   	var receiverEmails = receiverEmails.split(',');
   	for(var i = 0; i < receiverEmails.length; i++) {
 		if(!utilities.validateEmailAddress(receiverEmails[i].trim())) {
@@ -10,7 +10,7 @@ module.exports = {
   	}
     return true;
   },
-  validateSenderEmail: function(senderEmail) {
+  validateSenderEmail: (senderEmail) => {
   	return !utilities.validateEmailAddress(senderEmail) ? false : true;
   }
 };

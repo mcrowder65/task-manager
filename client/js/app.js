@@ -1,23 +1,26 @@
 
 var app = angular.module('app', ['ngRoute', 'ngMaterial']);
 var MILLISECONDS_IN_DAY = 86400000;
-app.factory('simpleFactory', function(){
+app.factory('simpleFactory', () => {
     var factory = {};
 
     return factory;
 });
 
-app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
+app.controller('app', ($scope, simpleFactory, $http, $mdToast) => {
 
-    $scope.isLoggedIn = function() {
+    $scope.isLoggedIn = () => {
         $scope.loggedIn = localStorage.token != null && localStorage.token != "";
     }
+
     $scope.logout = () => {
       localStorage.token = '';
     }
+
     $scope.reroute = (url) => {
       window.location = url;
     }
+
     $scope.getReminders = async () => {
       const response = await $http({
         method: 'POST',
@@ -29,7 +32,6 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
       return response.data.map( (reminder) => {
         const date = new Date(reminder.timeToSend)
         reminder.date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
-        console.log(reminder)
         return reminder;
       });
 
@@ -41,44 +43,39 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
         url: '/getRemindersByDay',
         data: {
           currentDay: date || new Date(),
-          id: localStorage.token //TODO move this to be a jwt or something which contains the uid?
+          id: localStorage.token // TODO move this to be a jwt or something which contains the uid?
         }
       });
       return response.data.map( (reminder) => {
         const date = new Date(reminder.timeToSend)
         reminder.date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
-        //TODO change to object spread when it becomes available
+        // TODO change to object spread when it becomes available
         return reminder;
       });
 
     }
-    $scope.editReminder = function(_id){
+
+    $scope.editReminder = (_id) => {
         window.location.href = "/#!/addReminder/?_id=" + _id;
     }
-    $scope.deleteReminder = function(_id) {
-        $http({
-            method: 'POST',
-            url: '/deleteReminder',
-            data: { _id }
-        }).then(function successCallback(response) {
-            $scope.getReminders();
-        }, function errorCallback(response) {
-            alert("deleteReminder busted!");
-            throw new Error("deleteReminder busted!");
-        });
-    }
-    $scope.sendReminderImmediately = function(_id) {
-        $http({
-            method: 'POST',
-            url: '/sendReminderImmediately',
-            data: { _id: _id }
-        }).then(function successCallback(response) {
-            $scope.getReminders();
-        }, function errorCallback(response) {
 
-            alert("sendReminderImmediately busted!!!");
-            throw new Error("sendReminderImmediately busted!!!");
-        });
+    $scope.deleteReminder = (_id) => {
+      $http({
+          method: 'POST',
+          url: '/deleteReminder',
+          data: {
+            _id
+          }
+      });
+    }
+    $scope.sendReminderImmediately = (_id) => {
+      $http({
+        method: 'POST',
+        url: '/sendReminderImmediately',
+        data: {
+          _id
+        }
+      });
     }
 
     $scope.getById = async () => {
@@ -86,22 +83,23 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
         method: 'POST',
         url: '/getByUserId',
         data: {
-          _id: localStorage.token //TODO move to jwt
+          _id: localStorage.token // TODO move to jwt
         }
       });
       return response.data;
     }
 
-    $scope.hide = function(reminder) {
+    $scope.hide = (reminder) => {
         reminder.hidden = true;
     }
-    $scope.openToast = function($event) {
+
+    $scope.openToast = ($event) => {
       $mdToast.showSimple($event);
     };
 
 });
 
-app.config(function ($routeProvider) {
+app.config( ($routeProvider) => {
 
 	$routeProvider
     .when('/#!',
@@ -146,7 +144,7 @@ app.config(function ($routeProvider) {
                                                 //BASIC FUNCTIONS
 /*******************************************************************************************************************/
 
-function indexOf(scopeReminders, reminders) {
+const indexOf = (scopeReminders, reminders) => {
   for(var i = 0; i < scopeReminders.length; i++) {
     if(scopeReminders[i].id === reminders[i].id) {
       return i;
@@ -154,7 +152,7 @@ function indexOf(scopeReminders, reminders) {
   }
   return -1;
 }
-function get(parameter) {
+const get = (parameter) => {
   var url = window.location.href;
   var index = url.indexOf(parameter);
   if(index == -1)
@@ -171,7 +169,7 @@ function get(parameter) {
   return url.substring(index, i);
 }
 
-function removeGet(parameter, dateToSend) {
+const removeGet = (parameter, dateToSend) => {
   var url = window.location.href;
   var index = url.indexOf(parameter);
   if(index == -1)

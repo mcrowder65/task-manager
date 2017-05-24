@@ -2,7 +2,7 @@ var utilities = require('../utilities');
 
 
 module.exports = {
-    validateNewReminder: function(scope) {
+    validateNewReminder: (scope) => {
 	    var senderEmail = scope.senderEmail;
 	    var receiverEmail = scope.receiverEmail;
 	    var receiverEmails = receiverEmail.split(',');
@@ -17,9 +17,3 @@ module.exports = {
 	    return true;
 	}
 };
-
-
-
-
-
-
