@@ -9,16 +9,19 @@ var reminder = require('./server/models/reminder');
 const checkReminders = async () => {
   return new Promise( async (resolve, reject) => {
     try {
-      reminder.find({}, async (err, reminders, created) => {
-    		for(var i = 0; i < reminders.length; i++){
-    			if(reminders[i].timeToSend != null) {
-    				if(reminders[i].timeToSend.getTime() < new Date().getTime()){
-    					await sendReminder(reminders[i]);
-              resolve();
-    					break;
-    				}
-    			}
-    		}
+      reminder.find({
+        milliseconds: {
+          $lt: new Date().getTime()
+        }
+      }, async (err, reminders, created) => {
+        if(err) {
+          throw err;
+        } else {
+          for(var i = 0; i < reminders.length; i++){
+      			await sendReminder(reminders[i]);
+          }
+          resolve();
+        }
     	});
     } catch(error) {
       reject(error);
@@ -51,11 +54,13 @@ const sendReminder = async (reminderObj) => {
   }
 }
 
-try {
-  let result = (async () => {
+
+const check = async () => {
+  try {
     await checkReminders();
-  })();
-  db.disconnect();
-} catch(error) {
-  console.error(error);
+  } catch(error) {
+    console.error(error);
+  }
 }
+
+setInterval(check, 60000);
