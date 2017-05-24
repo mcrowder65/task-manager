@@ -28,9 +28,16 @@
 		<script src="client/js/profile.js"></script>
 		<script src="client/js/signup.js"></script>
 		<script src="client/js/login.js"></script>
+		<style>
+			.toolbar {
+				margin-bottom: 10px;
+			}
+			a {
+				text-decoration: none;
+			}
+		</style>
 		<header>
-
-			<nav class="navbar navbar-default" id="navbar" data-ng-init="isLoggedIn()">
+			<!-- <nav class="navbar navbar-default" id="navbar" data-ng-init="isLoggedIn()">
 				 <a class="navbar-brand" href="/#/allReminders">Home</a>
 				 <ul class="nav navbar-nav">
 				 	<li><a href="/#!/addReminder">Add Reminder</a></li>
@@ -41,17 +48,58 @@
 				 	<li data-ng-show="loggedIn == false"><a href="/#!/login">Log in</a></li>
 				 </ul>
 
-			</nav>
+			</nav> -->
+			<md-toolbar class="toolbar" data-ng-init="isLoggedIn()">
+	      <div class="md-toolbar-tools">
+
+					<h2 flex md-truncate>
+						<a href="/#!/allReminders">
+							Task Manager
+						</a>
+					</h2>
+					<md-menu>
+			      <md-button class="md-icon-button" ng-click="$mdMenu.open()">
+			        <md-icon md-menu-origin md-svg-icon="node_modules/material-design-icons/navigation/svg/production/ic_menu_48px.svg"></md-icon>
+			      </md-button>
+			      <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">
+							<md-menu-item data-ng-click="reroute('/#!/addReminder')" data-ng-show="loggedIn">
+								<md-button>
+									Add Reminder
+								</md-button>
+							</md-menu-item>
+							<md-menu-item data-ng-click="reroute('/#!/allReminders')" data-ng-show="loggedIn">
+								<md-button>
+									All Reminders
+								</md-button>
+							</md-menu-item>
+			        <md-menu-item data-ng-click="reroute('/#!/profile')" data-ng-show="loggedIn">
+			          <md-button>
+			            Profile
+			          </md-button>
+							</md-menu-item>
+							<md-menu-item data-ng-click="reroute('/#!/login'); logout()" data-ng-show="loggedIn">
+								<md-button>
+									Log out
+								</md-button>
+							</md-menu-item>
+							<md-menu-item data-ng-click="reroute('/#!/signup')" data-ng-show="!loggedIn">
+								<md-button>
+									Sign up
+								</md-button>
+							</md-menu-item>
+							<md-menu-item data-ng-click="reroute('/#!/login')" data-ng-show="!loggedIn">
+								<md-button>
+									Log in
+								</md-button>
+							</md-menu-item>
+
+						</md-menu-content>
+			    </md-menu>
+	      </div>
+    	</md-toolbar>
 		</header>
 		<div data-ng-view></div>
 		<div></div>
 
 	</body>
-
-	<script>
-		function logout(){
-			localStorage.token="";
-			window.location="/index.html";
-		}
-	</script>
 </html>

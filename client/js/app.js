@@ -50,7 +50,14 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
     $scope.isLoggedIn = function() {
         $scope.loggedIn = localStorage.token != null && localStorage.token != "";
     }
-
+    $scope.logout = () => {
+      console.log('logout');
+      localStorage.token = '';
+      window.location = '/index.html';
+    }
+    $scope.reroute = (url) => {
+      window.location = url;
+    }
     $scope.getReminders = function(ids) {
         $http({
             method: 'POST',

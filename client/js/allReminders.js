@@ -26,6 +26,6 @@ app.controller('allReminders', ['$scope', function ($scope) {
             $scope.addEndDateMessage = $scope.addEndDateClicked ? "Remove end date" : "Add end date";
             $scope.endDay = $scope.addEndDateClicked == false ? null : $scope.endDay;
         }
-        
+
     }
 }]);
