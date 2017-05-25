@@ -1,159 +1,159 @@
-
 var app = angular.module('app', ['ngRoute', 'ngMaterial']);
 var MILLISECONDS_IN_DAY = 86400000;
 app.factory('simpleFactory', () => {
-    var factory = {};
+  var factory = {};
 
-    return factory;
+  return factory;
 });
 
-app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
+app.controller('app', function($scope, simpleFactory, $http, $mdToast) {
 
-    $scope.isLoggedIn = () => {
-      $scope.loggedIn = !!localStorage.token;
-    }
+  $scope.$on('callIsLoggedIn', () => {
+    $scope.isLoggedIn();
+  })
 
-    $scope.logout = () => {
-      localStorage.token = '';
-    }
+  $scope.isLoggedIn = () => {
+    console.log('app $scope.isLoggedIn');
+    $scope.loggedIn = !!localStorage.token;
+  }
 
-    $scope.reroute = (url) => {
-      window.location = url;
-    }
+  $scope.logout = () => {
+    localStorage.token = '';
+    $scope.isLoggedIn();
+  }
 
-    $scope.getReminders = async () => {
-      const response = await $http({
-        method: 'POST',
-        url: '/getReminders',
-        data: {
-          id: localStorage.token //TODO refactor to jwt
-        }
-      });
+  $scope.reroute = (url) => {
+    window.location = url;
+  }
 
-      return response.data.map( (reminder) => {
-        const date = new Date(reminder.timeToSend)
-        reminder.date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
-        return reminder;
-      });
-
-    }
-
-    $scope.getRemindersByDay = async (date) => {
-      const response = await $http({
-        method: 'POST',
-        url: '/getRemindersByDay',
-        data: {
-          currentDay: date || new Date(),
-          id: localStorage.token // TODO refactor to jwt
-        }
-      });
-      return response.data.map( (reminder) => {
-        const date = new Date(reminder.timeToSend)
-        reminder.date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
-        // TODO change to object spread when it becomes available
-        return reminder;
-      });
-
-    }
-
-    $scope.editReminder = (_id) => {
-        window.location.href = "/#!/addReminder/?_id=" + _id;
-    }
-
-    $scope.deleteReminder = async (_id) => {
-      await $http({
-          method: 'POST',
-          url: '/deleteReminder',
-          data: {
-            _id //TODO add jwt
-          }
-      });
-    }
-    $scope.sendReminderImmediately = async (_id) => {
-      await $http({
-        method: 'POST',
-        url: '/sendReminderImmediately',
-        data: {
-          _id //TODO add jwt
-        }
-      });
-      $scope.reminders = await $scope.getReminders(); //TODO change to get by day or get all
-      $scope.$apply();
-    }
-
-    $scope.getById = async () => {
-      try {
-        const response = await $http({
-          method: 'POST',
-          url: '/getById',
-          data: {
-            token: localStorage.token
-          }
-        });
-        return response.data;
-      } catch(error) {
-        console.error(error);
+  $scope.getReminders = async() => {
+    const response = await $http({
+      method: 'POST',
+      url: '/getReminders',
+      data: {
+        id: localStorage.token //TODO refactor to jwt
       }
-    }
+    });
 
-    $scope.hide = (reminder) => {
-        reminder.hidden = true;
-    }
+    return response.data.map((reminder) => {
+      const date = new Date(reminder.timeToSend)
+      reminder.date = (date.getMonth() + 1) + "/" + date.getDate() + " " + date.toLocaleTimeString()
+      return reminder;
+    });
 
-    $scope.openToast = ($event) => {
-      $mdToast.showSimple($event);
-    };
+  }
+
+  $scope.getRemindersByDay = async(date) => {
+    const response = await $http({
+      method: 'POST',
+      url: '/getRemindersByDay',
+      data: {
+        currentDay: date || new Date(),
+        id: localStorage.token // TODO refactor to jwt
+      }
+    });
+    return response.data.map((reminder) => {
+      const date = new Date(reminder.timeToSend)
+      reminder.date = (date.getMonth() + 1) + "/" + date.getDate() + " " + date.toLocaleTimeString()
+      // TODO change to object spread when it becomes available
+      return reminder;
+    });
+
+  }
+
+  $scope.editReminder = (_id) => {
+    window.location.href = "/#!/addReminder/?_id=" + _id;
+  }
+
+  $scope.deleteReminder = async(_id) => {
+    await $http({
+      method: 'POST',
+      url: '/deleteReminder',
+      data: {
+        _id //TODO add jwt
+      }
+    });
+  }
+  $scope.sendReminderImmediately = async(_id) => {
+    await $http({
+      method: 'POST',
+      url: '/sendReminderImmediately',
+      data: {
+        _id //TODO add jwt
+      }
+    });
+    $scope.reminders = await $scope.getReminders(); //TODO change to get by day or get all
+    $scope.$apply();
+  }
+
+  $scope.getById = async() => {
+    try {
+      const response = await $http({
+        method: 'POST',
+        url: '/getById',
+        data: {
+          token: localStorage.token
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  $scope.hide = (reminder) => {
+    reminder.hidden = true;
+  }
+
+  $scope.openToast = ($event) => {
+    $mdToast.showSimple($event);
+  };
 
 });
 
-app.config( ($routeProvider) => {
+app.config(($routeProvider) => {
 
-	$routeProvider
-    .when('/#!',
-    {
-        controller: 'app',
-        templateUrl: 'client/html/allReminders.html'
-    })
-    .when('/allReminders',
-    {
-	    controller: 'app',
+  $routeProvider
+    .when('/#!', {
+      controller: 'app',
       templateUrl: 'client/html/allReminders.html'
     })
-    .when('/addReminder',
-    {
-    	controller: 'app',
-    	templateUrl: 'client/html/addReminder.html'
+    .when('/allReminders', {
+      controller: 'app',
+      templateUrl: 'client/html/allReminders.html'
     })
-    .when('/profile',
-    {
-    	controller: 'app',
-    	templateUrl: 'client/html/profile.html'
+    .when('/addReminder', {
+      controller: 'app',
+      templateUrl: 'client/html/addReminder.html'
     })
-    .when('/signup',
-    {
-    	controller: 'app',
+    .when('/profile', {
+      controller: 'app',
+      templateUrl: 'client/html/profile.html'
+    })
+    .when('/signup', {
+      controller: 'app',
       templateUrl: 'client/html/signup.html'
     })
-    .when('/login',
-    {
-    	controller: 'app',
+    .when('/login', {
+      controller: 'app',
       templateUrl: 'client/html/login.html'
     })
-    .when('/logout',
-    {
+    .when('/logout', {
       controller: 'app',
       templateUrl: 'client/html/logout.html'
     })
-    .otherwise({ redirectTo: '/allReminders' });
+    .otherwise({
+      redirectTo: '/allReminders'
+    });
 
 });
 /*******************************************************************************************************************/
-                                                //BASIC FUNCTIONS
+//BASIC FUNCTIONS
 /*******************************************************************************************************************/
 
 const indexOf = (scopeReminders, reminders) => {
-  for(var i = 0; i < scopeReminders.length; i++) {
-    if(scopeReminders[i].id === reminders[i].id) {
+  for (var i = 0; i < scopeReminders.length; i++) {
+    if (scopeReminders[i].id === reminders[i].id) {
       return i;
     }
   }
@@ -162,14 +162,14 @@ const indexOf = (scopeReminders, reminders) => {
 const get = (parameter) => {
   var url = window.location.href;
   var index = url.indexOf(parameter);
-  if(index == -1)
+  if (index == -1)
     return null;
   index += parameter.length + 1; //if the word we're looking for is address, get a index
-                                 //then add address.length +1 to get start of value
+  //then add address.length +1 to get start of value
 
   var i = index;
-  while(url[i] != '?' && url[i] != '&') {
-    if(i > url.length)
+  while (url[i] != '?' && url[i] != '&') {
+    if (i > url.length)
       break;
     i++;
   }
@@ -179,12 +179,12 @@ const get = (parameter) => {
 const removeGet = (parameter, dateToSend) => {
   var url = window.location.href;
   var index = url.indexOf(parameter);
-  if(index == -1)
+  if (index == -1)
     return null;
 
   var i = index + parameter.length + 1;
-  while(url[i] != '?' && url[i] != '&') {
-    if(i > url.length)
+  while (url[i] != '?' && url[i] != '&') {
+    if (i > url.length)
       break;
     i++;
   }
