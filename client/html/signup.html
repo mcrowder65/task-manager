@@ -16,21 +16,25 @@
 	}
 
 </style>
-<div class="wrapper" data-ng-controller="signup">
-	<div class="card signup-card">
-	    <h3>Register</h3>
-			<div>
-				<md-input-container>
-					<label>Username</label>
-					<input type="text" data-ng-model="username"/>
-				</md-input-container>
-			</div>
-			<div>
-				<md-input-container>
-					<label>Password</label>
-					<input type="password" data-ng-model="password"/>
-				</md-input-container>
-			</div>
-	    <md-button class="button" data-ng-click="signUp()">Sign up</md-button>
+<div data-ng-controller="signup">
+	<div class="wrapper">
+
+		<div class="card signup-card">
+		    <h3>Register</h3>
+				<div>
+					<md-input-container>
+						<label>Username</label>
+						<input type="text" data-ng-model="username"/>
+					</md-input-container>
+				</div>
+				<div>
+					<md-input-container>
+						<label>Password</label>
+						<input type="password" data-ng-model="password"/>
+					</md-input-container>
+				</div>
+		    <md-button class="button" data-ng-click="signUp()">Sign up</md-button>
+		</div>
 	</div>
+		
 </div>

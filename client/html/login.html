@@ -14,22 +14,25 @@
 		width: 300px;
 	}
 </style>
-<div data-ng-controller="login" class="wrapper">
-	<div class="card login-card">
-		<h3>Log in</h3>
-		<div>
-			<md-input-container>
-				<label>Username</label>
-				<input type="text" data-ng-model="username" required>
-			</md-input-container>
-		</div>
-		<div>
-			<md-input-container>
-				<label>password</label>
-				<input type="password" data-ng-model="password" required>
-			</md-input-container>
-		</div>
-		<md-button class="button" data-ng-click="login()">Login</md-button>
+<div data-ng-controller="login">
+	<div class="wrapper">
 
+		<div class="card login-card">
+			<h3>Log in</h3>
+			<div>
+				<md-input-container>
+					<label>Username</label>
+					<input type="text" data-ng-model="username" required>
+				</md-input-container>
+			</div>
+			<div>
+				<md-input-container>
+					<label>password</label>
+					<input type="password" data-ng-model="password" required>
+				</md-input-container>
+			</div>
+			<md-button class="button" data-ng-click="login()">Login</md-button>
+
+		</div>
 	</div>
 </div>

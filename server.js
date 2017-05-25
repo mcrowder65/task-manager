@@ -33,6 +33,8 @@ var server = app.listen(portNumber, () => {
 app.post('/getRemindersByDay', async (req, res) => {
   try {
     const reminders = await reminderDAO.getByDay(req.body.currentDay, req.body.id);
+    console.log('reminders ', reminders);
+    console.log('req.body.currentDay ', req.body.currentDay);
     res.json(reminders)
   } catch(error) {
     res.sendStatus(500);

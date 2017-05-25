@@ -24,33 +24,37 @@
 		width: 200px;
 	}
 </style>
-<div data-ng-controller="profile" class="wrapper">
-	<div class="profile card">
-		<div class="profile-header">
-			<h3>Profile</h3>
-		</div>
-		<div data-ng-init="init()" style="text-align:center">
-			<div>
-				<md-input-container>
-					<label>Receiving email account</label>
-					<input type="text" data-ng-model="receiverEmail" data-ng-value="receiverEmail" required>
-				</md-input-container>
+<div data-ng-controller="profile">
+	<div class="wrapper">
 
+		<div class="profile card">
+			<div class="profile-header">
+				<h3>Profile</h3>
 			</div>
-			<div>
-				<md-input-container>
-					<label>Sending email account</label>
-					<input type="text" data-ng-model="senderEmail" data-ng-value="senderEmail" required>
-				</md-input-container>
+			<div data-ng-init="init()" style="text-align:center">
+				<div>
+					<md-input-container>
+						<label>Receiving email account</label>
+						<input type="text" data-ng-model="receiverEmail" data-ng-value="receiverEmail" required>
+					</md-input-container>
 
-			</div>
-			<md-input-container>
-				<label>Sender email password</label>
-				<input type="text" data-ng-model="senderPassword" data-ng-value="senderPassword" required>
-			</md-input-container>
-			<div>
-				<button type="button" class="btn btn-primary" data-ng-click="setSenderPassword(); setReceiverEmail(); setSenderEmail(); openToast('Profile set');">Set</button>
+				</div>
+				<div>
+					<md-input-container>
+						<label>Sending email account</label>
+						<input type="text" data-ng-model="senderEmail" data-ng-value="senderEmail" required>
+					</md-input-container>
+
+				</div>
+				<md-input-container>
+					<label>Sender email password</label>
+					<input type="text" data-ng-model="senderPassword" data-ng-value="senderPassword" required>
+				</md-input-container>
+				<div>
+					<button type="button" class="btn btn-primary" data-ng-click="setSenderPassword(); setReceiverEmail(); setSenderEmail(); openToast('Profile set');">Set</button>
+				</div>
 			</div>
 		</div>
 	</div>
+		
 </div>

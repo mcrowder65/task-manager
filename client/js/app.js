@@ -10,7 +10,7 @@ app.factory('simpleFactory', () => {
 app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
 
     $scope.isLoggedIn = () => {
-        $scope.loggedIn = localStorage.token != null && localStorage.token != "";
+        $scope.loggedIn = !!localStorage.token;
     }
 
     $scope.logout = () => {
@@ -29,6 +29,7 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
           id: localStorage.token
         }
       });
+
       return response.data.map( (reminder) => {
         const date = new Date(reminder.timeToSend)
         reminder.date = (date.getMonth() + 1) + "/" + date.getDate()  + " " + date.toLocaleTimeString()
@@ -76,6 +77,8 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
           _id
         }
       });
+      $scope.reminders = await $scope.getReminders(); //TODO change to get by day or get all
+      $scope.$apply();
     }
 
     $scope.getById = async () => {

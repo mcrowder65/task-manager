@@ -4,7 +4,7 @@ app.controller('allReminders', ['$scope', ($scope) => {
     $scope.addEndDateMessage = "Add end date";
     $scope.init = async () => {
       $scope.reminders = await $scope.getReminders();
-      console.log($scope.reminders);
+      $scope.$apply();
     }
     $scope.showReminder = (dateToSend) => {
       console.log('showReminder')
