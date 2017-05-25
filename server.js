@@ -33,23 +33,35 @@ var server = app.listen(portNumber, () => {
 app.post('/getRemindersByDay', async (req, res) => {
   try {
     const reminders = await reminderDAO.getByDay(req.body.currentDay, req.body.id);
-    console.log('reminders ', reminders);
-    console.log('req.body.currentDay ', req.body.currentDay);
     res.json(reminders)
   } catch(error) {
     res.sendStatus(500);
   }
 });
 
-app.post('/getByUserId', async (req, res) => {
+app.post('/getById', async (req, res) => {
   try {
-    //TODO once object spread is supported, change to object spread
-    let user = await userDAO.getById(req.body._id);
-    user.clientSecret = null;
-    user.password = null;
-    res.json(user);
+    const payload = await getUserJWT(req.body.token);
+    let user = await userDAO.getById(payload._id);
+    if(user) {
+      user.clientSecret = null;
+      user.password = null;
+      res.json(user);
+    } else {
+      res.status(500).json('invalid user or something');
+    }
   } catch(error) {
-    res.sendStatus(500);
+    res.status(500).json(error.message);
+  }
+});
+
+app.post('/setById', async (req, res) => {
+  try {
+    const payload = await getUserJWT(req.body.token);
+    const response = await userDAO.update(payload._id, req.body.user);
+    res.json(response);
+  } catch(error) {
+    res.status(500).json(error.message);
   }
 });
 app.post('/sendReminderImmediately', (req, res) => {
@@ -78,21 +90,31 @@ app.post('/getReminders', async (req, res) => {
 app.post('/signup', (req, res) => {
 	userDAO.signup(req, res);
 });
-app.post('/getSenderPassword', (req, res) => {
-	userDAO.getSenderPassword(req, res);
-});
 app.post('/setSenderPassword', (req, res) => {
 	userDAO.setSenderPassword(req, res);
-});
-app.post('/getSenderEmail', (req, res) => {
-	userDAO.getSenderEmail(req, res);
 });
 app.post('/setSenderEmail', (req, res) => {
 	userDAO.setSenderEmail(req, res);
 });
-app.post('/login', (req, res) => {
-	userDAO.login(req, res);
+app.post('/login', async (req, res) => {
+  try {
+    const result = await userDAO.login(req.body);
+    res.json(result);
+  } catch(error) {
+    res.status(403).json(error);
+  }
 });
-app.post('/setReceiverEmail', (req, res) => {
+app.post('/setReceiverEmail', async (req, res) => {
 	userDAO.setReceiverEmail(req, res);
 });
+
+
+const getUserJWT = async (jwt) => {
+  try {
+    const payload = await user.verifyToken(jwt);
+    return payload;
+  } catch(error) {
+    console.log('jwt tampered ', error);
+    throw new Error('jwt tampered')
+  }
+};

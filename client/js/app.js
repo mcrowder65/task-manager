@@ -10,7 +10,7 @@ app.factory('simpleFactory', () => {
 app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
 
     $scope.isLoggedIn = () => {
-        $scope.loggedIn = !!localStorage.token;
+      $scope.loggedIn = !!localStorage.token;
     }
 
     $scope.logout = () => {
@@ -26,7 +26,7 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
         method: 'POST',
         url: '/getReminders',
         data: {
-          id: localStorage.token
+          id: localStorage.token //TODO refactor to jwt
         }
       });
 
@@ -44,7 +44,7 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
         url: '/getRemindersByDay',
         data: {
           currentDay: date || new Date(),
-          id: localStorage.token // TODO move this to be a jwt or something which contains the uid?
+          id: localStorage.token // TODO refactor to jwt
         }
       });
       return response.data.map( (reminder) => {
@@ -65,7 +65,7 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
           method: 'POST',
           url: '/deleteReminder',
           data: {
-            _id
+            _id //TODO add jwt
           }
       });
     }
@@ -74,7 +74,7 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
         method: 'POST',
         url: '/sendReminderImmediately',
         data: {
-          _id
+          _id //TODO add jwt
         }
       });
       $scope.reminders = await $scope.getReminders(); //TODO change to get by day or get all
@@ -82,14 +82,18 @@ app.controller('app', function ($scope, simpleFactory, $http, $mdToast) {
     }
 
     $scope.getById = async () => {
-      const response = await $http({
-        method: 'POST',
-        url: '/getByUserId',
-        data: {
-          _id: localStorage.token // TODO move to jwt
-        }
-      });
-      return response.data;
+      try {
+        const response = await $http({
+          method: 'POST',
+          url: '/getById',
+          data: {
+            token: localStorage.token
+          }
+        });
+        return response.data;
+      } catch(error) {
+        console.error(error);
+      }
     }
 
     $scope.hide = (reminder) => {

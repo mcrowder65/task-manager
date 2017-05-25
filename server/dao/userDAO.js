@@ -16,6 +16,48 @@ const getById = async (_id) => {
 	});
 
 };
+
+const login = async (body) => {
+	return new Promise( (resolve, reject) => {
+		user.findOne({
+			username: body.username
+		}, (err, tempUser) => {
+			try {
+				if (err) {
+					reject(err);
+				} else {
+					if (tempUser && tempUser.checkPassword(body.password, tempUser.password)) {
+						const jwt = user.generateToken(tempUser.username, tempUser._id);
+						resolve(jwt);
+					} else {
+						reject('incorrect password');
+					}
+				}
+			} catch(error) {
+				reject(error);
+			}
+		});
+	});
+}
+
+const update = async (_id, newUser) => {
+	return new Promise( (resolve, reject) => {
+		user.update( {
+			_id
+		}, {
+			username: newUser.username,
+			receiverEmail: newUser.receiverEmail,
+			senderEmail: newUser.senderEmail,
+			senderPassword: newUser.senderPassword
+		}, (err, newUser) => {
+			if(err) {
+				reject('Failed to update');
+			} else {
+				resolve('user updated');
+			}
+		});
+	});
+};
 module.exports = {
 	getById,
 	signup: (req, res) => {
@@ -34,20 +76,6 @@ module.exports = {
 			}
 		});
 	},
-	getSenderPassword: (req, res) => {
-		user.findOne({_id: req.body.id},
-		(err, tempUser) => {
-			if (err) {
-			    res.sendStatus(403);
-			    return;
-			}
-	        if (tempUser) {
-	            res.json({ senderPassword: tempUser.senderPassword});
-	       	} else {
-	            res.sendStatus(403);
-	        }
-		});
-	},
 	setSenderPassword: (req, res) => {
 		user.update({_id: req.body._id}, {senderPassword: req.body.senderPassword},
 		(err, user) => {
@@ -57,21 +85,6 @@ module.exports = {
 			else {
 				res.sendStatus('403');
 			}
-		});
-	},
-	getSenderEmail: (req, res) => {
-		user.findOne({_id: req.body.id},
-		(err, tempUser) => {
-			if (err) {
-			    res.sendStatus(403);
-			    return;
-			}
-	        if (tempUser) {
-	            res.json({senderEmail: tempUser.senderEmail});
-	       	}
-	        else {
-	            res.sendStatus(403);
-	        }
 		});
 	},
 	setSenderEmail: (req, res) => {
@@ -89,22 +102,8 @@ module.exports = {
 			}
 		});
 	},
-	login: (req, res) => {
-		user.findOne({username: req.body.username},
-		(err, tempUser) => {
-			if (err) {
-			    res.sendStatus(403);
-			    return;
-			}
-	        if (tempUser && tempUser.checkPassword(req.body.password)) {
-	            var token = tempUser._id;
-	            res.json({token:token});
-	       	}
-	        else {
-	            res.sendStatus(403);
-	        }
-		});
-	},
+	login,
+	update,
 	setReceiverEmail: (req, res) => {
 		if(!userValidator.validateReceiverEmail(req.body.receiverEmail)) {
 			res.sendStatus('403');

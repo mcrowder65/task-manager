@@ -23,39 +23,41 @@ var userSchema = new Schema({
 
 // hash the password
 userSchema.statics.hashPassword = (password) => {
-    return bcrypt.hashSync(password, SALT);
+  return bcrypt.hashSync(password, SALT);
 };
 
 // check the password
-userSchema.methods.checkPassword = (password) => {
-    return bcrypt.compareSync(password, this.password);
+userSchema.methods.checkPassword = (password, userPassword) => {
+  return bcrypt.compareSync(password, userPassword);
 };
 
 // Generate a token for a client
-userSchema.statics.generateToken = (username) => {
-    return jwt.sign({ username: username }, SECRET);
+userSchema.statics.generateToken = (username, _id) => {
+    return jwt.sign({
+      username,
+      _id
+    }, SECRET);
 };
 
 // Verify the token from a client. Call the callback with a user object if successful or null otherwise.
-userSchema.statics.verifyToken = (token,cb) => {
-    if (!token) {
-        cb(null);
-        return;
-    }
-    // decrypt the token and verify that the encoded user id is valid
-    jwt.verify(token, SECRET, (err, decoded) => {
-        if (!decoded) {
-            cb(null);
-            return;
+userSchema.statics.verifyToken = async (token) => {
+  return new Promise( (resolve, reject) => {
+    try {
+      jwt.verify(token, SECRET, (err, decoded) => {
+        try {
+          if(err) {
+            reject(err);
+          } else {
+            resolve(decoded);
+          }
+        } catch(error) {
+          reject(error);
         }
-        User.findOne({username: decoded.username}, (err,user) => {
-	    if (err) {
-		cb(null);
-	    } else {
-		cb(user);
-	    }
-	});
-    });
+      });
+    } catch(error) {
+      reject(error);
+    }
+  })
 };
 
 // add findOrCreate
