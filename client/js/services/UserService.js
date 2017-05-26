@@ -29,6 +29,17 @@ class UserService {
     });
     return response.data;
   }
+
+  async update(user) {
+    const response = await this.$http({
+      method: 'POST',
+      url: '/setById',
+      data: {
+        token: localStorage.token,
+        user
+      }
+    });
+  }
 }
 
 angular.module('userService', []).service('UserService', ['$http', UserService]);

@@ -1,6 +1,5 @@
-var app= angular.module('app');
-app.controller('profile', ['$scope', '$http', 'UserService', ($scope, $http, UserService) => {
-  $scope.init = async () => {
+function profileController($scope, $http, UserService) {
+  $scope.init = async() => {
     try {
       const user = await UserService.getLoggedInUser();
       $scope.receiverEmail = user ? user.receiverEmail : $scope.receiverEmail;
@@ -12,25 +11,19 @@ app.controller('profile', ['$scope', '$http', 'UserService', ($scope, $http, Use
     }
   };
 
-  $scope.updateUser = async () => {
+  $scope.updateUser = async() => {
     try {
       let user = await UserService.getLoggedInUser();
       user.receiverEmail = $scope.receiverEmail;
       user.senderEmail = $scope.senderEmail;
       user.senderPassword = $scope.senderPassword;
-      const response = await $http({
-        method: 'POST',
-        url: '/setById',
-        data: {
-          token: localStorage.token,
-          user
-        }
-      });
+      await UserService.update(user);
       $scope.openToast('Profile set');
     } catch(error) {
       console.error(error);
       $scope.openToast('Something went wrong...');
     }
   };
+}
 
-}]);
+angular.module('app').controller('profile', ['$scope', '$http', 'UserService', profileController]);
