@@ -5,36 +5,37 @@
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		grid-template-rows: repeat(1, 0fr);
+		margin-top: 20px;
+		margin-bottom: 20px;
 	}
 
 	.signup-card {
 		grid-column: 1/3;
 		grid-row: 1;
 		justify-self: center;
-		width: 400px;
+		width: 300px;
 		text-align: center;
 	}
-
 </style>
 <div data-ng-controller="signup">
 	<div class="wrapper">
 
 		<div class="card signup-card">
-		    <h3>Register</h3>
-				<div>
-					<md-input-container>
-						<label>Username</label>
-						<input type="text" data-ng-model="username"/>
-					</md-input-container>
-				</div>
-				<div>
-					<md-input-container>
-						<label>Password</label>
-						<input type="password" data-ng-model="password"/>
-					</md-input-container>
-				</div>
-		    <md-button class="button" data-ng-click="signUp()">Sign up</md-button>
+			<h3>Sign up</h3>
+			<div>
+				<md-input-container>
+					<label>Username</label>
+					<input type="text" data-ng-model="username" />
+				</md-input-container>
+			</div>
+			<div>
+				<md-input-container>
+					<label>Password</label>
+					<input type="password" data-ng-model="password" />
+				</md-input-container>
+			</div>
+			<md-button class="button" data-ng-click="signUp()">Sign up</md-button>
 		</div>
 	</div>
-		
+
 </div>
