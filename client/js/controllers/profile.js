@@ -1,8 +1,8 @@
 var app= angular.module('app');
-app.controller('profile', ['$scope', '$http', ($scope, $http) => {
+app.controller('profile', ['$scope', '$http', 'UserService', ($scope, $http, UserService) => {
   $scope.init = async () => {
     try {
-      const user = await $scope.getById();
+      const user = await UserService.getLoggedInUser();
       $scope.receiverEmail = user ? user.receiverEmail : $scope.receiverEmail;
       $scope.senderEmail = user ? user.senderEmail : $scope.senderEmail;
       $scope.senderPassword = user ? user.senderPassword : $scope.senderPassword;
@@ -14,7 +14,7 @@ app.controller('profile', ['$scope', '$http', ($scope, $http) => {
 
   $scope.updateUser = async () => {
     try {
-      let user = await $scope.getById();
+      let user = await UserService.getLoggedInUser();
       user.receiverEmail = $scope.receiverEmail;
       user.senderEmail = $scope.senderEmail;
       user.senderPassword = $scope.senderPassword;

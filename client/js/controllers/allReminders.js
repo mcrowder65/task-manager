@@ -1,9 +1,9 @@
 var app= angular.module('app');
 
-app.controller('allReminders', ['$scope', ($scope) => {
+app.controller('allReminders', ['$scope', 'ReminderService', ($scope, ReminderService) => {
     $scope.addEndDateMessage = "Add end date";
     $scope.init = async () => {
-      $scope.reminders = await $scope.getReminders();
+      $scope.reminders = await ReminderService.getAllUserReminders();
       $scope.$apply();
     }
     $scope.showReminder = (dateToSend) => {

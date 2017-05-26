@@ -1,23 +1,15 @@
-var app = angular.module('app');
-app.controller('login', ['$scope', '$http', '$rootScope', ($scope, $http, $rootScope) => {
-
+function loginController($scope, $http, UserService) {
   $scope.login = async() => {
     try {
-      const response = await $http({
-        method: 'POST',
-        url: '/login',
-        data: {
-          username: $scope.username,
-          password: $scope.password
-        }
-      });
-      localStorage.token = response.data;
+      const token = await UserService.login($scope.username.toLowerCase(), $scope.password);
+      localStorage.token = token;
       $scope.$emit('callIsLoggedIn', {});
-      window.location = "/#!/allReminders";
-    } catch (error) {
+      window.location = "/#!/addReminder";
+    } catch(error) {
       console.error('error while logging in ', error);
       $scope.openToast('Login failed');
     }
   }
 
-}]);
+}
+angular.module('app').controller('login', ['$scope', '$http', 'UserService', loginController]);

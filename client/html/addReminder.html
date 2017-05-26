@@ -136,7 +136,7 @@
         <div>{{ reminder.emailBody }}</div>
         <div>{{ reminder.date }}</div>
         <div class="button-grid">
-          <md-button class="delete-button button red" data-ng-click="deleteReminder(reminder._id, reminder.dateToSend); toggleShowReminders(); toggleShowReminders()">Delete</md-button>
+          <md-button class="delete-button button red" data-ng-click="deleteReminder(reminder._id, reminder.dateToSend);">Delete</md-button>
           <md-button class="edit-button button green" data-ng-click="editReminder(reminder._id);">Edit</md-button>
           <md-button class="send-now-button button lightblue" data-ng-click="sendReminderImmediately(reminder._id, reminder.dateToSend);">Send now</md-button>
         </div>

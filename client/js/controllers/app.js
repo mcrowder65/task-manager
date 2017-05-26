@@ -1,7 +1,7 @@
 
 const MILLISECONDS_IN_DAY = 86400000;
 
-function appController($scope, $http, $mdToast, UserDAO) {
+function appController($scope, $http, $mdToast) {
 
   $scope.$on('callIsLoggedIn', () => {
     $scope.isLoggedIn();
@@ -20,99 +20,8 @@ function appController($scope, $http, $mdToast, UserDAO) {
     window.location = url;
   }
 
-  $scope.getReminders = async() => {
-    const response = await $http({
-      method: 'POST',
-      url: '/getReminders',
-      data: {
-        token: localStorage.token
-      }
-    });
-    return response.data.map((reminder) => {
-      const date = new Date(reminder.timeToSend)
-      reminder.date = (date.getMonth() + 1) + "/" + date.getDate() + " " + date.toLocaleTimeString()
-      return reminder;
-    });
-
-  }
-
-  $scope.getRemindersByDay = async(date) => {
-    const response = await $http({
-      method: 'POST',
-      url: '/getRemindersByDay',
-      data: {
-        currentDay: date || new Date(),
-        token: localStorage.token
-      }
-    });
-    return response.data.map((reminder) => {
-      const date = new Date(reminder.timeToSend)
-      reminder.date = (date.getMonth() + 1) + "/" + date.getDate() + " " + date.toLocaleTimeString()
-      // TODO change to object spread when it becomes available
-      return reminder;
-    });
-
-  }
-
   $scope.editReminder = (_id) => {
     window.location.href = "/#!/addReminder/?_id=" + _id;
-  }
-
-  $scope.deleteReminder = async(_id, date) => {
-    try {
-      await $http({
-        method: 'POST',
-        url: '/deleteReminder',
-        data: {
-          _id,
-          token: localStorage.token
-        }
-      });
-      $scope.reminders = await (date ? $scope.getRemindersByDay(date) : $scope.getReminders());
-      $scope.$broadcast('notifyChildren', {});
-      $scope.$apply();
-    } catch(error) {
-      console.error('Something went wrong while deleting reminder ', error);
-
-    }
-  }
-
-  $scope.sendReminderImmediately = async(_id, date) => {
-    try {
-      await $http({
-        method: 'POST',
-        url: '/sendReminderImmediately',
-        data: {
-          _id,
-          token: localStorage.token
-        }
-      });
-      $scope.reminders = await (date ? $scope.getRemindersByDay(date) : $scope.getReminders());
-      $scope.$apply();
-      console.log('$scope.reminders ', $scope.reminders);
-    } catch(error) {
-      console.error('error while sending immediately ', error);
-      $scope.openToast('Something went wrong while sending immediately');
-    }
-  }
-
-  $scope.getById = async() => {
-    try {
-      const response = await $http({
-        method: 'POST',
-        url: '/getById',
-        data: {
-          token: localStorage.token
-        }
-      });
-      return response.data;
-    } catch(error) {
-      console.error(error);
-    }
-  }
-
-  $scope.hide = (reminder) => {
-    reminder.hidden = true;
   }
 
   $scope.openToast = ($event) => {
@@ -156,7 +65,7 @@ const appConfig = ($routeProvider) => {
     });
 
 }
-angular.module('app', ['ngRoute', 'ngMaterial', 'userDAO']).controller('app', appController).config(appConfig);
+angular.module('app', ['ngRoute', 'ngMaterial', 'userService', 'reminderService']).controller('app', appController, ReminderService).config(appConfig);
 /*******************************************************************************************************************/
 //BASIC FUNCTIONS
 /*******************************************************************************************************************/
