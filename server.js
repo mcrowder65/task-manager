@@ -74,8 +74,14 @@ app.post('/sendReminderImmediately', async (req, res) => {
     res.status(500).json(error.message || error);
   }
 });
-app.post('/getReminder', (req, res) => {
-  reminderDAO.getReminder(req, res);
+app.post('/getReminder', async (req, res) => {
+  try {
+    const payload = await getUserJWT(req.body.token);
+    const reminderObject = await reminderDAO.getReminder(req.body._id, payload._id);
+    res.status(200).json(reminderObject);
+  } catch(error) {
+    res.status(500).json(error.message || error);
+  }
 });
 app.post('/deleteReminder', async (req, res) => {
   try {

@@ -1,16 +1,11 @@
-var showRemindersMessage = "Don't show reminders on same day";
-
-const AddReminderController = async($scope, $http, UserService, ReminderService) => {
+const AddReminderController = async($scope, $http, UserService, ReminderService, UtilitiesService) => {
   $scope.init = async() => {
-    if(get('date') != null) {
-      var date = new Date(parseInt(get('date')));
-      $scope.dateToSend = date;
-      $scope.showReminders = true;
-      $scope.showRemindersMessage = "Don't show reminders on same day";
-    }
     $scope.dateToSend = new Date();
     $scope.showReminders = true;
-    $scope.showRemindersMessage = showRemindersMessage;
+    $scope.showRemindersMessage = 'Don\'t show reminders on same day';
+    if(UtilitiesService.get('date') != null) {
+      $scope.dateToSend = new Date(parseInt(UtilitiesService.get('date')));
+    }
     $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
     const user = await UserService.getLoggedInUser();
     $scope.senderEmail = user.senderEmail;
@@ -20,12 +15,7 @@ const AddReminderController = async($scope, $http, UserService, ReminderService)
     $scope.$apply();
   }
 
-  $scope.$on('notifyChildren', () => {
-    console.log('child notified');
-    $scope.$apply();
-  })
-
-  $scope.sendReminderImmediately = async (_id, date) => {
+  $scope.sendReminderImmediately = async(_id, date) => {
     try {
       await ReminderService.sendReminderImmediately(_id, date);
       $scope.reminders = await ReminderService.getAllUserRemindersByDay(date);
@@ -36,57 +26,25 @@ const AddReminderController = async($scope, $http, UserService, ReminderService)
 
   }
   $scope.newReminder = async() => {
-    if($scope.senderEmail == undefined || $scope.senderEmail == null || $scope.senderEmail == "" || $scope.senderPassword == undefined || $scope.senderPassword == null || $scope.senderPassword == "" || $scope.receiverEmail == undefined || $scope.receiverEmail == null || $scope.receiverEmail == "" || $scope.dateToSend == undefined || $scope.dateToSend == null || $scope.dateToSend == "" || $scope.timeToSend == undefined || $scope.timeToSend == null || $scope.timeToSend == "" || (($scope.subject == undefined || $scope.subject == null || $scope.subject == "") && ($scope.emailBody == undefined || $scope.emailBody == null || $scope.emailBody == ""))) {
-      $scope.openToast('Something went wrong');
-      return;
-    }
     try {
       let time = String($scope.dateToSend);
-      time = time.match("([Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec]* [0-9]* [0-9]{0,4})");
+      time = time.match('([Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec]* [0-9]* [0-9]{0,4})');
       time = time[0];
-      const timeToSend = new Date(time + " " + $scope.timeToSend).getTime();
-      if(!get('_id')) {
-        try {
-
-        } catch(error) {
-
-        }
-        await $http({
-          method: 'POST',
-          url: '/newReminder',
-          data: {
-            senderEmail: $scope.senderEmail,
-            senderPassword: $scope.senderPassword,
-            receiverEmail: $scope.receiverEmail,
-            timeToSend,
-            emailBody: $scope.emailBody,
-            subject: $scope.subject,
-            userID: localStorage.token,
-            dateToSend: $scope.dateToSend,
-            timeOfDay: $scope.timeToSend,
-            token: localStorage.token
-          }
-        });
-      } else {
-        await $http({
-          method: 'POST',
-          url: '/setReminder',
-          data: {
-            _id: get('_id'),
-            senderEmail: $scope.senderEmail,
-            senderPassword: $scope.senderPassword,
-            receiverEmail: $scope.receiverEmail,
-            timeToSend: timeToSend,
-            emailBody: $scope.emailBody,
-            subject: $scope.subject,
-            dateToSend: $scope.dateToSend,
-            timeOfDay: $scope.timeToSend,
-            token: localStorage.token
-          }
-        });
-      }
+      const timeToSend = new Date(time + ' ' + $scope.timeToSend).getTime();
+      const _id = UtilitiesService.get('_id');
+      await ReminderService.createOrUpdate(_id, {
+        senderEmail: $scope.senderEmail,
+        senderPassword: $scope.senderPassword,
+        receiverEmail: $scope.receiverEmail,
+        timeToSend,
+        emailBody: $scope.emailBody,
+        subject: $scope.subject,
+        dateToSend: $scope.dateToSend,
+        timeOfDay: $scope.timeToSend,
+        token: localStorage.token
+      });
       $scope.openToast('Reminder set');
-      $scope.reminders = await $scope.getRemindersByDay($scope.dateToSend);
+      $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
       $scope.$apply();
     } catch(err) {
       $scope.openToast('Something went wrong');
@@ -95,18 +53,26 @@ const AddReminderController = async($scope, $http, UserService, ReminderService)
   }
 
   $scope.toggleShowReminders = async() => {
-    $scope.showReminders = !$scope.showReminders;
-    $scope.showRemindersMessage = !$scope.showReminders ? "Show reminders on same day" : "Don't show reminders on same day";
-    $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
-    $scope.$apply();
+    try {
+      $scope.showReminders = !$scope.showReminders;
+      $scope.showRemindersMessage = !$scope.showReminders ? 'Show reminders on same day' : 'Don\'t show reminders on same day';
+      $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
+      $scope.$apply();
+    } catch(error) {
+      console.error('error in toggleShowReminders ', error);
+    }
   }
 
   $scope.dateChange = async() => {
-    $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
-    $scope.$apply();
+    try {
+      $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
+      $scope.$apply();
+    } catch(error) {
+      console.error('error in dateChange ', error)
+    }
   }
 
-  $scope.deleteReminder = async (_id, date) => {
+  $scope.deleteReminder = async(_id, date) => {
     try {
       await ReminderService.deleteReminder(_id);
       $scope.reminders = await ReminderService.getAllUserRemindersByDay(date);
@@ -118,28 +84,31 @@ const AddReminderController = async($scope, $http, UserService, ReminderService)
   }
 
   $scope.getReminder = async() => {
-    if(get('_id')) {
-      const response = await $http({
-        method: 'POST',
-        url: '/getReminder',
-        data: {
-          _id: get('_id')
-        }
-      });
-      const reminder = response.data;
-      $scope.editing = true;
-      $scope.dateToSend = reminder.dateToSend != null ? new Date(reminder.dateToSend) : $scope.dateToSend;
-      $scope.timeToSend = reminder.timeOfDay != null ? reminder.timeOfDay : $scope.timeToSend;
-      $scope.subject = reminder.subject;
-      $scope.emailBody = reminder.emailBody;
-      $scope.receiverEmail = reminder.receiverEmail != null ? reminder.receiverEmail : $scope.receiverEmail;
+    try {
+      const _id = UtilitiesService.get('_id');
+      if(_id) {
+
+        const reminder = await ReminderService.getReminderById(_id);
+        $scope.editing = true;
+        $scope.dateToSend = reminder.dateToSend != null ? new Date(reminder.dateToSend) : $scope.dateToSend;
+        $scope.timeToSend = reminder.timeOfDay != null ? reminder.timeOfDay : $scope.timeToSend;
+        $scope.subject = reminder.subject;
+        $scope.emailBody = reminder.emailBody;
+        $scope.receiverEmail = reminder.receiverEmail != null ? reminder.receiverEmail : $scope.receiverEmail;
+        $scope.$apply();
+      }
+
+    } catch(error) {
+      console.error('Something went wrong while trying to edit reminder ', error);
+      $scope.openToast('Woops something went wrong fetching that one..');
     }
 
   }
 
   $scope.stopEditing = () => {
-    removeGet("_id", $scope.dateToSend.getTime());
+    UtilitiesService.removeGet('_id', $scope.dateToSend.getTime());
   }
+
 };
 
-angular.module('app').controller('addReminder', ['$scope', '$http', 'UserService', 'ReminderService', AddReminderController]);
+angular.module('app').controller('addReminder', ['$scope', '$http', 'UserService', 'ReminderService', 'UtilitiesService', AddReminderController]);

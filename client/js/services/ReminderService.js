@@ -56,6 +56,56 @@ class ReminderService {
       }
     });
   }
+
+  async getReminderById(_id) {
+    const response = await this.$http({
+      method: 'POST',
+      url: '/getReminder',
+      data: {
+        _id,
+        token: localStorage.token
+      }
+    });
+    return response.data;
+  }
+
+  async createOrUpdate(_id, reminder) {
+    if(_id) {
+      await this.$http({
+        method: 'POST',
+        url: '/setReminder',
+        data: {
+          _id,
+          senderEmail: reminder.senderEmail,
+          senderPassword: reminder.senderPassword,
+          receiverEmail: reminder.receiverEmail,
+          timeToSend: reminder.timeToSend,
+          emailBody: reminder.emailBody,
+          subject: reminder.subject,
+          dateToSend: reminder.dateToSend,
+          timeOfDay: reminder.timeToSend,
+          token: localStorage.token
+        }
+      });
+    } else {
+      // create
+      await this.$http({
+        method: 'POST',
+        url: '/newReminder',
+        data: {
+          senderEmail: reminder.senderEmail,
+          senderPassword: reminder.senderPassword,
+          receiverEmail: reminder.receiverEmail,
+          timeToSend: reminder.timeToSend,
+          emailBody: reminder.emailBody,
+          subject: reminder.subject,
+          dateToSend: reminder.dateToSend,
+          timeOfDay: reminder.timeToSend,
+          token: localStorage.token
+        }
+      });
+    }
+  }
 }
 
 angular.module('reminderService', []).service('ReminderService', ['$http', ReminderService]);

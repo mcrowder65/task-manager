@@ -37,17 +37,19 @@ const newReminder = async(userID, body) => {
   });
 }
 
-const getReminder = (req, res) => {
-  reminder.findOne({
-      _id: req.body._id
-    },
-    (err, tempReminder) => {
-      if(tempReminder) {
-        res.json(tempReminder);
-      } else if(err) {
-        res.sendStatus(403);
+const getReminder = async (_id, userID) => {
+  return new Promise( async (resolve, reject) => {
+    try {
+      const reminderObject = await getById(_id);
+      if(reminderObject.userID !== userID) {
+        reject('User doesn\'t own this reminder');
       }
-    });
+      resolve(reminderObject);
+    } catch(error) {
+      reject('Something went wrong while getting reminder ', error.toString());
+    }
+
+  });
 };
 const sendReminderImmediately = async(userID, _id) => {
   return new Promise(async(resolve, reject) => {
