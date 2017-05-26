@@ -28,7 +28,6 @@ function appController($scope, $http, $mdToast, UserDAO) {
         token: localStorage.token
       }
     });
-
     return response.data.map((reminder) => {
       const date = new Date(reminder.timeToSend)
       reminder.date = (date.getMonth() + 1) + "/" + date.getDate() + " " + date.toLocaleTimeString()
