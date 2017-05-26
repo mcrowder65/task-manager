@@ -1,19 +1,13 @@
-var app = angular.module('app', ['ngRoute', 'ngMaterial']);
+var app = angular.module('app', ['ngRoute', 'ngMaterial', 'userDAO']);
 var MILLISECONDS_IN_DAY = 86400000;
-app.factory('simpleFactory', () => {
-  var factory = {};
 
-  return factory;
-});
-
-app.controller('app', function($scope, simpleFactory, $http, $mdToast) {
+app.controller('app', function($scope, $http, $mdToast, UserDAO) {
 
   $scope.$on('callIsLoggedIn', () => {
     $scope.isLoggedIn();
   })
 
   $scope.isLoggedIn = () => {
-    console.log('app $scope.isLoggedIn');
     $scope.loggedIn = !!localStorage.token;
   }
 
@@ -31,7 +25,7 @@ app.controller('app', function($scope, simpleFactory, $http, $mdToast) {
       method: 'POST',
       url: '/getReminders',
       data: {
-        id: localStorage.token //TODO refactor to jwt
+        token: localStorage.token
       }
     });
 
@@ -65,25 +59,42 @@ app.controller('app', function($scope, simpleFactory, $http, $mdToast) {
     window.location.href = "/#!/addReminder/?_id=" + _id;
   }
 
-  $scope.deleteReminder = async(_id) => {
-    await $http({
-      method: 'POST',
-      url: '/deleteReminder',
-      data: {
-        _id //TODO add jwt
-      }
-    });
+  $scope.deleteReminder = async(_id, date) => {
+    try {
+      await $http({
+        method: 'POST',
+        url: '/deleteReminder',
+        data: {
+          _id,
+          token: localStorage.token
+        }
+      });
+      $scope.reminders = await (date ? $scope.getRemindersByDay(date) : $scope.getReminders());
+      $scope.$broadcast('notifyChildren', {});
+      $scope.$apply();
+    } catch(error) {
+      console.error('Something went wrong while deleting reminder ', error);
+
+    }
   }
-  $scope.sendReminderImmediately = async(_id) => {
-    await $http({
-      method: 'POST',
-      url: '/sendReminderImmediately',
-      data: {
-        _id //TODO add jwt
-      }
-    });
-    $scope.reminders = await $scope.getReminders(); //TODO change to get by day or get all
-    $scope.$apply();
+
+  $scope.sendReminderImmediately = async(_id, date) => {
+    try {
+      await $http({
+        method: 'POST',
+        url: '/sendReminderImmediately',
+        data: {
+          _id,
+          token: localStorage.token
+        }
+      });
+      $scope.reminders = await (date ? $scope.getRemindersByDay(date) : $scope.getReminders());
+      $scope.$apply();
+      console.log('$scope.reminders ', $scope.reminders);
+    } catch(error) {
+      console.error('error while sending immediately ', error);
+      $scope.openToast('Something went wrong while sending immediately');
+    }
   }
 
   $scope.getById = async() => {
@@ -96,7 +107,7 @@ app.controller('app', function($scope, simpleFactory, $http, $mdToast) {
         }
       });
       return response.data;
-    } catch (error) {
+    } catch(error) {
       console.error(error);
     }
   }
@@ -152,8 +163,8 @@ app.config(($routeProvider) => {
 /*******************************************************************************************************************/
 
 const indexOf = (scopeReminders, reminders) => {
-  for (var i = 0; i < scopeReminders.length; i++) {
-    if (scopeReminders[i].id === reminders[i].id) {
+  for(var i = 0; i < scopeReminders.length; i++) {
+    if(scopeReminders[i].id === reminders[i].id) {
       return i;
     }
   }
@@ -162,14 +173,14 @@ const indexOf = (scopeReminders, reminders) => {
 const get = (parameter) => {
   var url = window.location.href;
   var index = url.indexOf(parameter);
-  if (index == -1)
+  if(index == -1)
     return null;
   index += parameter.length + 1; //if the word we're looking for is address, get a index
   //then add address.length +1 to get start of value
 
   var i = index;
-  while (url[i] != '?' && url[i] != '&') {
-    if (i > url.length)
+  while(url[i] != '?' && url[i] != '&') {
+    if(i > url.length)
       break;
     i++;
   }
@@ -179,12 +190,12 @@ const get = (parameter) => {
 const removeGet = (parameter, dateToSend) => {
   var url = window.location.href;
   var index = url.indexOf(parameter);
-  if (index == -1)
+  if(index == -1)
     return null;
 
   var i = index + parameter.length + 1;
-  while (url[i] != '?' && url[i] != '&') {
-    if (i > url.length)
+  while(url[i] != '?' && url[i] != '&') {
+    if(i > url.length)
       break;
     i++;
   }

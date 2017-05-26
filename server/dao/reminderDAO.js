@@ -5,7 +5,7 @@ var googlecalendar = require('../googlecalendar/googlecalendar.js');
 var constants = require('../constants.js');
 
 const newReminder = async(userID, body) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async(resolve, reject) => {
     try {
       if(!reminderValidator.validateNewReminder(body)) {
         reject('Reminder format not valid');
@@ -49,67 +49,84 @@ const getReminder = (req, res) => {
       }
     });
 };
-const sendReminderImmediately = (req, res) => {
-  reminder.findOrCreate({
-    _id: req.body._id
-  }, (err, tempReminder, created) => {
-    if(tempReminder) {
-      res.json({})
-      utilities.sendReminder(tempReminder);
-      reminder.remove({
-        _id: tempReminder._id
-      }, (err, temp) => {});
-    } else
-      res.sendStatus("403");
-  });
-};
-
-const deleteReminder = async(req, res) => {
-  const reminderObject = await getById(req.body._id);
-  googlecalendar.remove(reminderObject.eid, reminderObject.userID);
-  reminder.remove({
-    _id: req.body._id
-  }, (err, tempReminder) => {
-    if(tempReminder) {
-      res.json({})
+const sendReminderImmediately = async(userID, _id) => {
+  return new Promise(async(resolve, reject) => {
+    try {
+      const reminderObject = await getById(_id);
+      if(reminderObject.userID !== userID) {
+        reject('User doesn\'t own this reminder');
+      }
+      await utilities.sendReminder(reminderObject);
+      await deleteReminder(userID, _id, false);
+      resolve();
+    } catch(error) {
+      reject(error.toString());
     }
   });
 };
 
-const setReminder = async (userID, body) => {
-	return new Promise( async (resolve, reject) => {
-		try {
-			const reminderObject = await getById(body._id);
-			if(reminderObject.userID !== userID) {
-				reject('User doesn\'t own this reminder');
-			}
-			const eid = await googlecalendar.createOrUpdate(body.subject, body.timeToSend, body.emailBody, reminderObject.eid, userID);
-			reminder.update({
-				_id: body._id
-			}, {
-				senderEmail: body.senderEmail,
-				senderPassword: body.senderPassword,
-				receiverEmail: body.receiverEmail,
-				emailBody: body.emailBody,
-				timeToSend: body.timeToSend,
-				subject: body.subject,
-				userID,
-				milliseconds: new Date(body.timeToSend).getTime(),
-				dateToSend: body.dateToSend,
-				timeOfDay: body.timeOfDay,
-				hidden: false,
-				eid: reminderObject.eid
-			}, (err, tempReminder) => {
-				if(tempReminder) {
-					resolve();
-				} else {
-					reject('Something went wrong');
-				}
-			});
-		} catch(error) {
-			reject(error.toString());
-		}
-	});
+const deleteReminder = async(userID, _id, removeFromGoogleCalendar) => {
+  return new Promise(async(resolve, reject) => {
+    try {
+      const reminderObject = await getById(_id);
+      if(reminderObject.userID !== userID) {
+        reject('User can\'t delete reminder that they don\'t own');
+      }
+      if(removeFromGoogleCalendar) {
+        await googlecalendar.remove(reminderObject.eid, reminderObject.userID);
+      }
+      reminder.remove({
+        _id
+      }, (err, tempReminder) => {
+        if(err) {
+          reject('Something went wrong while deleting');
+        } else {
+          resolve();
+        }
+      });
+    } catch(error) {
+      reject(error.toString());
+    }
+  });
+};
+
+const setReminder = async(userID, body) => {
+  return new Promise(async(resolve, reject) => {
+    try {
+      const reminderObject = await getById(body._id);
+      if(reminderObject.userID !== userID) {
+        reject('User doesn\'t own this reminder');
+      }
+      if(!reminderValidator.validateNewReminder(body)) {
+        reject('Reminder format not valid');
+      }
+      const eid = await googlecalendar.createOrUpdate(body.subject, body.timeToSend, body.emailBody, reminderObject.eid, userID);
+      reminder.update({
+        _id: body._id
+      }, {
+        senderEmail: body.senderEmail,
+        senderPassword: body.senderPassword,
+        receiverEmail: body.receiverEmail,
+        emailBody: body.emailBody,
+        timeToSend: body.timeToSend,
+        subject: body.subject,
+        userID,
+        milliseconds: new Date(body.timeToSend).getTime(),
+        dateToSend: body.dateToSend,
+        timeOfDay: body.timeOfDay,
+        hidden: false,
+        eid: reminderObject.eid
+      }, (err, tempReminder) => {
+        if(tempReminder) {
+          resolve();
+        } else {
+          reject('Something went wrong');
+        }
+      });
+    } catch(error) {
+      reject(error.toString());
+    }
+  });
 };
 const getReminders = async(userID) => {
   return new Promise((resolve, reject) => {

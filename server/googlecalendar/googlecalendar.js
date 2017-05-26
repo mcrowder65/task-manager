@@ -164,6 +164,7 @@ const removeEvent = async (auth, dateTime, body, title, eventId) => {
 }
 
 const remove = async (eid, userId) => {
+    
   const user = await userDAO.getById(userId);
   const clientSecret = user.clientSecret;
 
