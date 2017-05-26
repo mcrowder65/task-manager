@@ -40,6 +40,18 @@ class UserService {
       }
     });
   }
+
+  async signup(username, password) {
+    const response = await this.$http({
+      method: 'POST',
+      url: '/signup',
+      data: {
+        username,
+        password
+      }
+    });
+    return response.data;
+  }
 }
 
 angular.module('userService', []).service('UserService', ['$http', UserService]);

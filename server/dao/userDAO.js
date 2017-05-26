@@ -58,63 +58,56 @@ const update = async (_id, newUser) => {
 		});
 	});
 };
+
+const getByUsername = async (username) => {
+	return new Promise( async (resolve, reject) => {
+		try {
+			user.findOne({
+				username
+			}, (err, tempUser) => {
+				if(err) {
+					reject(err);
+				} else {
+					resolve(tempUser);
+				}
+			});
+		} catch(error) {
+			reject(error.toString());
+		}
+	});
+};
+const signup = async (username, password) => {
+	return new Promise( async (resolve, reject) => {
+		try {
+			if(!password || password.trim().length === 0) {
+				reject('empty password');
+			}
+			const tempUser = await getByUsername(username);
+			if(tempUser) {
+				reject('username taken')
+			}
+			user.findOrCreate({
+				username,
+				password: user.hashPassword(password),
+				receiverEmail: '',
+				senderEmail: '',
+				senderPassword: ''
+			}, (err, tempUser, created) => {
+				if(created) {
+					const token = user.generateToken(tempUser.username, tempUser._id);
+					resolve(token);
+				} else if(err || !created) {
+					reject();
+				}
+			});
+		} catch(error) {
+			reject(error.toString());
+		}
+	});
+};
 module.exports = {
 	getById,
-	signup: (req, res) => {
-		user.findOrCreate({
-			username: req.body.username,
-			password: user.hashPassword(req.body.password),
-			receiverEmail: '',
-			senderEmail: '',
-			senderPassword: ''
-		}, (err, tempUser, created) => {
-			if(created) {
-				var token = user.generateToken(tempUser.username);
-		        res.json({token: tempUser._id});
-			} else if(!created) {
-				res.sendStatus("403");
-			}
-		});
-	},
-	setSenderPassword: (req, res) => {
-		user.update({_id: req.body._id}, {senderPassword: req.body.senderPassword},
-		(err, user) => {
-			if(user) {
-				res.json(req.body.senderPassword);
-			}
-			else {
-				res.sendStatus('403');
-			}
-		});
-	},
-	setSenderEmail: (req, res) => {
-		if(!userValidator.validateSenderEmail(req.body.senderEmail)){
-			res.sendStatus('403');
-			return;
-		}
-		user.update({_id: req.body._id}, {senderEmail: req.body.senderEmail},
-		(err, user) => {
-			if(user) {
-				res.json(req.body.senderEmail);
-			}
-			else {
-				res.sendStatus('403');
-			}
-		});
-	},
+	signup,
 	login,
-	update,
-	setReceiverEmail: (req, res) => {
-		if(!userValidator.validateReceiverEmail(req.body.receiverEmail)) {
-			res.sendStatus('403');
-			return;
-		}
-		user.update({_id: req.body._id}, {receiverEmail: req.body.receiverEmail},
-		(err, user) => {
-			if(user)
-				res.json(req.body.receiverEmail);
-			else
-				res.sendStatus('403');
-		});
-	}
+	update
 };

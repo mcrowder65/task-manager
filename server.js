@@ -43,6 +43,7 @@ app.post('/getRemindersByDay', async(req, res) => {
 app.post('/getById', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
+    console.log('payload ', payload);
     let user = await userDAO.getById(payload._id);
     if(user) {
       user.clientSecret = null;
@@ -119,8 +120,13 @@ app.post('/getReminders', async(req, res) => {
     res.status(500).json(error.message || error);
   }
 });
-app.post('/signup', (req, res) => {
-  userDAO.signup(req, res);
+app.post('/signup', async (req, res) => {
+  try {
+    const token = await userDAO.signup(req.body.username, req.body.password);
+    res.status(200).json(token);
+  } catch(error) {
+    res.status(500).json(error.message || error);
+  }
 });
 app.post('/login', async(req, res) => {
   try {

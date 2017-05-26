@@ -1,25 +1,21 @@
-var app = angular.module('app');
-app.controller('signup', ['$scope', '$http', ($scope, $http) => {
+function signupController($scope, $http, UserService) {
 
   $scope.signUp = async() => {
     try {
-      $scope.username = $scope.username.toLowerCase();
-      const response = await $http({
-        method: 'POST',
-        url: '/signup',
-        data: {
-          username: $scope.username,
-          password: $scope.password
-        }
-      });
-
-      localStorage.token = response.data;
+      const token = await UserService.signup($scope.username.toLowerCase(), $scope.password);
+      localStorage.token = token;
       $scope.$emit('callIsLoggedIn', {});
-      window.location = "/#!/allReminders";
-
+      window.location = "/#!/addReminder";
     } catch(error) {
-      $scope.openToast('something went wrong!');
+      console.error('something went wrong while signing up ', error);
+      if(error.data === 'username taken') {
+        $scope.openToast('Username taken');
+      } else if(error.data === 'empty password') {
+        $scope.openToast('Your password can\'t be empty!');
+      } else {
+        $scope.openToast('something went wrong!');
+      }
     }
-
   }
-}]);
+}
+angular.module('app').controller('signup', ['$scope', '$http', 'UserService', signupController]);
