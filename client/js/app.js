@@ -49,7 +49,7 @@ app.controller('app', function($scope, simpleFactory, $http, $mdToast) {
       url: '/getRemindersByDay',
       data: {
         currentDay: date || new Date(),
-        id: localStorage.token // TODO refactor to jwt
+        token: localStorage.token
       }
     });
     return response.data.map((reminder) => {

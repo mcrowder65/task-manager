@@ -14,7 +14,7 @@ var userDAO = require('./server/dao/userDAO.js');
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({
-        extended: true
+  extended: true
 }));
 
 var portNumber = 80;
@@ -25,21 +25,22 @@ process.argv.forEach((val, index, array) => {
 });
 
 var server = app.listen(portNumber, () => {
-	console.log("Started on port " + portNumber);
-	var host = server.address().address;
-	var port = server.address().port;
+  console.log("Started on port " + portNumber);
+  var host = server.address().address;
+  var port = server.address().port;
 });
 
-app.post('/getRemindersByDay', async (req, res) => {
+app.post('/getRemindersByDay', async(req, res) => {
   try {
-    const reminders = await reminderDAO.getByDay(req.body.currentDay, req.body.id);
+    const payload = await getUserJWT(req.body.token);
+    const reminders = await reminderDAO.getByDay(req.body.currentDay, payload._id);
     res.json(reminders)
   } catch(error) {
-    res.sendStatus(500);
+    res.status(500).json(error.message);
   }
 });
 
-app.post('/getById', async (req, res) => {
+app.post('/getById', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     let user = await userDAO.getById(payload._id);
@@ -55,7 +56,7 @@ app.post('/getById', async (req, res) => {
   }
 });
 
-app.post('/setById', async (req, res) => {
+app.post('/setById', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     const response = await userDAO.update(payload._id, req.body.user);
@@ -65,21 +66,34 @@ app.post('/setById', async (req, res) => {
   }
 });
 app.post('/sendReminderImmediately', (req, res) => {
-	reminderDAO.sendReminderImmediately(req, res);
+  reminderDAO.sendReminderImmediately(req, res);
 });
 app.post('/getReminder', (req, res) => {
-	reminderDAO.getReminder(req, res);
+  reminderDAO.getReminder(req, res);
 });
 app.post('/deleteReminder', (req, res) => {
-	reminderDAO.deleteReminder(req, res);
+  reminderDAO.deleteReminder(req, res);
 });
-app.post('/newReminder', (req, res) => {
-	reminderDAO.newReminder(req, res);
+app.post('/newReminder', async(req, res) => {
+  try {
+    const payload = await getUserJWT(req.body.token);
+    await reminderDAO.newReminder(payload._id, req.body);
+    res.json({});
+  } catch(error) {
+    res.status(500).json(error.message || error);
+  }
 });
-app.post('/setReminder', (req, res) => {
-	reminderDAO.setReminder(req, res);
+app.post('/setReminder', async (req, res) => {
+  try {
+    const payload = await getUserJWT(req.body.token);
+    await reminderDAO.setReminder(payload._id, req.body);
+    res.json({});
+  } catch(error) {
+    console.log('error ', error);
+    res.status(500).json(error.message || error);
+  }
 })
-app.post('/getReminders', async (req, res) => {
+app.post('/getReminders', async(req, res) => {
   try {
     const reminders = await reminderDAO.getReminders(req.body.id);
     res.json(reminders);
@@ -88,28 +102,19 @@ app.post('/getReminders', async (req, res) => {
   }
 });
 app.post('/signup', (req, res) => {
-	userDAO.signup(req, res);
+  userDAO.signup(req, res);
 });
-app.post('/setSenderPassword', (req, res) => {
-	userDAO.setSenderPassword(req, res);
-});
-app.post('/setSenderEmail', (req, res) => {
-	userDAO.setSenderEmail(req, res);
-});
-app.post('/login', async (req, res) => {
+app.post('/login', async(req, res) => {
   try {
     const result = await userDAO.login(req.body);
     res.json(result);
   } catch(error) {
-    res.status(403).json(error);
+    res.status(403).json(error.message || error);
   }
 });
-app.post('/setReceiverEmail', async (req, res) => {
-	userDAO.setReceiverEmail(req, res);
-});
 
 
-const getUserJWT = async (jwt) => {
+const getUserJWT = async(jwt) => {
   try {
     const payload = await user.verifyToken(jwt);
     return payload;
