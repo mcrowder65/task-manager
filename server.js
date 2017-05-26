@@ -43,7 +43,6 @@ app.post('/getRemindersByDay', async(req, res) => {
 app.post('/getById', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
-    console.log('payload ', payload);
     let user = await userDAO.getById(payload._id);
     if(user) {
       user.clientSecret = null;
