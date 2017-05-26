@@ -1,7 +1,7 @@
-var app = angular.module('app', ['ngRoute', 'ngMaterial', 'userDAO']);
-var MILLISECONDS_IN_DAY = 86400000;
 
-app.controller('app', function($scope, $http, $mdToast, UserDAO) {
+const MILLISECONDS_IN_DAY = 86400000;
+
+function appController($scope, $http, $mdToast, UserDAO) {
 
   $scope.$on('callIsLoggedIn', () => {
     $scope.isLoggedIn();
@@ -120,9 +120,8 @@ app.controller('app', function($scope, $http, $mdToast, UserDAO) {
     $mdToast.showSimple($event);
   };
 
-});
-
-app.config(($routeProvider) => {
+}
+const appConfig = ($routeProvider) => {
 
   $routeProvider
     .when('/#!', {
@@ -157,7 +156,8 @@ app.config(($routeProvider) => {
       redirectTo: '/allReminders'
     });
 
-});
+}
+angular.module('app', ['ngRoute', 'ngMaterial', 'userDAO']).controller('app', appController).config(appConfig);
 /*******************************************************************************************************************/
 //BASIC FUNCTIONS
 /*******************************************************************************************************************/

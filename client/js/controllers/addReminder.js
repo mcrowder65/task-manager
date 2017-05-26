@@ -1,10 +1,6 @@
-var app = angular.module('app');
 var showRemindersMessage = "Don't show reminders on same day";
-const AddReminderController = async($scope, $http) => {
-  $scope.dateToSend = new Date();
-  $scope.showReminders = true;
-  $scope.showRemindersMessage = showRemindersMessage;
 
+const AddReminderController = async($scope, $http) => {
   $scope.init = async() => {
     if(get('date') != null) {
       var date = new Date(parseInt(get('date')));
@@ -12,6 +8,9 @@ const AddReminderController = async($scope, $http) => {
       $scope.showReminders = true;
       $scope.showRemindersMessage = "Don't show reminders on same day";
     }
+    $scope.dateToSend = new Date();
+    $scope.showReminders = true;
+    $scope.showRemindersMessage = showRemindersMessage;
     $scope.reminders = await $scope.getRemindersByDay();
     const user = await $scope.getById();
     $scope.senderEmail = user.senderEmail;
@@ -122,4 +121,4 @@ const AddReminderController = async($scope, $http) => {
   }
 };
 
-app.controller('addReminder', ['$scope', '$http', AddReminderController]);
+angular.module('app').controller('addReminder', ['$scope', '$http', AddReminderController]);
