@@ -36,7 +36,7 @@ app.post('/getRemindersByDay', async(req, res) => {
     const reminders = await reminderDAO.getByDay(req.body.currentDay, payload._id);
     res.status(200).json(reminders)
   } catch(error) {
-    res.status(500).json(error.message);
+    res.status(500).json(error.message || error);
   }
 });
 
@@ -62,10 +62,11 @@ app.post('/setById', async(req, res) => {
     const response = await userDAO.update(payload._id, req.body.user);
     res.status(200).json(response);
   } catch(error) {
-    res.status(500).json(error.message);
+    res.status(500).json(error.message || error);
   }
 });
-app.post('/sendReminderImmediately', async (req, res) => {
+
+app.post('/sendReminderImmediately', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     await reminderDAO.sendReminderImmediately(payload._id, req.body._id);
@@ -74,7 +75,7 @@ app.post('/sendReminderImmediately', async (req, res) => {
     res.status(500).json(error.message || error);
   }
 });
-app.post('/getReminder', async (req, res) => {
+app.post('/getReminder', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     const reminderObject = await reminderDAO.getReminder(req.body._id, payload._id);
@@ -83,7 +84,7 @@ app.post('/getReminder', async (req, res) => {
     res.status(500).json(error.message || error);
   }
 });
-app.post('/deleteReminder', async (req, res) => {
+app.post('/deleteReminder', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     await reminderDAO.deleteReminder(payload._id, req.body._id, true);
@@ -101,7 +102,7 @@ app.post('/newReminder', async(req, res) => {
     res.status(500).json(error.message || error);
   }
 });
-app.post('/setReminder', async (req, res) => {
+app.post('/setReminder', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     await reminderDAO.setReminder(payload._id, req.body);
@@ -109,7 +110,8 @@ app.post('/setReminder', async (req, res) => {
   } catch(error) {
     res.status(500).json(error.message || error);
   }
-})
+});
+
 app.post('/getReminders', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
@@ -119,7 +121,8 @@ app.post('/getReminders', async(req, res) => {
     res.status(500).json(error.message || error);
   }
 });
-app.post('/signup', async (req, res) => {
+
+app.post('/signup', async(req, res) => {
   try {
     const token = await userDAO.signup(req.body.username, req.body.password);
     res.status(200).json(token);
