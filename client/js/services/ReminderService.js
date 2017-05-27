@@ -83,7 +83,7 @@ class ReminderService {
           emailBody: reminder.emailBody,
           subject: reminder.subject,
           dateToSend: reminder.dateToSend,
-          timeOfDay: reminder.timeToSend,
+          timeOfDay: reminder.timeOfDay,
           token: localStorage.token
         }
       });
@@ -100,7 +100,7 @@ class ReminderService {
           emailBody: reminder.emailBody,
           subject: reminder.subject,
           dateToSend: reminder.dateToSend,
-          timeOfDay: reminder.timeToSend,
+          timeOfDay: reminder.timeOfDay,
           token: localStorage.token
         }
       });
