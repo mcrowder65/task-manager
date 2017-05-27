@@ -34,17 +34,17 @@
     </div>
     <input type="date" data-ng-model="day" data-ng-change="dayChange()" />
     <md-button class="button" data-ng-show="day != null" data-ng-click="day = null; endDay = null; addEndDateClickedChange('override')">Reset</md-button>
-    <md-button class="button" data-ng-show="day != null" data-ng-model="addEndDateClicked" data-ng-click="addEndDateClickedChange(null);"> {{ addEndDateMessage }} </md-button><br><br>
-    <input type="date" data-ng-show="addEndDateClicked" data-ng-model="endDay" data-ng-change="endDayChange();" /><br><br>
+    <md-button class="button" data-ng-show="day != null" data-ng-model="addEndDateClicked" data-ng-click="addEndDateClickedChange(null);"> {{ addEndDateMessage }} </md-button>
+    <input type="date" data-ng-show="addEndDateClicked" data-ng-model="endDay" data-ng-change="endDayChange();" />
     <div class="reminders">
 
       <div data-ng-repeat="reminder in reminders | orderBy:'timeToSend' | filter: {hidden: false }">
         <div data-ng-show="showReminder(reminder.dateToSend)">
           <div class="card reminder-card">
             <div>{{ reminder.receiverEmail }}</div>
-            <div>{{ reminder.subject }}<br></div>
+            <div>{{ reminder.subject }}</div>
             <div>{{ reminder.emailBody }}</div>
-            <div>{{ reminder.date }}<br></div>
+            <div>{{ reminder.date }}</div>
             <md-button class="button red" data-ng-click="deleteReminder(reminder._id);">Delete</md-button>
             <md-button class="button green" data-ng-click="editReminder(reminder._id)">Edit</md-button>
             <md-button class="button lightblue" data-ng-click="sendReminderImmediately(reminder._id)">Send now</md-button>
