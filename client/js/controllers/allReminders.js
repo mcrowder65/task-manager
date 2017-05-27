@@ -1,9 +1,10 @@
 const MILLISECONDS_IN_DAY = 86400000;
 
-function allRemindersController($scope, ReminderService) {
+function allRemindersController($scope, ReminderService, RealTimeService) {
   $scope.init = async() => {
     $scope.addEndDateMessage = 'Add end date';
     $scope.reminders = await ReminderService.getAllUserReminders();
+
     $scope.$apply();
   }
   $scope.sendReminderImmediately = async(_id, date) => {
@@ -52,7 +53,7 @@ function allRemindersController($scope, ReminderService) {
       $scope.addEndDateMessage = $scope.addEndDateClicked ? 'Remove end date' : 'Add end date';
       $scope.endDay = $scope.addEndDateClicked == false ? null : $scope.endDay;
     }
-
   }
+  
 }
-angular.module('app').controller('allReminders', ['$scope', 'ReminderService', allRemindersController]);
+angular.module('app').controller('allReminders', ['$scope', 'ReminderService', 'RealTimeService', 'socket', allRemindersController]);

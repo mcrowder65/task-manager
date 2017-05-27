@@ -63,4 +63,17 @@ const appConfig = ($routeProvider) => {
     });
 
 }
-angular.module('app', ['ngRoute', 'ngMaterial', 'userService', 'reminderService', 'utilitiesService']).controller('app', appController, ReminderService).config(appConfig);
+
+const factory = ($rootScope) => {
+  var socket = io.connect();
+
+  return {
+    on: function(eventName, callback){
+      socket.on(eventName, callback);
+    },
+    emit: function(eventName, data) {
+      socket.emit(eventName, data);
+    }
+  };
+}
+angular.module('app', ['ngRoute', 'ngMaterial', 'userService', 'reminderService', 'utilitiesService', 'realTimeService']).factory('socket', ['$rootScope', factory]).controller('app', appController, ReminderService).config(appConfig);

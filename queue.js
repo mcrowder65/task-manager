@@ -1,11 +1,28 @@
+const express = require('express');
+const app = express();
 var mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/list');
 var utilities = require('./server/utilities');
 var reminder = require('./server/models/reminder');
 
+const portNumber = 7999;
+const server = app.listen(portNumber, () => {
+  console.log("Started on port " + portNumber);
+  const host = server.address().address;
+  const port = server.address().port;
+});
+
+var io = require('socket.io')(server);
 
 
-
+io.sockets.on('connection', function(socket) {
+  socket.on('message', (message) => {
+    console.log('message ', message);
+    socket.emit('new', {
+      hello: 'world'
+    });
+  });
+});
 const checkReminders = async () => {
   return new Promise( async (resolve, reject) => {
     try {
@@ -19,6 +36,9 @@ const checkReminders = async () => {
         } else {
           for(var i = 0; i < reminders.length; i++){
       			await sendReminder(reminders[i]);
+            io.emit('remove-reminder', {
+              _id: reminders[i]._id
+            });
           }
           resolve();
         }
@@ -62,5 +82,6 @@ const check = async () => {
     console.error(error);
   }
 }
-
-setInterval(check, 60000);
+const interval = 5000;
+console.log('checking every ' + (interval / 1000) + ' seconds');
+setInterval(check, interval);

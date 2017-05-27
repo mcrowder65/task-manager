@@ -1,34 +1,35 @@
-var express = require('express');
-var app = express();
-var mongoose = require('mongoose');
-var db = mongoose.connect('mongodb://localhost/list');
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+const db = mongoose.connect('mongodb://localhost/list');
 app.use(express.static(__dirname + ''));
-var bodyParser = require('body-parser');
-var userValidator = require('./server/validators/userValidator');
-var reminderValidator = require('./server/validators/reminderValidator');
-var utilities = require('./server/utilities');
-var reminder = require('./server/models/reminder.js');
-var reminderDAO = require('./server/dao/reminderDAO.js');
-var user = require('./server/models/user.js');
-var userDAO = require('./server/dao/userDAO.js');
+const bodyParser = require('body-parser');
+const userValidator = require('./server/validators/userValidator');
+const reminderValidator = require('./server/validators/reminderValidator');
+const utilities = require('./server/utilities');
+const reminder = require('./server/models/reminder.js');
+const reminderDAO = require('./server/dao/reminderDAO.js');
+const user = require('./server/models/user.js');
+const userDAO = require('./server/dao/userDAO.js');
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-var portNumber = 80;
+let portNumber = 80;
 process.argv.forEach((val, index, array) => {
   if(val === '--port') {
     portNumber = array[index + 1];
   }
 });
 
-var server = app.listen(portNumber, () => {
+const server = app.listen(portNumber, () => {
   console.log("Started on port " + portNumber);
-  var host = server.address().address;
-  var port = server.address().port;
+  const host = server.address().address;
+  const port = server.address().port;
 });
+
 
 app.post('/getRemindersByDay', async(req, res) => {
   try {
@@ -70,6 +71,7 @@ app.post('/sendReminderImmediately', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     await reminderDAO.sendReminderImmediately(payload._id, req.body._id);
+    
     res.status(200).json({});
   } catch(error) {
     res.status(500).json(error.message || error);
