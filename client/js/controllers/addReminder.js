@@ -1,18 +1,22 @@
 const AddReminderController = async($scope, $http, UserService, ReminderService, UtilitiesService) => {
   $scope.init = async() => {
-    $scope.dateToSend = new Date();
-    $scope.showReminders = true;
-    $scope.showRemindersMessage = 'Don\'t show reminders on same day';
-    if(UtilitiesService.get('date') != null) {
-      $scope.dateToSend = new Date(parseInt(UtilitiesService.get('date')));
+    try {
+      $scope.dateToSend = new Date();
+      $scope.showReminders = true;
+      $scope.showRemindersMessage = 'Don\'t show reminders on same day';
+      if(UtilitiesService.get('date') != null) {
+        $scope.dateToSend = new Date(parseInt(UtilitiesService.get('date')));
+      }
+      $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
+      const user = await UserService.getLoggedInUser();
+      $scope.senderEmail = user.senderEmail;
+      $scope.receiverEmail = user.receiverEmail;
+      $scope.senderPassword = user.senderPassword;
+      $scope.getReminder();
+      $scope.$apply();
+    } catch(error) {
+      $scope.openToast('something went wrong :(');
     }
-    $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
-    const user = await UserService.getLoggedInUser();
-    $scope.senderEmail = user.senderEmail;
-    $scope.receiverEmail = user.receiverEmail;
-    $scope.senderPassword = user.senderPassword;
-    $scope.getReminder();
-    $scope.$apply();
   }
 
   $scope.sendReminderImmediately = async(_id, date) => {
