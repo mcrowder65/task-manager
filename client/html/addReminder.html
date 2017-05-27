@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="client/css/styles.css">
 <style>
-
   .wrapper {
+    margin-top: 10px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(5, 0fr);
@@ -11,7 +11,7 @@
     grid-column: 1/3;
     grid-row: 1;
     justify-self: center;
-    width: 400px;
+    min-width: 300px;
     text-align: center;
     margin-left: 10px;
     margin-right: 10px;
@@ -23,6 +23,7 @@
     grid-column: 1/3;
     min-width: 20%;
     justify-self: center;
+    text-align: center;
   }
 
   .show-reminders-button {
@@ -31,16 +32,6 @@
     grid-column: 1/3;
     min-width: 20%;
     justify-self: center;
-  }
-
-  #success-message {
-  	width: 30%;
-  	text-align: center;
-  	visibility: hidden;
-    grid-row: 5;
-    grid-column: 1/3;
-    justify-self: center;
-    margin-top: 10px;
   }
 
   .editing-alerts {
@@ -52,18 +43,49 @@
     text-align: center;
   }
 
+
+  md-input-container {
+    width: 60%;
+  }
+
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1;
+  }
+
+  .delete-button {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .edit-button {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .send-now-button {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .reminders {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
   .reminder-card {
     margin-top: 5px;
     margin-bottom: 5px;
-  }
-
-  md-input-container {
-      width: 60%;
+    text-align: center;
+    width: 300px;
+    margin: 8px;
   }
 </style>
 <div data-ng-controller="addReminder">
 
-  <div class="wrapper" data-ng-init="getSenderEmail(); getSenderPassword(); getReceiverEmail(); getReminder(); init();" id="wrapper">
+  <div class="wrapper" data-ng-init="init()" id="wrapper">
     <div class="card reminder-content">
       <h3>Reminder content</h3>
       <div>
@@ -73,7 +95,7 @@
         </md-input-container>
       </div>
       <div>
-        <md-datepicker ng-model="dateToSend"></md-datepicker>
+        <md-datepicker ng-model="dateToSend" ng-change="dateChange()"></md-datepicker>
       </div>
       <div>
         <md-input-container>
@@ -94,36 +116,33 @@
         </md-input-container>
       </div>
     </div>
-
-    <button type="button" class="btn btn-primary set-reminder-button" data-ng-click="newReminder()"> Set Reminder </button><br><br>
-
-    <button class="btn btn-info show-reminders-button" data-ng-click="toggleShowReminders()"> {{ showRemindersMessage }} </button>
-    <div class="editing-alerts" data-ng-show="editing">
-      <div class="alert alert-danger" role="alert">You're editing a reminder!!!!!</div>
-      <button class="btn btn-danger" data-ng-click="stopEditing()"> Stop editing </button>
-      <br><br>
+    <div class="set-reminder-button">
+      <md-button class="button" data-ng-click="newReminder()"> Set Reminder </md-button>
     </div>
-    <div id="success-message" class="alert alert-success" role="alert">Your reminder has been set!</div>
+    <div class="show-reminders-button">
+      <md-button class="button lightblue" data-ng-click="toggleShowReminders()"> {{ showRemindersMessage }} </md-button>
+    </div>
+    <div class="editing-alerts" data-ng-show="editing">
+      <md-button class="button red" data-ng-click="stopEditing()"> Stop editing </md-button>
+    </div>
   </div>
 
 
-
-  <div data-ng-show="showReminders">
-    <div data-ng-init="getReminders()" style="text-align:center">
-      <div data-ng-repeat="reminder in reminders | orderBy:'timeToSend' | filter: {hidden: false }">
-        <div class="col-md-6" data-ng-show="showReminder(reminder.dateToSend)">
-          <div class="card reminder-card">
-              <div id="receiver"><b>Receiver:</b> {{ reminder.receiverEmail }}</div>
-              <div data-ng-show="reminder.subject != '' && reminder.subject != null"><b>Subject: </b> {{ reminder.subject }}<br></div>
-              <div data-ng-show="reminder.emailBody != '' && reminder.emailBody != null"><b>Body:</b> {{ reminder.emailBody }}</div>
-              <div id="time"><b>Time:</b> {{ reminder.date }}<br></div>
-              <button type="button" class="btn btn-danger" data-ng-click="deleteReminder(reminder._id); toggleShowReminders(); toggleShowReminders();">Delete</button>
-              <button type="button" class="btn btn-success" data-ng-click="editReminder(reminder._id); toggleShowReminders(); toggleShowReminders();">Edit</button>
-              <button type="button" class="btn btn-warning" data-ng-click="hide(reminder)">Hide</button>
-              <button type="button" class="btn btn-info" data-ng-click="sendReminderImmediately(reminder._id); toggleShowReminders(); toggleShowReminders();">Send now</button>
-          </div>
+  <div class="reminders" data-ng-show="showReminders">
+    <div data-ng-repeat="reminder in reminders | orderBy: 'timeToSend' | filter: { hidden: false }">
+      <div class="card reminder-card">
+        <div>{{ reminder.receiverEmail }}</div>
+        <div>{{ reminder.subject }}</div>
+        <div>{{ reminder.emailBody }}</div>
+        <div>{{ reminder.date }}</div>
+        <div class="button-grid">
+          <md-button class="delete-button button red" data-ng-click="deleteReminder(reminder._id, reminder.dateToSend);">Delete</md-button>
+          <md-button class="edit-button button green" data-ng-click="editReminder(reminder._id);">Edit</md-button>
+          <md-button class="send-now-button button lightblue" data-ng-click="sendReminderImmediately(reminder._id, reminder.dateToSend);">Send now</md-button>
         </div>
       </div>
     </div>
   </div>
+
+
 </div>

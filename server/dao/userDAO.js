@@ -16,121 +16,98 @@ const getById = async (_id) => {
 	});
 
 };
+
+const login = async (body) => {
+	return new Promise( (resolve, reject) => {
+		user.findOne({
+			username: body.username
+		}, (err, tempUser) => {
+			try {
+				if (err) {
+					reject(err);
+				} else {
+					if (tempUser && tempUser.checkPassword(body.password, tempUser.password)) {
+						const jwt = user.generateToken(tempUser.username, tempUser._id);
+						resolve(jwt);
+					} else {
+						reject('incorrect password');
+					}
+				}
+			} catch(error) {
+				reject(error);
+			}
+		});
+	});
+}
+
+const update = async (_id, newUser) => {
+	return new Promise( (resolve, reject) => {
+		user.update( {
+			_id
+		}, {
+			username: newUser.username,
+			receiverEmail: newUser.receiverEmail,
+			senderEmail: newUser.senderEmail,
+			senderPassword: newUser.senderPassword
+		}, (err, newUser) => {
+			if(err) {
+				reject('Failed to update');
+			} else {
+				resolve('user updated');
+			}
+		});
+	});
+};
+
+const getByUsername = async (username) => {
+	return new Promise( async (resolve, reject) => {
+		try {
+			user.findOne({
+				username
+			}, (err, tempUser) => {
+				if(err) {
+					reject(err);
+				} else {
+					resolve(tempUser);
+				}
+			});
+		} catch(error) {
+			reject(error.toString());
+		}
+	});
+};
+const signup = async (username, password) => {
+	return new Promise( async (resolve, reject) => {
+		try {
+			if(!password || password.trim().length === 0) {
+				reject('empty password');
+			}
+			const tempUser = await getByUsername(username);
+			if(tempUser) {
+				reject('username taken')
+			}
+			user.findOrCreate({
+				username,
+				password: user.hashPassword(password),
+				receiverEmail: '',
+				senderEmail: '',
+				senderPassword: ''
+			}, (err, tempUser, created) => {
+				if(created) {
+					const token = user.generateToken(tempUser.username, tempUser._id);
+					resolve(token);
+				} else if(err || !created) {
+					reject();
+				}
+			});
+		} catch(error) {
+			reject(error.toString());
+		}
+	});
+};
 module.exports = {
 	getById,
-	signup: function(req, res) {
-		user.findOrCreate({
-			username: req.body.username,
-			password: user.hashPassword(req.body.password),
-			receiverEmail: '',
-			senderEmail: '',
-			senderPassword: ''
-		}, function(err, tempUser, created) {
-			if(created) {
-				var token = user.generateToken(tempUser.username);
-		        res.json({token: tempUser._id});
-			} else if(!created) {
-				res.sendStatus("403");
-			}
-		});
-	},
-	getSenderPassword: function(req, res) {
-		user.findOne({_id: req.body.id},
-		function(err, tempUser) {
-			if (err) {
-			    res.sendStatus(403);
-			    return;
-			}
-	        if (tempUser) {
-	            res.json({ senderPassword: tempUser.senderPassword});
-	       	} else {
-	            res.sendStatus(403);
-	        }
-		});
-	},
-	setSenderPassword: function(req, res) {
-		user.update({_id: req.body._id}, {senderPassword: req.body.senderPassword},
-		function(err, user) {
-			if(user) {
-				res.json(req.body.senderPassword);
-			}
-			else {
-				res.sendStatus('403');
-			}
-		});
-	},
-	getSenderEmail: function(req, res) {
-		user.findOne({_id: req.body.id},
-		function(err, tempUser) {
-			if (err) {
-			    res.sendStatus(403);
-			    return;
-			}
-	        if (tempUser) {
-	            res.json({senderEmail: tempUser.senderEmail});
-	       	}
-	        else {
-	            res.sendStatus(403);
-	        }
-		});
-	},
-	setSenderEmail: function(req, res) {
-		if(!userValidator.validateSenderEmail(req.body.senderEmail)){
-			res.sendStatus('403');
-			return;
-		}
-		user.update({_id: req.body._id}, {senderEmail: req.body.senderEmail},
-		function(err, user) {
-			if(user) {
-				res.json(req.body.senderEmail);
-			}
-			else {
-				res.sendStatus('403');
-			}
-		});
-	},
-	login: function(req, res) {
-		user.findOne({username: req.body.username},
-		function(err, tempUser) {
-			if (err) {
-			    res.sendStatus(403);
-			    return;
-			}
-	        if (tempUser && tempUser.checkPassword(req.body.password)) {
-	            var token = tempUser._id;
-	            res.json({token:token});
-	       	}
-	        else {
-	            res.sendStatus(403);
-	        }
-		});
-	},
-	getReceiverEmail: function(req, res) {
-		user.findOne({_id: req.body.id},
-		function(err, tempUser) {
-			if (err) {
-			    res.sendStatus(403);
-			    return;
-			}
-	        if (tempUser) {
-	            res.json({email:tempUser.receiverEmail});
-	       	}
-	        else {
-	            res.sendStatus(403);
-	        }
-		});
-	},
-	setReceiverEmail: function(req, res) {
-		if(!userValidator.validateReceiverEmail(req.body.receiverEmail)) {
-			res.sendStatus('403');
-			return;
-		}
-		user.update({_id: req.body._id}, {receiverEmail: req.body.receiverEmail},
-		function(err, user) {
-			if(user)
-				res.json(req.body.receiverEmail);
-			else
-				res.sendStatus('403');
-		});
-	}
+	signup,
+	login,
+	update
 };

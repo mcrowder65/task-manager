@@ -42,7 +42,7 @@ const authorize = (credentials, callback, dateTime, body, title, eid) => {
 
 }
 
-function getNewToken(oauth2Client, callback) {
+const getNewToken = (oauth2Client, callback) => {
   var authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES
@@ -52,9 +52,9 @@ function getNewToken(oauth2Client, callback) {
     input: process.stdin,
     output: process.stdout
   });
-  rl.question('Enter the code from that page here: ', function(code) {
+  rl.question('Enter the code from that page here: ', (code) => {
     rl.close();
-    oauth2Client.getToken(code, function(err, token) {
+    oauth2Client.getToken(code, (err, token) => {
       if (err) {
         console.log('Error while trying to retrieve access token', err);
         return;
@@ -66,7 +66,7 @@ function getNewToken(oauth2Client, callback) {
   });
 }
 
-function storeToken(token) {
+const storeToken = (token) => {
   try {
     fs.mkdirSync(TOKEN_DIR);
   } catch (err) {
@@ -164,6 +164,7 @@ const removeEvent = async (auth, dateTime, body, title, eventId) => {
 }
 
 const remove = async (eid, userId) => {
+    
   const user = await userDAO.getById(userId);
   const clientSecret = user.clientSecret;
 
