@@ -1,6 +1,11 @@
 function profileController($scope, $http, UserService) {
   $scope.init = async() => {
     try {
+      if(!$scope.isLoggedIn()) {
+        $scope.openToast('You must be logged in to see this page');
+        $scope.reroute('/#!/login');
+        return;
+      }
       const user = await UserService.getLoggedInUser();
       $scope.username = user ? user.username : $scope.username;
       $scope.receiverEmail = user ? user.receiverEmail : $scope.receiverEmail;

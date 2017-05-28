@@ -2,6 +2,11 @@ const MILLISECONDS_IN_DAY = 86400000;
 
 function allRemindersController($scope, ReminderService) {
   $scope.init = async() => {
+    if(!$scope.isLoggedIn()) {
+      $scope.openToast('You must be logged in to see this page');
+      $scope.reroute('/#!/login');
+      return;
+    }
     $scope.addEndDateMessage = 'Add end date';
     $scope.reminders = await ReminderService.getAllUserReminders();
     $scope.$apply();
