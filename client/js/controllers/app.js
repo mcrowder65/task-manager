@@ -76,4 +76,4 @@ const factory = ($rootScope) => {
     }
   };
 }
-angular.module('app', ['ngRoute', 'ngMaterial', 'userService', 'reminderService', 'utilitiesService', 'realTimeService']).factory('socket', ['$rootScope', factory]).controller('app', appController, ReminderService).config(appConfig);
+angular.module('app', ['ngRoute', 'ngMaterial', 'userService', 'reminderService', 'utilitiesService']).factory('socket', ['$rootScope', factory]).controller('app', appController, ReminderService).config(appConfig);
