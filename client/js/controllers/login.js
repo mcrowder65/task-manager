@@ -1,7 +1,7 @@
 function loginController($scope, $http, UserService) {
   $scope.login = async() => {
     try {
-      const token = await UserService.login($scope.username.toLowerCase(), $scope.password);
+      const token = await UserService.login($scope.username.toLowerCase().trim(), $scope.password);
       localStorage.token = token;
       $scope.$emit('callIsLoggedIn', {});
       $scope.reroute('/#!/addReminder');
