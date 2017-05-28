@@ -2,6 +2,7 @@ function profileController($scope, $http, UserService) {
   $scope.init = async() => {
     try {
       const user = await UserService.getLoggedInUser();
+      $scope.username = user ? user.username : $scope.username;
       $scope.receiverEmail = user ? user.receiverEmail : $scope.receiverEmail;
       $scope.senderEmail = user ? user.senderEmail : $scope.senderEmail;
       $scope.senderPassword = user ? user.senderPassword : $scope.senderPassword;
