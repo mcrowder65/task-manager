@@ -12,17 +12,8 @@ const server = app.listen(portNumber, () => {
   const port = server.address().port;
 });
 
-var io = require('socket.io')(server);
+const io = require('socket.io')(server);
 
-
-io.sockets.on('connection', function(socket) {
-  socket.on('message', (message) => {
-    console.log('message ', message);
-    socket.emit('new', {
-      hello: 'world'
-    });
-  });
-});
 const checkReminders = async () => {
   return new Promise( async (resolve, reject) => {
     try {
