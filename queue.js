@@ -1,10 +1,18 @@
+const express = require('express');
+const app = express();
 var mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/list');
 var utilities = require('./server/utilities');
 var reminder = require('./server/models/reminder');
 
+const portNumber = 7999;
+const server = app.listen(portNumber, () => {
+  console.log("Started on port " + portNumber);
+  const host = server.address().address;
+  const port = server.address().port;
+});
 
-
+const io = require('socket.io')(server);
 
 const checkReminders = async () => {
   return new Promise( async (resolve, reject) => {
@@ -17,8 +25,17 @@ const checkReminders = async () => {
         if(err) {
           throw err;
         } else {
-          for(var i = 0; i < reminders.length; i++){
-      			await sendReminder(reminders[i]);
+          for(var i = 0; i < reminders.length; i++) {
+            reminder.remove({
+              _id: reminders[i]._id
+            }, (err, tempReminder) => {
+            });
+          }
+          for(var i = 0; i < reminders.length; i++) {
+            await utilities.sendReminder(reminders[i]);
+            io.emit('remove-reminder', {
+              _id: reminders[i]._id
+            });
           }
           resolve();
         }
@@ -29,30 +46,6 @@ const checkReminders = async () => {
 
   });
 }
-const sendReminder = async (reminderObj) => {
-
-  return new Promise( async (resolve, reject) => {
-    try {
-      await utilities.sendReminder(reminderObj);
-      await removeReminder(reminderObj);
-      resolve();
-    } catch(error) {
-      reject(error);
-    }
-  });
-
-  async function removeReminder(reminderObj) {
-    return new Promise( async (resolve, reject) => {
-      reminder.remove({_id: reminderObj._id}, (err, tempReminder) => {
-        if(err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    });
-  }
-}
 
 
 const check = async () => {
@@ -62,5 +55,6 @@ const check = async () => {
     console.error(error);
   }
 }
-
-setInterval(check, 60000);
+const interval = 60000;
+console.log('checking every ' + (interval / 1000) + ' seconds');
+setInterval(check, interval);

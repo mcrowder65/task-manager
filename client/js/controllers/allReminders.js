@@ -4,6 +4,7 @@ function allRemindersController($scope, ReminderService) {
   $scope.init = async() => {
     $scope.addEndDateMessage = 'Add end date';
     $scope.reminders = await ReminderService.getAllUserReminders();
+
     $scope.$apply();
   }
   $scope.sendReminderImmediately = async(_id, date) => {
@@ -52,7 +53,17 @@ function allRemindersController($scope, ReminderService) {
       $scope.addEndDateMessage = $scope.addEndDateClicked ? 'Remove end date' : 'Add end date';
       $scope.endDay = $scope.addEndDateClicked == false ? null : $scope.endDay;
     }
-
   }
+
+  $scope.updateReminders = (_id) => {
+    $scope.reminders = $scope.reminders.filter( (reminder) => {
+      return reminder._id !== _id;
+    })
+    $scope.$apply();
+  }
+  const socket = io(window.location.hostname + ':7999');
+  socket.on('remove-reminder', (data) => {
+    $scope.updateReminders(data._id)
+  });
 }
 angular.module('app').controller('allReminders', ['$scope', 'ReminderService', allRemindersController]);
