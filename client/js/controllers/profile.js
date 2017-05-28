@@ -25,6 +25,17 @@ function profileController($scope, $http, UserService) {
       $scope.openToast('Something went wrong...');
     }
   };
+
+  const serverSocket = io(window.location.hostname + ':' + (window.location.hostname === 'localhost' ? '3000' : '80'));
+
+  serverSocket.on('profile-updated', async () => {
+    try {
+      $scope.init();
+    } catch(error) {
+      console.error(error);
+    }
+  });
+
 }
 
 angular.module('app').controller('profile', ['$scope', '$http', 'UserService', profileController]);

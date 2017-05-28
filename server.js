@@ -30,7 +30,7 @@ const server = app.listen(portNumber, () => {
   const port = server.address().port;
 });
 
-
+const io = require('socket.io')(server);
 app.post('/getRemindersByDay', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
@@ -61,6 +61,7 @@ app.post('/setById', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     const response = await userDAO.update(payload._id, req.body.user);
+    io.emit('profile-updated', {});
     res.status(200).json(response);
   } catch(error) {
     res.status(500).json(error.message || error);
@@ -71,7 +72,7 @@ app.post('/sendReminderImmediately', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     await reminderDAO.sendReminderImmediately(payload._id, req.body._id);
-    
+    io.emit('reminders-updated', {});
     res.status(200).json({});
   } catch(error) {
     res.status(500).json(error.message || error);
@@ -90,6 +91,7 @@ app.post('/deleteReminder', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     await reminderDAO.deleteReminder(payload._id, req.body._id, true);
+    io.emit('reminders-updated', {});
     res.status(200).json({});
   } catch(error) {
     res.status(500).json(error.message || error);
@@ -99,6 +101,7 @@ app.post('/newReminder', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     await reminderDAO.newReminder(payload._id, req.body);
+    io.emit('reminders-updated', {});
     res.status(200).json({});
   } catch(error) {
     res.status(500).json(error.message || error);
@@ -108,6 +111,7 @@ app.post('/setReminder', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
     await reminderDAO.setReminder(payload._id, req.body);
+    io.emit('reminders-updated', {});
     res.status(200).json({});
   } catch(error) {
     res.status(500).json(error.message || error);

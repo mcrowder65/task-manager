@@ -22,8 +22,6 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
   $scope.sendReminderImmediately = async(_id, date) => {
     try {
       await ReminderService.sendReminderImmediately(_id, date);
-      $scope.reminders = await ReminderService.getAllUserRemindersByDay(date);
-      $scope.$apply();
     } catch(error) {
       console.error('error while sending reminder immediately ', error);
     }
@@ -48,8 +46,6 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
         token: localStorage.token
       });
       $scope.openToast('Reminder set');
-      $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
-      $scope.$apply();
     } catch(err) {
       $scope.openToast('Something went wrong');
       console.error('error while making reminder or setting reminder ', err);
@@ -79,8 +75,6 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
   $scope.deleteReminder = async(_id, date) => {
     try {
       await ReminderService.deleteReminder(_id);
-      $scope.reminders = await ReminderService.getAllUserRemindersByDay(date);
-      $scope.$apply();
     } catch(error) {
       console.error('something went wrong while deleting the reminder ', error);
       $scope.openToast('Woops... something went wrong')
@@ -118,9 +112,25 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
     })
     $scope.$apply();
   }
-  const socket = io(window.location.hostname + ':7999');
-  socket.on('remove-reminder', (data) => {
-    $scope.updateReminders(data._id)
+  const queueSocket = io(window.location.hostname + ':7999');
+  queueSocket.on('remove-reminder', (data) => {
+    try {
+      $scope.updateReminders(data._id)
+    } catch(error) {
+      console.error(error);
+    }
+  });
+
+  //TODO move to 443 when https
+  const serverSocket = io(window.location.hostname + ':' + (window.location.hostname === 'localhost' ? '3000' : '80'));
+
+  serverSocket.on('reminders-updated', async () => {
+    try {
+      $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
+      $scope.$apply();
+    } catch(error) {
+      console.error(error);
+    }
   });
 
 };
