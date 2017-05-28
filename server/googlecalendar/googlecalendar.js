@@ -134,20 +134,6 @@ const create = (auth, dateTime, body, title, eventId) => {
   });
 }
 
-const createOrUpdate = async (title, time, body, eid, userID) => {
-  const user = await userDAO.getById(userID);
-  const clientSecret = user.clientSecret;
-
-  if(eid) {
-    // update
-    const event = await authorize(JSON.parse(clientSecret), update, new Date(time).toISOString(), body, title, eid);
-    return eid;
-  } else {
-    // create
-    const event = await authorize(JSON.parse(clientSecret), create, new Date(time).toISOString(), body, title, null);
-    return event.id;
-  }
-};
 
 const removeEvent = async (auth, dateTime, body, title, eventId) => {
   var calendar = google.calendar('v3');
@@ -163,12 +149,28 @@ const removeEvent = async (auth, dateTime, body, title, eventId) => {
   });
 }
 
+const createOrUpdate = async (title, time, body, eid, userID) => {
+  const user = await userDAO.getById(userID);
+  const clientSecret = user.clientSecret;
+  if(clientSecret) {
+    if(eid) {
+      // update
+      const event = await authorize(JSON.parse(clientSecret), update, new Date(time).toISOString(), body, title, eid);
+      return eid;
+    } else {
+      // create
+      const event = await authorize(JSON.parse(clientSecret), create, new Date(time).toISOString(), body, title, null);
+      return event.id;
+    }
+  }
+};
+
 const remove = async (eid, userId) => {
-    
   const user = await userDAO.getById(userId);
   const clientSecret = user.clientSecret;
-
-  await authorize(JSON.parse(clientSecret), removeEvent, null, null, null, eid);
+  if(clientSecret) {
+    await authorize(JSON.parse(clientSecret), removeEvent, null, null, null, eid);
+  }
 }
 module.exports = {
   createOrUpdate,
