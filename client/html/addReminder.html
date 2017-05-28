@@ -96,7 +96,10 @@
         </md-input-container>
       </div>
       <div>
+        dateToSend {{dateToSend}}
+        <md-button class="x-small button" data-ng-click="minusOne()">-1</md-button>
         <md-datepicker ng-model="dateToSend" ng-change="dateChange()"></md-datepicker>
+        <md-button class="x-small button" data-ng-click="plusOne()">+1</md-button>
       </div>
       <div>
         <md-input-container>
