@@ -120,7 +120,6 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
   }
   const socket = io(window.location.hostname + ':7999');
   socket.on('remove-reminder', (data) => {
-    console.log('remove this reminder ', data);
     $scope.updateReminders(data._id)
   });
 
