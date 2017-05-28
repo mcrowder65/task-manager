@@ -98,6 +98,7 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
         $scope.subject = reminder.subject;
         $scope.emailBody = reminder.emailBody;
         $scope.receiverEmail = reminder.receiverEmail != null ? reminder.receiverEmail : $scope.receiverEmail;
+        $scope.dateChange();
         $scope.$apply();
       }
 
