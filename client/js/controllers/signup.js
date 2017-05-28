@@ -5,7 +5,7 @@ function signupController($scope, $http, UserService) {
       const token = await UserService.signup($scope.username.toLowerCase(), $scope.password);
       localStorage.token = token;
       $scope.$emit('callIsLoggedIn', {});
-      window.location = "/#!/addReminder";
+      $scope.reroute('/#!/addReminder');
     } catch(error) {
       console.error('something went wrong while signing up ', error);
       if(error.data === 'username taken') {

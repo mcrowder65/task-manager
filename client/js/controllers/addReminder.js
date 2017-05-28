@@ -1,6 +1,11 @@
 const AddReminderController = async($scope, $http, UserService, ReminderService, UtilitiesService) => {
   $scope.init = async() => {
     try {
+      if(!$scope.isLoggedIn()) {
+        $scope.openToast('You must be logged in to see this page');
+        $scope.reroute('/#!/login');
+        return;
+      }
       $scope.dateToSend = new Date();
       $scope.showReminders = true;
       $scope.showRemindersMessage = 'Don\'t show reminders on same day';
@@ -107,7 +112,7 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
     UtilitiesService.removeGet('_id', $scope.dateToSend.getTime());
   }
   $scope.updateReminders = (_id) => {
-    $scope.reminders = $scope.reminders.filter( (reminder) => {
+    $scope.reminders = $scope.reminders.filter((reminder) => {
       return reminder._id !== _id;
     })
     $scope.$apply();
@@ -124,7 +129,7 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
   //TODO move to 443 when https
   const serverSocket = io(window.location.hostname + ':' + (window.location.hostname === 'localhost' ? '3000' : '80'));
 
-  serverSocket.on('reminders-updated', async () => {
+  serverSocket.on('reminders-updated', async() => {
     try {
       $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
       $scope.$apply();

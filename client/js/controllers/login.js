@@ -4,7 +4,7 @@ function loginController($scope, $http, UserService) {
       const token = await UserService.login($scope.username.toLowerCase(), $scope.password);
       localStorage.token = token;
       $scope.$emit('callIsLoggedIn', {});
-      window.location = "/#!/addReminder";
+      $scope.reroute('/#!/addReminder');
     } catch(error) {
       console.error('error while logging in ', error);
       $scope.openToast('Login failed');

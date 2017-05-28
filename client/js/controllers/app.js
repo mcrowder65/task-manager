@@ -7,6 +7,8 @@ function appController($scope, $http, $mdToast) {
 
   $scope.isLoggedIn = () => {
     $scope.loggedIn = !!localStorage.token;
+    
+    return $scope.loggedIn;
   }
 
   $scope.logout = () => {
@@ -19,7 +21,7 @@ function appController($scope, $http, $mdToast) {
   }
 
   $scope.editReminder = (_id) => {
-    window.location.href = "/#!/addReminder/?_id=" + _id;
+    $scope.reroute('/#!/addReminder/?_id=' + _id);
   }
 
   $scope.openToast = ($event) => {
