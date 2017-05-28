@@ -25,8 +25,14 @@ const checkReminders = async () => {
         if(err) {
           throw err;
         } else {
-          for(var i = 0; i < reminders.length; i++){
-      			await sendReminder(reminders[i]);
+          for(var i = 0; i < reminders.length; i++) {
+            reminder.remove({
+              _id: reminders[i]._id
+            }, (err, tempReminder) => {
+            });
+          }
+          for(var i = 0; i < reminders.length; i++) {
+            await utilities.sendReminder(reminders[i]);
             io.emit('remove-reminder', {
               _id: reminders[i]._id
             });
@@ -40,30 +46,6 @@ const checkReminders = async () => {
 
   });
 }
-const sendReminder = async (reminderObj) => {
-
-  return new Promise( async (resolve, reject) => {
-    try {
-      await utilities.sendReminder(reminderObj);
-      await removeReminder(reminderObj);
-      resolve();
-    } catch(error) {
-      reject(error);
-    }
-  });
-
-  async function removeReminder(reminderObj) {
-    return new Promise( async (resolve, reject) => {
-      reminder.remove({_id: reminderObj._id}, (err, tempReminder) => {
-        if(err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    });
-  }
-}
 
 
 const check = async () => {
@@ -73,6 +55,6 @@ const check = async () => {
     console.error(error);
   }
 }
-const interval = 5000;
+const interval = 60000;
 console.log('checking every ' + (interval / 1000) + ' seconds');
 setInterval(check, interval);
