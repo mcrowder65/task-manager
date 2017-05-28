@@ -117,6 +117,23 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
     })
     $scope.$apply();
   }
+  $scope.minusOne = async () => {
+    const oldDate = $scope.dateToSend;
+    $scope.dateToSend = new Date();
+    $scope.dateToSend.setMonth(oldDate.getMonth());
+    $scope.dateToSend.setDate( oldDate.getDate() - 1);
+    $scope.dateToSend.setFullYear(oldDate.getFullYear());
+    await $scope.dateChange()
+  };
+
+  $scope.plusOne = async () => {
+    const oldDate = $scope.dateToSend;
+    $scope.dateToSend = new Date();
+    $scope.dateToSend.setMonth(oldDate.getMonth());
+    $scope.dateToSend.setDate( oldDate.getDate() + 1);
+    $scope.dateToSend.setFullYear(oldDate.getFullYear());
+    await $scope.dateChange()
+  }
   const queueSocket = io(window.location.hostname + ':7999');
   queueSocket.on('remove-reminder', (data) => {
     try {
