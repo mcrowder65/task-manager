@@ -113,13 +113,12 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
     UtilitiesService.removeGet('_id', $scope.dateToSend.getTime());
   }
   $scope.updateReminders = (_id) => {
-    //TODO decide on filter or fetch from server.
     $scope.reminders = $scope.reminders.filter( (reminder) => {
       return reminder._id !== _id;
     })
     $scope.$apply();
   }
-  var socket = io('localhost:7999'); //TODO set localhost or DO server
+  const socket = io(window.location.hostname + ':7999');
   socket.on('remove-reminder', (data) => {
     console.log('remove this reminder ', data);
     $scope.updateReminders(data._id)

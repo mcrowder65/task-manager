@@ -54,6 +54,16 @@ function allRemindersController($scope, ReminderService, RealTimeService) {
       $scope.endDay = $scope.addEndDateClicked == false ? null : $scope.endDay;
     }
   }
-  
+
+  $scope.updateReminders = (_id) => {
+    $scope.reminders = $scope.reminders.filter( (reminder) => {
+      return reminder._id !== _id;
+    })
+    $scope.$apply();
+  }
+  const socket = io(window.location.hostname + ':7999'); 
+  socket.on('remove-reminder', (data) => {
+    $scope.updateReminders(data._id)
+  });
 }
-angular.module('app').controller('allReminders', ['$scope', 'ReminderService', 'RealTimeService', 'socket', allRemindersController]);
+angular.module('app').controller('allReminders', ['$scope', 'ReminderService', 'RealTimeService', allRemindersController]);
