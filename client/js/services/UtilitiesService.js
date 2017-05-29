@@ -1,3 +1,4 @@
+const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 class UtilitiesService {
   constructor() {
   }
@@ -31,6 +32,10 @@ class UtilitiesService {
       i++;
     }
     window.location.href = String(window.location.href).replace(url.substring(index, i), "") + 'date=' + dateToSend;
+  }
+
+  getWeekDay(date) {
+    return daysOfWeek[date.getDay()];
   }
 
 }

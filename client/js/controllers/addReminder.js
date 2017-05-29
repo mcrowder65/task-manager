@@ -12,6 +12,7 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
       if(UtilitiesService.get('date') != null) {
         $scope.dateToSend = new Date(parseInt(UtilitiesService.get('date')));
       }
+      $scope.dayOfWeek = UtilitiesService.getWeekDay($scope.dateToSend)
       $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
       const user = await UserService.getLoggedInUser();
       $scope.senderEmail = user.senderEmail;
@@ -71,6 +72,7 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
   $scope.dateChange = async() => {
     try {
       $scope.reminders = await ReminderService.getAllUserRemindersByDay($scope.dateToSend);
+      $scope.dayOfWeek = UtilitiesService.getWeekDay($scope.dateToSend)
       $scope.$apply();
     } catch(error) {
       console.error('error in dateChange ', error)
