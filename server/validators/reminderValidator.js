@@ -22,7 +22,7 @@ const validateNewReminder = (scope) => {
   if(!scope.subject && !scope.emailBody) {
     throw new Error('no subject and no body!');
   }
-  const timeOfDayRegex = /[0-2]?[0-9]:[0-5][0-9]/g;
+  const timeOfDayRegex = /^([0-2]?[0-9]:[0-5][0-9])$/;
   if(!timeOfDayRegex.test(timeOfDay)) {
     throw new Error('Time to send not formatted correctly!');
   }
@@ -30,8 +30,8 @@ const validateNewReminder = (scope) => {
   const hour = timeOfDay.split(':')[0];
   if(hour.length === 2) {
     if(parseInt(hour[0]) === 2) {
-      if(parseInt(hour[1]) > 4) {
-        throw new Error('If the first digit is 2 the second can\'t be greater than 4!')
+      if(parseInt(hour[1]) > 3) {
+        throw new Error('If the first digit is 2 the second can\'t be greater than 3!')
       }
     }
   }
