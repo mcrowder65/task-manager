@@ -25,6 +25,11 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
     }
   }
 
+  $scope.timeToSendChange = () => {
+    if($scope.timeToSend) {
+      $scope.timeToSend = $scope.timeToSend.replace(';', ':');
+    }
+  }
   $scope.sendReminderImmediately = async(_id, date) => {
     try {
       await ReminderService.sendReminderImmediately(_id, date);
