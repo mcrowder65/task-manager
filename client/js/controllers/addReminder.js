@@ -43,6 +43,7 @@ const AddReminderController = async($scope, $http, UserService, ReminderService,
       let time = String($scope.dateToSend);
       time = time.match('([Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec]* [0-9]* [0-9]{0,4})');
       time = time[0];
+      $scope.timeToSend = $scope.timeToSend.trim();
       const timeToSend = new Date(time + ' ' + $scope.timeToSend).getTime();
       const _id = UtilitiesService.get('_id');
       await ReminderService.createOrUpdate(_id, {
