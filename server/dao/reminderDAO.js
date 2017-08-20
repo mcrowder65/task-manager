@@ -10,8 +10,7 @@ const newReminder = async(userID, body) => {
       if(!reminderValidator.validateNewReminder(body)) {
         reject('Reminder format not valid');
       }
-      const eid = await googlecalendar.createOrUpdate(body.subject, body.timeToSend, body.emailBody, null, userID);
-      reminder.findOrCreate({
+reminder.findOrCreate({
         senderEmail: body.senderEmail,
         senderPassword: body.senderPassword,
         receiverEmail: body.receiverEmail.replace(" ", ""),
@@ -22,10 +21,10 @@ const newReminder = async(userID, body) => {
         dateToSend: body.dateToSend,
         milliseconds: new Date(body.timeToSend).getTime(),
         timeOfDay: body.timeOfDay,
-        hidden: false,
-        eid
+        hidden: false
       }, (err, tempReminder, created) => {
         if(created || tempReminder) {
+          setEid(tempReminder._id, userID, body)
           resolve();
         } else {
           reject('Error while creating')
@@ -36,7 +35,33 @@ const newReminder = async(userID, body) => {
     }
   });
 }
-
+const setEid = async (_id, userID, body) => {
+  return new Promise( async (resolve, reject) => {
+    const eid = await googlecalendar.createOrUpdate(body.subject, body.timeToSend, body.emailBody, null, userID);
+    reminder.update({
+      _id
+    }, {
+      senderEmail: body.senderEmail,
+      senderPassword: body.senderPassword,
+      receiverEmail: body.receiverEmail,
+      emailBody: body.emailBody,
+      timeToSend: body.timeToSend,
+      subject: body.subject,
+      userID,
+      milliseconds: new Date(body.timeToSend).getTime(),
+      dateToSend: body.dateToSend,
+      timeOfDay: body.timeOfDay,
+      hidden: false,
+      eid
+    }, (err, tempReminder) => {
+      if(tempReminder) {
+        resolve();
+      } else {
+        reject('Something went wrong');
+      }
+    });
+  });
+};
 const getReminder = async (_id, userID) => {
   return new Promise( async (resolve, reject) => {
     try {

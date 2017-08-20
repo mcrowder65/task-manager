@@ -11,6 +11,8 @@ const reminder = require('./server/models/reminder.js');
 const reminderDAO = require('./server/dao/reminderDAO.js');
 const user = require('./server/models/user.js');
 const userDAO = require('./server/dao/userDAO.js');
+var googlecalendar = require('./server/googlecalendar/googlecalendar.js');
+
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({
@@ -40,7 +42,9 @@ app.post('/getRemindersByDay', async(req, res) => {
     res.status(500).json(error.message || error);
   }
 });
-
+app.get('/getNum', async(req, res) => {
+res.status(200).json({message: 'you successfully fetched a message!'});
+});
 app.post('/getById', async(req, res) => {
   try {
     const payload = await getUserJWT(req.body.token);
