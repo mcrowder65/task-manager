@@ -7,7 +7,7 @@ import {
     Route
 } from "react-router";
 
-import Login from "../login";
+import Login from "../login/";
 import Home from "../home";
 import Drawer from "./drawer";
 
