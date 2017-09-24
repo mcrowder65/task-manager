@@ -1,5 +1,8 @@
 const initialState = {
     username: "",
-    isDrawerOpen: false
+    isDrawerOpen: false,
+    user: {
+        id: ""
+    }
 };
 export default initialState;

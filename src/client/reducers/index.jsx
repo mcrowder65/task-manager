@@ -1,5 +1,7 @@
 import {combineReducers} from "redux";
 
+import user from "./user";
+
 import {SET_USERNAME, SET_IS_DRAWER_OPEN} from "../actions/action-types";
 
 const username = (store, action) => {
@@ -17,5 +19,6 @@ const isDrawerOpen = (store, action) => {
 };
 export default combineReducers({
     username,
-    isDrawerOpen
+    isDrawerOpen,
+    user
 });

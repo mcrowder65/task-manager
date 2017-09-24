@@ -10,6 +10,7 @@ import Router from "./components/navigation/router";
 import initialState from "./reducers/initial-state";
 import "./styles/base.css";
 import "./styles/home.css";
+import Header from "./components/navigation/header";
 
 /* eslint no-underscore-dangle: "off" */
 /* global window */
@@ -19,7 +20,9 @@ const store = createStore(rootReducer, initialState,
 
 const App = () => (
     <Provider store={store}>
-        <Router/>
+        <Header>
+            <Router/>
+        </Header>
     </Provider>
 );
 

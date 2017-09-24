@@ -9,10 +9,12 @@ import {
 
 import Login from "../login";
 import Home from "../home";
+import Drawer from "./drawer";
 
-const Router = () => (
+const Router = props => (
     <BrowserRouter history={browserHistory}>
         <div>
+            <Drawer {...props}/>
             <Route exact path="/" component={Home}/>
             <Route exact path="/login" component={Login}/>
         </div>
