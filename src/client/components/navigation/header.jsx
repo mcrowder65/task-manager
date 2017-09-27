@@ -13,7 +13,10 @@ const Header = props => (
     <div>
         <AppBar>
             <Toolbar>
-                <IconButton color="contrast" aria-label="Menu" onClick={() => props.setIsDrawerOpen(true)}>
+                <IconButton
+                    color="contrast"
+                    aria-label="Menu"
+                    onClick={() => props.setIsDrawerOpen(true)}>
                     <MenuIcon/>
                 </IconButton>
                 <Typography type="title" color="inherit">

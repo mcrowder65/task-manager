@@ -1,4 +1,11 @@
-import {setUsername, setIsDrawerOpen} from "../../../src/client/actions/index";
+import "isomorphic-fetch";
+import fetchMock from "fetch-mock";
+import thunk from "redux-thunk";
+import {createStore, applyMiddleware} from "redux";
+
+import rootReducer from "../../../src/client/reducers/";
+import initialState from "../../../src/client/reducers/initial-state";
+import {setUsername, setIsDrawerOpen, asyncCall} from "../../../src/client/actions/index";
 import {SET_IS_DRAWER_OPEN, SET_USERNAME} from "../../../src/client/actions/action-types";
 
 describe("src/client/actions/index.jsx", () => {
@@ -51,5 +58,19 @@ describe("src/client/actions/index.jsx", () => {
             expect(setIsDrawerOpen(undefined)).eql({...obj, isDrawerOpen});
         });
 
+    });
+    describe("function asyncCall", () => {
+        let store;
+        beforeEach(() => {
+            store = createStore(rootReducer, initialState, applyMiddleware(thunk));
+            fetchMock.restore();
+        });
+        it("should return matt as result", async () => {
+            const body = "hello";
+            fetchMock.post("http://localhost:3000/login",
+                {body, headers: {"content-type": "text/html"}, status: 200});
+            await store.dispatch(asyncCall(body, "crowder"));
+            expect(store.getState().username).eql(body);
+        });
     });
 });

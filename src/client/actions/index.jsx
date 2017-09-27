@@ -24,10 +24,7 @@ export const asyncCall = (username = "matt", password = "crowder") => {
             url: "http://localhost:3000/login",
             body: JSON.stringify({username, password})
         });
-        if (result) {
-
-            dispatch(setUsername(username));
-        }
+        dispatch(setUsername(result));
         //this is the jwt and now i'm logged in!
     };
 };

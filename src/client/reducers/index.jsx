@@ -1,14 +1,14 @@
 import {combineReducers} from "redux";
 
 import user from "./user";
-
+import initialState from "./initial-state";
 import {SET_USERNAME, SET_IS_DRAWER_OPEN} from "../actions/action-types";
 
-const username = (store, action) => {
+const username = (store = initialState.username, action) => {
     if (action.type === SET_USERNAME) {
         return action.username;
     }
-    return store || "";
+    return store;
 };
 
 const isDrawerOpen = (store, action) => {

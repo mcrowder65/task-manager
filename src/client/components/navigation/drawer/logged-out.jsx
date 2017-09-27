@@ -17,7 +17,6 @@ class LoggedOut extends Component {
     render() {
         return (
             <div>
-
                 <ListItem button onClick={this.loggedInClicked}>
                     <ListItemText primary="Login"/>
                 </ListItem>
@@ -27,7 +26,7 @@ class LoggedOut extends Component {
             </div>
         );
     }
-};
+}
 
 LoggedOut.propTypes = {
     _setIsDrawerOpen: PropTypes.func

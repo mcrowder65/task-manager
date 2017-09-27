@@ -81,7 +81,7 @@
     "karma-spec-reporter": "0.0.31",
     "karma-webpack": "^2.0.4",
     "mocha": "^3.5.3",
-    "react-dom": "^15.6.1",
+    "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^15.6.1",
     "style-loader": "^0.18.2"
   }

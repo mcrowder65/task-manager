@@ -15,7 +15,8 @@ const Drawer = props => {
                 open={props.isDrawerOpen}
                 onRequestClose={() => props.setIsDrawerOpen(false)}>
                 <List>
-                    {props.isLoggedIn ? <LoggedIn/> : <LoggedOut _setIsDrawerOpen={props.setIsDrawerOpen}/>}
+                    {props.isLoggedIn ? <LoggedIn/> :
+                        <LoggedOut _setIsDrawerOpen={props.setIsDrawerOpen}/>}
                 </List>
             </MuiDrawer>
         </div>

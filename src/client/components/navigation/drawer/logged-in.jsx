@@ -1,6 +1,6 @@
 import React from "react";
 
-const LoggedIn = props => {
+const LoggedIn = () => {
     return (
         <div>
 
