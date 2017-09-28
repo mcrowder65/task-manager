@@ -12,3 +12,4 @@ emailer/emailer/bin*
 emailer/RemoteSystemsTempFiles/.project
 
 client_secret.json
+.idea
