@@ -3,8 +3,8 @@ var webpack = require("webpack");
 module.exports = function (config) {
     config.set({
         browsers: ["PhantomJS"],
-        singleRun: false,
-        autoWatch: true,
+        singleRun: true,
+        autoWatch: false,
         frameworks: ["mocha", "chai"],
         files: [
             "node_modules/babel-polyfill/dist/polyfill.js",
