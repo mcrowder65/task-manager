@@ -13,9 +13,6 @@ emailer/RemoteSystemsTempFiles/.project
 
 client_secret.json
 .idea
-<<<<<<< HEAD
-=======
 .editorconfig
 .gitattributes
 coverage
->>>>>>> ab8830ed02d561124dd95c5c5abe2d903dab9b89
