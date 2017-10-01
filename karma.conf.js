@@ -41,7 +41,12 @@ module.exports = function (config) {
                 {type: "lcov"},
                 {type: "text"}
             ],
-            dir: "./coverage/client"
+            dir: "./coverage",
+            subdir(browser) {
+              // normalization process to keep a consistent browser name across different
+              // OS
+              return browser.toLowerCase().split(/[ /-]/)[0];
+            }
         },
         webpackServer: {
             noInfo: false
