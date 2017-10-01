@@ -1,10 +1,9 @@
-const webpack = require("webpack");
 
 module.exports = function (config) {
     config.set({
         browsers: ["PhantomJS"],
-        singleRun: true,
-        autoWatch: false,
+        singleRun: process.env.HOT ? false : true,
+        autoWatch: process.env.HOT ? true : false,
         frameworks: ["mocha", "chai"],
         files: [
           "node_modules/babel-polyfill/dist/polyfill.js",

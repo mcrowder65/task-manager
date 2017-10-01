@@ -67,9 +67,9 @@ describe("src/client/actions/index.jsx", () => {
         });
         it("should return matt as result", async () => {
             const body = "hello";
-            fetchMock.post("http://localhost:3000/login",
+            fetchMock.post("http://matthewjcrowder.com:80/login",
                 {body, headers: {"content-type": "text/html"}, status: 200});
-            await store.dispatch(asyncCall(body, "crowder"));
+            await store.dispatch(asyncCall());
             expect(store.getState().username).eql(body);
         });
     });

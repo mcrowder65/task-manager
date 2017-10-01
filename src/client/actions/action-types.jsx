@@ -1,3 +1,5 @@
 export const SET_USERNAME = "SET_USERNAME";
 export const SET_IS_DRAWER_OPEN = "SET_IS_DRAWER_OPEN";
 export const USER_SET_ID = "USER_SET_ID";
+export const ADD_FETCHING = "ADD_FETCHING";
+export const MINUS_FETCHING = "MINUS_FETCHING";

@@ -5,7 +5,7 @@ import Card from "material-ui/Card";
 import Grid from "material-ui/Grid";
 import Button from "material-ui/Button";
 
-import {asyncCall} from "../../actions/index";
+import {login} from "../../actions/user-actions";
 import ViewUsername from "../view-username";
 import "../../styles/login.css";
 
@@ -16,7 +16,7 @@ const Login = props => {
                 <Grid item>
                     <Card className="login-card">
                         <ViewUsername username={props.username}/>
-                        <Button id="login" onClick={props.asyncCall}>Click me</Button>
+                        <Button id="login" onClick={props.login}>Click me</Button>
                     </Card>
                 </Grid>
             </Grid>
@@ -25,20 +25,20 @@ const Login = props => {
 };
 
 Login.propTypes = {
-    asyncCall: PropTypes.func,
+    login: PropTypes.func,
     username: PropTypes.string
 };
 
 const mapStateToProps = state => {
     return {
-        username: state.username
+        username: state.user.id
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        asyncCall: () => {
-            return dispatch(asyncCall());
+        login: () => {
+            return dispatch(login());
         }
     };
 };
