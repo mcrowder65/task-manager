@@ -5,6 +5,8 @@ import Card, {CardHeader} from "material-ui/Card";
 import Button from "material-ui/Button";
 import TextField from "material-ui/TextField";
 
+import Center from "../utils/center";
+
 import {setUsername, setUsernameError, setPassword,
   setPasswordError, validateLoginForm, clearLoginForm} from "../../actions/forms/login";
 import {login} from "../../actions/user-actions";
@@ -13,25 +15,27 @@ import "../../styles/login";
 const Login = props => {
     return (
         <div>
-          <Card className="login-card">
-          <CardHeader title="Login"/>
-          <TextField
-            error={props.usernameError !== ""}
-            label={props.usernameError === "" ? "Username" : props.usernameError}
-            value={props.username}
-            onChange={props.setUsername}/>
-            <TextField
-              type="password"
-              error={props.passwordError !== ""}
-              label={props.passwordError === "" ? "Password" : props.passwordError}
-              value={props.password}
-              onChange={props.setPassword}/>
-            <Button
-              id="login"
-              onClick={() => props.login(props.username, props.password)}>
-              Click me
-            </Button>
-          </Card>
+          <Center>
+              <Card className="login-card">
+              <CardHeader title="Login"/>
+              <TextField
+                error={props.usernameError !== ""}
+                label={props.usernameError === "" ? "Username" : props.usernameError}
+                value={props.username}
+                onChange={props.setUsername}/>
+                <TextField
+                  type="password"
+                  error={props.passwordError !== ""}
+                  label={props.passwordError === "" ? "Password" : props.passwordError}
+                  value={props.password}
+                  onChange={props.setPassword}/>
+                <Button
+                  id="login"
+                  onClick={() => props.login(props.username, props.password)}>
+                  Click me
+                </Button>
+              </Card>
+          </Center>
         </div>
     );
 };

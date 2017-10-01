@@ -15,7 +15,7 @@ module.exports = function (config) {
         reporters: ["spec", "coverage"],
         webpack: {
             resolve: {
-                extensions: [".js", ".jsx"]
+                extensions: [".js", ".jsx", ".css"]
             },
             module: {
                 loaders: [{
