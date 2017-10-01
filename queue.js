@@ -55,6 +55,6 @@ const check = async () => {
     console.error(error);
   }
 }
-const interval = 60000;
+const interval = 10000;
 console.log('checking every ' + (interval / 1000) + ' seconds');
 setInterval(check, interval);
