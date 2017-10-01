@@ -1,15 +1,4 @@
-import {SET_USERNAME, SET_IS_DRAWER_OPEN} from "./action-types";
-import {fetchPost} from "../shared/shared-fetch";
-
-export const setUsername = username => {
-    if (!username || username.length === 0 || typeof username !== "string") {
-        throw Error("username must be non empty string");
-    }
-    return {
-        type: SET_USERNAME,
-        username
-    };
-};
+import {SET_IS_DRAWER_OPEN, ADD_FETCH_COUNT, MINUS_FETCH_COUNT} from "./action-types";
 
 export const setIsDrawerOpen = isDrawerOpen => {
     return {
@@ -18,13 +7,14 @@ export const setIsDrawerOpen = isDrawerOpen => {
     };
 };
 
-export const asyncCall = (username = "matt", password = "crowder") => {
-    return async dispatch => {
-        const result = await fetchPost({
-            url: "http://localhost:3000/login",
-            body: JSON.stringify({username, password})
-        });
-        dispatch(setUsername(result));
-        //this is the jwt and now i'm logged in!
-    };
+export const addFetchCount = () => {
+  return {
+    type: ADD_FETCH_COUNT
+  };
+};
+
+export const minusFetchCount = () => {
+  return {
+    type: MINUS_FETCH_COUNT
+  };
 };

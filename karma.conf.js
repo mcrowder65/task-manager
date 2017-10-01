@@ -1,10 +1,9 @@
-const webpack = require("webpack");
 
 module.exports = function (config) {
     config.set({
         browsers: ["PhantomJS"],
-        singleRun: true,
-        autoWatch: false,
+        singleRun: process.env.HOT ? false : true,
+        autoWatch: process.env.HOT ? true : false,
         frameworks: ["mocha", "chai"],
         files: [
           "node_modules/babel-polyfill/dist/polyfill.js",
@@ -16,7 +15,7 @@ module.exports = function (config) {
         reporters: ["spec", "coverage"],
         webpack: {
             resolve: {
-                extensions: [".js", ".jsx"]
+                extensions: [".js", ".jsx", ".css"]
             },
             module: {
                 loaders: [{
@@ -42,7 +41,12 @@ module.exports = function (config) {
                 {type: "lcov"},
                 {type: "text"}
             ],
-            dir: "./coverage/client"
+            dir: "./coverage",
+            subdir(browser) {
+              // normalization process to keep a consistent browser name across different
+              // OS
+              return browser.toLowerCase().split(/[ /-]/)[0];
+            }
         },
         webpackServer: {
             noInfo: false
