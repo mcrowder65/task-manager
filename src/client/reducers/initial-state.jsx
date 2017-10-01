@@ -1,5 +1,4 @@
 const initialState = {
-    username: "",
     isDrawerOpen: false,
     user: {
         id: ""
@@ -7,7 +6,9 @@ const initialState = {
     forms: {
       login: {
         username: "",
-        password: ""
+        usernameError: "",
+        password: "",
+        passwordError: ""
       }
     }
 };

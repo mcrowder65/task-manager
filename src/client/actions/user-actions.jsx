@@ -1,8 +1,8 @@
 import {USER_SET_ID} from "./action-types";
 import {addFetching, minusFetching} from "./index";
-import {fetchPost} from "../shared/shared-fetch";
 import stringValidator from "../validators/string";
-import {setUsernameError, setPasswordError} from "./login-actions";
+import {setUsernameError, setPasswordError, clearLoginForm} from "./forms/login";
+import UserApi from "../api/user-api";
 
 export const userSetId = id => {
     if (!id || id.length === 0 || typeof id !== "string") {
@@ -21,18 +21,16 @@ export const login = (username, password) => {
           dispatch(setUsernameError("Username is required"));
       }
       if (!stringValidator(password)) {
-        return dispatch(setPasswordError("Password is required"));
+        dispatch(setPasswordError("Password is required"));
+      } else {
+        dispatch(addFetching());
+        const id = await UserApi.login(username, password);
+        //this is the jwt and now i'm logged in!
+        dispatch(userSetId(id));
+        dispatch(clearLoginForm());
       }
-      dispatch(addFetching());
-      const result = await fetchPost({
-        url: "http://matthewjcrowder.com:80/login",
-        body: JSON.stringify({username, password})
-      });
-      //this is the jwt and now i'm logged in!
-      return dispatch(userSetId(result));
     } catch (error) {
-      console.error(error);
-      return dispatch(userSetId(result));
+      dispatch(userSetId("didnt work"));
     } finally {
       dispatch(minusFetching());
     }
