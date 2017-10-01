@@ -3,6 +3,12 @@ const initialState = {
     isDrawerOpen: false,
     user: {
         id: ""
+    },
+    forms: {
+      login: {
+        username: "",
+        password: ""
+      }
     }
 };
 export default initialState;
