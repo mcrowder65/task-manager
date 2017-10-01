@@ -1,12 +1,12 @@
 import {USER_SET_ID} from "./action-types";
 import {addFetching, minusFetching} from "./index";
-import stringValidator from "../validators/string";
+import stringValidator, {emptyStringValidator} from "../validators/string";
 import {setUsernameError, setPasswordError, clearLoginForm} from "./forms/login";
 import UserApi from "../api/user-api";
 
 export const userSetId = id => {
-    if (!id || id.length === 0 || typeof id !== "string") {
-        throw Error("id must be non empty string");
+    if (!emptyStringValidator(id)) {
+      throw new Error("Id must be string");
     }
     return {
         type: USER_SET_ID,
@@ -24,8 +24,8 @@ export const login = (username, password) => {
         dispatch(setPasswordError("Password is required"));
       } else {
         dispatch(addFetching());
-        const id = await UserApi.login(username, password);
         //this is the jwt and now i'm logged in!
+        const id = await UserApi.login(username, password);
         dispatch(userSetId(id));
         dispatch(clearLoginForm());
       }
