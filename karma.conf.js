@@ -1,4 +1,4 @@
-var webpack = require("webpack");
+const webpack = require("webpack");
 
 module.exports = function (config) {
     config.set({
@@ -7,11 +7,11 @@ module.exports = function (config) {
         autoWatch: false,
         frameworks: ["mocha", "chai"],
         files: [
-            "node_modules/babel-polyfill/dist/polyfill.js",
-            "test/**/*.jsx"
+          "node_modules/babel-polyfill/dist/polyfill.js",
+          "karma-files.js"
         ],
         preprocessors: {
-            "test/**/*.jsx": ["webpack", "sourcemap"]
+          "karma-files.js": ["webpack", "sourcemap"]
         },
         reporters: ["spec", "coverage"],
         webpack: {
