@@ -1,12 +1,5 @@
-import "isomorphic-fetch";
-import fetchMock from "fetch-mock";
-import thunk from "redux-thunk";
-import {createStore, applyMiddleware} from "redux";
-
-import rootReducer from "../../../src/client/reducers/";
-import initialState from "../../../src/client/reducers/initial-state";
-import {setUsername, setIsDrawerOpen, asyncCall} from "../../../src/client/actions/index";
-import {SET_IS_DRAWER_OPEN, SET_USERNAME} from "../../../src/client/actions/action-types";
+import { setIsDrawerOpen} from "../../../src/client/actions/index";
+import {SET_IS_DRAWER_OPEN} from "../../../src/client/actions/action-types";
 
 describe("src/client/actions/index.jsx", () => {
     describe("function setIsDrawerOpen()", () => {
