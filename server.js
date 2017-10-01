@@ -2,13 +2,13 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const db = mongoose.connect("mongodb://localhost/list");
-app.all("*", function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
+app.all("*", (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "http://localhost:8080");
     res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
     res.header("Access-Control-Allow-Headers", "Content-Type");
     next();
 });
-app.use(express.static(__dirname + ""));
+app.use(express.static(`${__dirname }`));
 const bodyParser = require("body-parser");
 const userValidator = require("./server/validators/userValidator");
 const reminderValidator = require("./server/validators/reminderValidator");
@@ -17,7 +17,7 @@ const reminder = require("./server/models/reminder.js");
 const reminderDAO = require("./server/dao/reminderDAO.js");
 const user = require("./server/models/user.js");
 const userDAO = require("./server/dao/userDAO.js");
-var googlecalendar = require("./server/googlecalendar/googlecalendar.js");
+const googlecalendar = require("./server/googlecalendar/googlecalendar.js");
 
 app.use(bodyParser.json());
 
@@ -33,7 +33,7 @@ process.argv.forEach((val, index, array) => {
 });
 
 const server = app.listen(portNumber, () => {
-    console.log("Started on port " + portNumber);
+    console.log(`Started on port ${ portNumber}`);
     const host = server.address().address;
     const port = server.address().port;
 });
@@ -54,7 +54,7 @@ app.get("/getNum", async (req, res) => {
 app.post("/getById", async (req, res) => {
     try {
         const payload = await getUserJWT(req.body.token);
-        let user = await userDAO.getById(payload._id);
+        const user = await userDAO.getById(payload._id);
         if (user) {
             user.clientSecret = null;
             user.password = null;
