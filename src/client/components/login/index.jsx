@@ -6,7 +6,8 @@ import Grid from "material-ui/Grid";
 import Button from "material-ui/Button";
 import TextField from "material-ui/TextField";
 
-import {setUsername, setUsernameError, setPassword, setPasswordError} from "../../actions/forms/login";
+import {setUsername, setUsernameError, setPassword,
+  setPasswordError, validateLoginForm, clearLoginForm} from "../../actions/forms/login";
 import {login} from "../../actions/user-actions";
 import "../../styles/login.css";
 
@@ -43,6 +44,7 @@ Login.propTypes = {
     password: PropTypes.string,
     setUsername: PropTypes.func,
     setPassword: PropTypes.func,
+    id: PropTypes.string,
     login: PropTypes.func
 };
 
@@ -51,7 +53,8 @@ const mapStateToProps = state => {
         username: state.forms.login.username,
         usernameError: state.forms.login.usernameError,
         password: state.forms.login.password,
-        passwordError: state.forms.login.passwordError
+        passwordError: state.forms.login.passwordError,
+        id: state.user.id
     };
 };
 
@@ -59,14 +62,18 @@ const mapDispatchToProps = dispatch => {
     return {
         setUsername: evt => {
           dispatch(setUsername(evt.target.value));
-          return dispatch(setUsernameError(""));
+          dispatch(setUsernameError(""));
         },
         setPassword: evt => {
           dispatch(setPassword(evt.target.value));
-          return dispatch(setPasswordError(""));
+          dispatch(setPasswordError(""));
         },
-        login: (username, password) => {
-            return dispatch(login(username, password));
+        login: async (username, password) => {
+          const success = dispatch(validateLoginForm(username, password));
+          const loginSuccess = success && await dispatch(login(username, password));
+          if (loginSuccess) {
+             dispatch(clearLoginForm());
+          }
         }
     };
 };
