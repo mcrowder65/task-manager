@@ -1,5 +1,5 @@
 import {USER_SET_ID} from "./action-types";
-import {addFetching, minusFetching} from "./index";
+import {addFetchCount, minusFetchCount} from "./index";
 import {emptyStringValidator} from "../validators/string";
 import UserApi from "../api/user-api";
 
@@ -16,7 +16,7 @@ export const userSetId = id => {
 export const login = (username, password) => {
   return async dispatch => {
     try {
-      dispatch(addFetching());
+      dispatch(addFetchCount());
       const id = await UserApi.login(username, password);
       dispatch(userSetId(id));
       return true;
@@ -24,7 +24,7 @@ export const login = (username, password) => {
       //TODO add failure message
       return false;
     } finally {
-      dispatch(minusFetching());
+      dispatch(minusFetchCount());
     }
   };
 };

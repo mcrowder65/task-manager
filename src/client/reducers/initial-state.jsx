@@ -1,5 +1,6 @@
 const initialState = {
     isDrawerOpen: false,
+    fetchCount: 0,
     user: {
         id: ""
     },

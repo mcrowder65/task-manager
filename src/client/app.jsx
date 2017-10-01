@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import {createStore, applyMiddleware} from "redux";
 import {Provider} from "react-redux";
 import thunk from "redux-thunk";
+import {persistStore, autoRehydrate} from "redux-persist";
 import "babel-polyfill";
 
 import rootReducer from "./reducers/index";
@@ -16,8 +17,8 @@ import Header from "./components/navigation/header";
 /* global window */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 const store = createStore(rootReducer, initialState,
-    composeEnhancers(applyMiddleware(thunk)));
-
+    composeEnhancers(applyMiddleware(thunk), autoRehydrate()));
+persistStore(store);
 const App = () => (
     <Provider store={store}>
         <Header>

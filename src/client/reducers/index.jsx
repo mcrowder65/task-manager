@@ -3,6 +3,7 @@ import {combineReducers} from "redux";
 import user from "./user";
 import forms from "./forms";
 import initialState from "./initial-state";
+import fetchCount from "./fetch-count";
 import {SET_IS_DRAWER_OPEN} from "../actions/action-types";
 const isDrawerOpen = (state = initialState.isDrawerOpen, action) => {
     if (action.type === SET_IS_DRAWER_OPEN) {
@@ -12,6 +13,7 @@ const isDrawerOpen = (state = initialState.isDrawerOpen, action) => {
 };
 export default combineReducers({
     forms,
+    fetchCount,
     isDrawerOpen,
     user
 });

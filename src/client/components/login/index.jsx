@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import Card from "material-ui/Card";
+import Card, {CardHeader} from "material-ui/Card";
 import Grid from "material-ui/Grid";
 import Button from "material-ui/Button";
 import TextField from "material-ui/TextField";
@@ -17,12 +17,14 @@ const Login = props => {
             <Grid container justify="center" align="center">
                 <Grid item>
                     <Card className="login-card">
+                    <CardHeader title="Login"/>
                     <TextField
                       error={props.usernameError !== ""}
                       label={props.usernameError === "" ? "Username" : props.usernameError}
                       value={props.username}
                       onChange={props.setUsername}/>
                       <TextField
+                        type="password"
                         error={props.passwordError !== ""}
                         label={props.passwordError === "" ? "Password" : props.passwordError}
                         value={props.password}
