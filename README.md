@@ -1,5 +1,5 @@
 # task-manager
-[![Coverage Status](https://coveralls.io/repos/github/mcrowder65/task-manager/badge.svg?branch=react)](https://coveralls.io/github/mcrowder65/task-manager?branch=react)
+[![Coverage Status](https://coveralls.io/repos/github/mcrowder65/task-manager/badge.svg?branch=master)](https://coveralls.io/github/mcrowder65/task-manager?branch=master)
 
 This is a personal project I've been working on since the beginning of May, 2016.
 
