@@ -84,6 +84,5 @@ describe("login integration tests", () => {
         getLogin().setPassword({target: {value: password}});
         //here for code coverage
         container.find("#login").simulate("click");
-
     });
 });
