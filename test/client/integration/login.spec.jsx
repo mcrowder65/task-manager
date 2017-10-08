@@ -76,4 +76,14 @@ describe("login integration tests", () => {
         await getLogin().login(username, password);
         expect(store.getState().user.id).not.eql("");
     });
+
+    it("full clicking around and stuff", () => {
+        const username = "test";
+        const password = "user";
+        getLogin().setUsername({target: {value: username}});
+        getLogin().setPassword({target: {value: password}});
+        //here for code coverage
+        container.find("#login").simulate("click");
+
+    });
 });
