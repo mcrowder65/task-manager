@@ -5,12 +5,13 @@ const initialState = {
         id: ""
     },
     forms: {
-      login: {
-        username: "",
-        usernameError: "",
-        password: "",
-        passwordError: ""
-      }
-    }
+        login: {
+            username: "",
+            usernameError: "",
+            password: "",
+            passwordError: ""
+        }
+    },
+    messages: []
 };
 export default initialState;
