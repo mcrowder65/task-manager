@@ -1,6 +1,9 @@
 const express = require("express");
+const https = require('https');
+const fs = require('fs');
 const app = express();
 const mongoose = require("mongoose");
+require('isomorphic-fetch');
 const db = mongoose.connect("mongodb://localhost/list");
 app.all("*", (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "http://localhost:8080");
@@ -8,6 +11,12 @@ app.all("*", (req, res, next) => {
     res.header("Access-Control-Allow-Headers", "Content-Type");
     next();
 });
+app.use(require('helmet')());
+// Set up express server here
+const options = {
+    cert: fs.readFileSync('/etc/letsencrypt/live/matthewjcrowder.com/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/matthewjcrowder.com/privkey.pem')
+};
 app.use(express.static(`${__dirname }`));
 const bodyParser = require("body-parser");
 const userValidator = require("./server/validators/userValidator");
@@ -37,6 +46,7 @@ const server = app.listen(portNumber, () => {
     const host = server.address().address;
     const port = server.address().port;
 });
+https.createServer(options, app).listen(443);
 
 const io = require("socket.io")(server);
 app.post("/getRemindersByDay", async (req, res) => {
@@ -47,6 +57,18 @@ app.post("/getRemindersByDay", async (req, res) => {
     } catch (error) {
         res.status(500).json(error.message || error);
     }
+});
+app.get("/search/:query", async (req, res) => {
+  try {
+    const apiKey = "gfr925mrc8b96m5nz4uwz678";
+    const json = await fetch(`http://api.walmartlabs.com/v1/search?query=${req.params.query}&format=json&apiKey=${apiKey}`, {
+      method: 'GET'
+    });
+    const result = await json.json();
+    res.send(result);
+  } catch(error) {
+    res.status(200).json(error.message);
+  }
 });
 app.get("/getNum", async (req, res) => {
     res.status(200).json({message: "you successfully fetched a message!"});
