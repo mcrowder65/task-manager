@@ -58,9 +58,21 @@ app.post("/getRemindersByDay", async (req, res) => {
         res.status(500).json(error.message || error);
     }
 });
+const apiKey = "gfr925mrc8b96m5nz4uwz678";
+app.get("/itemLookup/:id", async (req, res) => {
+  try {
+    const json = await fetch(`http://api.walmartlabs.com/v1/items/${req.params.id}?format=json&apiKey=${apiKey}`, {
+      method: 'GET'
+    });
+    const result = await json.json();
+    res.send(result);
+  } catch(error) {
+    res.status(200).json(error.message);
+  }
+});
 app.get("/search/:query", async (req, res) => {
   try {
-    const apiKey = "gfr925mrc8b96m5nz4uwz678";
+
     const json = await fetch(`http://api.walmartlabs.com/v1/search?query=${req.params.query}&format=json&apiKey=${apiKey}`, {
       method: 'GET'
     });
@@ -69,6 +81,9 @@ app.get("/search/:query", async (req, res) => {
   } catch(error) {
     res.status(200).json(error.message);
   }
+});
+app.get('/reverse/:word', (req, res) => {
+  res.status(200).json(req.params.word && req.params.word.split("").reverse().join(""))
 });
 app.get("/getNum", async (req, res) => {
     res.status(200).json({message: "you successfully fetched a message!"});
